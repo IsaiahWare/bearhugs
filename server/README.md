@@ -71,16 +71,16 @@ Log a user into their account
 // Schema
 
 request
-  email: String,
-  password: String
+  email: string,
+  password: string
 }
 
 response {
-  errors: Object?,
-  results: Array[Object?] 
+  errors: object | null,
+  results: object[]
 }
 
-results Object {
+results object {
   id: Number,
   email: String,
   firstName: String,
@@ -117,8 +117,8 @@ request  {
 }
 
 response {
-  errors: Object?,
-  results: Array[Object?] 
+  errors: object | null,
+  results: object[] 
 }
 
 result object {
