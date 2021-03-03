@@ -113,7 +113,7 @@ Find data for a particular user
 
 ```
 request  {
-  id: String
+  id: string
 }
 
 response {
@@ -122,10 +122,10 @@ response {
 }
 
 result object {
-  id: Number,
-  email: String,
-  firstName: String,
-  lastName: String
+  id: number,
+  email: string,
+  firstName: string,
+  lastName: string
 }
 
 // Example request and response
