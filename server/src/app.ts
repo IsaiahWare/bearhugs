@@ -4,7 +4,7 @@ import cors from "cors";
 import express from "express";
 import mysql from "mysql";
 
-import userController from "./controllers/user/userController";
+import userController from "./controllers/userController";
 
 const app = express();
 
