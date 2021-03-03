@@ -4,7 +4,7 @@ import express, { Response , Request, NextFunction } from "express";
 import { MysqlError} from "mysql";
 
 interface User {
-    id: string;
+    id: number;
     email: string;
     firstName: string;
     lastName: string;
@@ -66,7 +66,14 @@ router.post("/login", (req: Request, res: Response) => {
             bcrypt.compare(req.body.password, queryResults[0].hashedPassword, (compareError: Error, passwordsMatch: boolean) => {
                 const loginResponse: LoginResponse = {
                     "error": compareError,
-                    "results": passwordsMatch
+                    "results": [
+                        {   
+                            "id": queryResults[0].id,
+                            "email": queryResults[0].email,
+                            "firstName": queryResults[0].firstName,
+                            "lastName": queryResults[0].lastName,
+                        }
+                    ]
                 }; 
                 res.json(loginResponse);
             });
