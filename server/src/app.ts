@@ -14,6 +14,10 @@ app.use(bodyParser.urlencoded({
 	extended: true
 }));
 
+app.get("/", (req: express.Request , res: express.Response) => {
+    res.send("Welcome to the bearhugs.love internal API!");
+});
+
 app.use("/user", userController);
 
 export default app;
