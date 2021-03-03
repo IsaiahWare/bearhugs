@@ -11,7 +11,7 @@ Start server in development mode (the server will automatically refresh upon sav
 
 ```yarn start-dev```
 
-Transpile typescript after a change
+Transpile Typescript into Javascript after a change
 
 ```yarn build```
 
