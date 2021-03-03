@@ -9,9 +9,13 @@ Install dependencies
 ## Development
 Start server in development mode (the server will automatically refresh upon saved changes):
 
-```yarn run start-dev```
+```yarn start-dev```
 
-Run unit tests:
+Transpile typescript after a change
+
+```yarn build```
+
+Run unit tests (not implemented yet):
 
 ```yarn test```
 
