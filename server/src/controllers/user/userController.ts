@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
 import db from "./../../db";
-import express, { Response , Request, NextFunction } from "express";
+import express, { Response , Request } from "express";
 import { MysqlError} from "mysql";
 
 interface User {
