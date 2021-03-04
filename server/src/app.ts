@@ -5,6 +5,7 @@ import express from "express";
 import mysql from "mysql";
 
 import userController from "./controllers/userController";
+import quizController from "./controllers/quizController";
 
 const app = express();
 
@@ -19,5 +20,6 @@ app.get("/", (req: express.Request , res: express.Response) => {
 });
 
 app.use("/user", userController);
+app.use("/quiz/", quizController);
 
 export default app;
