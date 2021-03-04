@@ -2,7 +2,7 @@
 
 Install dependencies
 
-```yarn install```
+```yarn install```sh
 
 # Usage
 
