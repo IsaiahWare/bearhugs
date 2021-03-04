@@ -34,7 +34,7 @@ router.post("/send", (req: Request, res: Response) => {
     db.query(queryStatement, queryArgs, (queryError: MysqlError | null, queryResults: any) => {
         const sendQuizResultsResponse: SendQuizResultsResponse = {
             "error": queryError,
-            "results": queryError ? true : false 
+            "results": queryError ? false : true 
         };
         res.json(sendQuizResultsResponse);
     });
@@ -49,7 +49,7 @@ router.post("/find", (req: Request, res: Response) => {
     db.query(queryStatement, queryArgs, (queryError: MysqlError | null, queryResults: any) => {
         const findSendQuizResultsResponse: SendQuizResultsResponse = {
             "error": queryError,
-            "results": queryError ? queryResults : [] 
+            "results": queryError ? [] : queryResults 
         };
         res.json(findSendQuizResultsResponse);
     });

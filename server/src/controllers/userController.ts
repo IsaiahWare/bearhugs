@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
 import db from "./../db";
 import express, { Response , Request } from "express";
-import { MysqlError} from "mysql";
+import { MysqlError } from "mysql";
 
 interface User {
     id: number;
@@ -10,18 +10,34 @@ interface User {
     lastName: string;
 }
 
+interface RegisterRequest {
+   email: string;
+   password: string;
+   firstName: string;
+   lastName: string;
+}
+
+interface LoginRequest {
+   email: string;
+   password: string;
+}
+
+interface FindRequest {
+   id: string;
+}
+
 interface RegisterResponse {
-    error: MysqlError | null; 
+    error: MysqlError | object; 
     results: object[];
 }
 
 interface LoginResponse {
-    error: MysqlError | Error | null;
+    error: MysqlError | Error | object;
     results: User[];
 }
 
 interface FindResponse {
-    error: MysqlError | Error | null;
+    error: MysqlError | Error | object;
     results: User[]
 }
 
@@ -30,20 +46,34 @@ const saltRounds: number = 10;
 const router = express.Router();
 
 router.post("/register", (req: Request, res: Response) => {
-    bcrypt.hash(req.body.password, saltRounds).then((hashedPassword: string) => {
+    const queryArgs: RegisterRequest = {
+        "email": req.body.email,
+        "password": req.body.password,
+        "firstName": req.body.firstName,
+        "lastName": req.body.lastName,
+    };
+    const registerResponse: RegisterResponse = {
+        "error": {},
+        "results": []
+    };
+    bcrypt.hash(queryArgs.password, saltRounds).then((hashedPassword: string) => {
         const queryStatement: string = "INSERT INTO users SET ?";
-        const queryArgs: object = {
-            "email": req.body.email,
-            "hashedPassword": hashedPassword,
-            "firstName": req.body.firstName,
-            "lastName": req.body.lastName,
-        };
-
+        queryArgs.password = hashedPassword;
         db.query(queryStatement, queryArgs, (queryError: MysqlError | null, queryResults: any) => {
-            const registerResponse: RegisterResponse = {
-                "error": queryError,
-                "results": queryResults
-            };
+            if (queryError) {
+                registerResponse.error = {
+                    "message": queryError.sqlMessage
+                };
+            } else {
+                registerResponse.results = [
+                    {
+                        "id": queryResults.insertId,
+                        "email": queryArgs.email,
+                        "firstName": queryArgs.firstName,
+                        "lastName": queryArgs.lastName
+                    }
+                ];
+            }
             res.json(registerResponse);
         });
     });
@@ -51,47 +81,65 @@ router.post("/register", (req: Request, res: Response) => {
 
 router.post("/login", (req: Request, res: Response) => {
     const queryStatement: string = "SELECT * FROM users WHERE email = ?";
-    const queryArgs: string[] = [
-        req.body.email
-    ];
-
-    db.query(queryStatement, queryArgs, (queryError: MysqlError | null, queryResults: any) => {
-        if (queryError || queryResults.length !== 1) {
-            const loginResponse: LoginResponse = {
-                "error": queryError,
-                "results": []
+    const queryArgs: LoginRequest = {
+        email: req.body.email,
+        password: req.body.password
+    };
+    const loginResponse: LoginResponse = {
+        "error": {},
+        "results": []
+    };
+    db.query(queryStatement, queryArgs.email, (queryError: MysqlError | null, queryResults: any) => {
+        if (queryError) { 
+            loginResponse.error = {
+                "message": queryError.sqlMessage
             };
-            res.json(loginResponse);
-        } else {
+        } 
+        else if (queryResults.length !== 1) { 
+                loginResponse.error = {
+                    "message": "Invalid email"
+                };
+        }
+        else {
             bcrypt.compare(req.body.password, queryResults[0].hashedPassword, (compareError: Error, passwordsMatch: boolean) => {
-                const loginResponse: LoginResponse = {
-                    "error": compareError,
-                    "results": [
+                if (compareError) {
+                        loginResponse.error = compareError;
+                }
+                else if (passwordsMatch) {
+                    loginResponse.results = [
                         {   
                             "id": queryResults[0].id,
                             "email": queryResults[0].email,
                             "firstName": queryResults[0].firstName,
                             "lastName": queryResults[0].lastName,
                         }
-                    ]
+                    ];
+                }
+                else {
+                    loginResponse.error = {
+                        "message": "Invalid password"
+                    };
                 }; 
-                res.json(loginResponse);
             });
         } 
+        res.json(loginResponse);      
     });
 });
 
 router.post("/find", (req: Request, res: Response) => {
     const queryStatement: string = "SELECT * FROM users WHERE id = ?";
-    const queryArgs: string[] = [
-        req.body.id
-    ];
-
-    db.query(queryStatement, queryArgs, (queryError: MysqlError | null, queryResults: any ) => {
-            const findResponse: FindResponse = {
-                "error": queryError,
-                "results": queryResults
-            };
+    const queryArgs: FindRequest = {
+        "id": req.body.id
+    };
+    const findResponse: FindResponse = {
+        "error": {},
+        "results": []
+    };
+    db.query(queryStatement, queryArgs.id, (queryError: MysqlError | null, queryResults: any ) => {
+            findResponse.error = queryError ? {
+                "message": queryError.sqlMessage
+            } : {};
+            findResponse.results = queryError ? [] : [queryResults];
             res.json(findResponse);
     }); 
 });
