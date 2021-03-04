@@ -8,13 +8,13 @@ Install dependencies
 
 ## Development
 
-Transpile Typescript into Javascript after a change
+Manually transpile Typescript into Javascript after a change
 
 ```yarn build```
 
 Start server in development mode (the server will automatically refresh upon saved changes):
 
-```yarn start-dev```
+```yarn dev```
 
 Run linter
 
@@ -25,9 +25,9 @@ Run unit tests (not implemented yet):
 ```yarn test```
 
 ## Production
-Start server in production mode:
+Start server in production mode (not implemented yet):
 
-```yarn start```
+```yarn prod```
 
 # API
 ## USER
