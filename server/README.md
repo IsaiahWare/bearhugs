@@ -46,7 +46,7 @@ request  {
 }
 
 response {
-  errors: object | null,
+  errors: object,
   results: object[]
 }
 
@@ -85,7 +85,7 @@ request
 }
 
 response {
-  errors: object | null,
+  errors: object,
   results: object[]
 }
 
@@ -126,7 +126,7 @@ request  {
 }
 
 response {
-  errors: object | null,
+  errors: object,
   results: object[] 
 }
 
