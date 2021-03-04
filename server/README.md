@@ -16,6 +16,10 @@ Start server in development mode (the server will automatically refresh upon sav
 
 ```yarn start-dev```
 
+Run linter
+
+```yarn lint```
+
 Run unit tests (not implemented yet):
 
 ```yarn test```
