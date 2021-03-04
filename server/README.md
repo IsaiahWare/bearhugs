@@ -126,7 +126,7 @@ response {
   results: object[] 
 }
 
-result object {
+results object {
   id: number,
   email: string,
   firstName: string,
