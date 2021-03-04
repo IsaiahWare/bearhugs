@@ -27,7 +27,7 @@ Start server in production mode:
 
 # API
 ## USERS
-### `POST /users/register`
+### `POST /user/register`
 
 Create an account for a user
 
@@ -68,7 +68,7 @@ const response = {
   ]
 }
 ```
-### `POST /users/login`
+### `POST /user/login`
 
 Log a user into their account
 
@@ -112,7 +112,7 @@ const response = {
 }
 ```
 
-### `POST /users/find`
+### `POST /user/find`
 
 Find data for a particular user
 
