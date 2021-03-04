@@ -27,7 +27,7 @@ Run unit tests (not implemented yet):
 ## Production
 Start server in production mode:
 
-```yarn run start```
+```yarn start```
 
 # API
 ## USER
