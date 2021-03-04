@@ -25,8 +25,8 @@ Start server in production mode:
 
 ```yarn run start```
 
-## API
-
+# API
+# USERS
 ### `POST /users/register`
 
 Create an account for a user
@@ -86,10 +86,10 @@ response {
 }
 
 results object {
-  id: Number,
-  email: String,
-  firstName: String,
-  lastName: String
+  id: number,
+  email: string,
+  firstName: string,
+  lastName: string
 }
 
 // Example request and response
