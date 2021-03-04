@@ -26,7 +26,7 @@ Start server in production mode:
 ```yarn run start```
 
 # API
-# USERS
+## USERS
 ### `POST /users/register`
 
 Create an account for a user
