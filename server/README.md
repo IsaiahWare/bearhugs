@@ -30,6 +30,8 @@ Start server in production mode (not implemented yet):
 ```yarn prod```
 
 # API
+## BASE URL
+### http://ec2-54-146-61-111.compute-1.amazonaws.com:3000/
 ## USER
 ### `POST /user/register`
 
