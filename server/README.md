@@ -31,7 +31,7 @@ Start server in production mode (not implemented yet):
 
 # API
 ## BASE URL
-### http://ec2-54-146-61-111.compute-1.amazonaws.com:3000/
+### http://ec2-54-146-61-111.compute-1.amazonaws.com:3000
 ## USER
 ### `POST /user/register`
 
