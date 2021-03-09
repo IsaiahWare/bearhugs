@@ -20,6 +20,6 @@ app.get("/", (req: express.Request , res: express.Response) => {
 });
 
 app.use("/user", userController);
-app.use("/quiz/", quizController);
+app.use("/quiz", quizController);
 
 export default app;

@@ -2,64 +2,43 @@ import bcrypt from "bcrypt";
 import db from "./../db";
 import express, { Response , Request } from "express";
 import { MysqlError } from "mysql";
-
-interface User {
-    id: number;
-    email: string;
-    firstName: string;
-    lastName: string;
-}
-
-interface RegisterRequest {
-   email: string;
-   password: string;
-   firstName: string;
-   lastName: string;
-}
-
-interface LoginRequest {
-   email: string;
-   password: string;
-}
-
-interface FindRequest {
-   id: string;
-}
-
-interface RegisterResponse {
-    error: MysqlError | object; 
-    results: object[];
-}
-
-interface LoginResponse {
-    error: MysqlError | Error | object;
-    results: User[];
-}
-
-interface FindResponse {
-    error: MysqlError | Error | object;
-    results: User[]
-}
+import {
+    User,
+    UserLoginRequest,
+    UserLoginResponse,
+    UserFindRequest,
+    UserFindResponse,
+    UserRegisterRequest,
+    UserRegisterResponse,
+} from "./../models/userControllerModels";
+import {
+    isUserRegisterRequest,
+    isUserLoginRequest,
+    isUserFindRequest,
+} from "./../checkers/userControllerModelsChecker";
 
 const saltRounds: number = 10;
-
 const router = express.Router();
 
 router.post("/register", (req: Request, res: Response) => {
-    const queryArgs: RegisterRequest = {
-        "email": req.body.email,
-        "password": req.body.password,
-        "firstName": req.body.firstName,
-        "lastName": req.body.lastName,
-    };
-    const registerResponse: RegisterResponse = {
+    const registerResponse: UserRegisterResponse = {
         "error": {},
         "results": []
     };
-    bcrypt.hash(queryArgs.password, saltRounds).then((hashedPassword: string) => {
+    
+    if (!isUserRegisterRequest(req.body)) {
+        registerResponse.error = {
+            "message": "Invalid request parameters!"
+        };
+        res.json(registerResponse);
+        return;
+    }
+
+    bcrypt.hash(req.body.password, saltRounds).then((hashedPassword: string) => {
         const queryStatement: string = "INSERT INTO users SET ?";
-        queryArgs.password = hashedPassword;
-        db.query(queryStatement, queryArgs, (queryError: MysqlError | null, queryResults: any) => {
+        req.body.password = hashedPassword;
+
+        db.query(queryStatement, req.body, (queryError: MysqlError | null, queryResults: any) => {
             if (queryError) {
                 registerResponse.error = {
                     "message": queryError.sqlMessage
@@ -68,9 +47,9 @@ router.post("/register", (req: Request, res: Response) => {
                 registerResponse.results = [
                     {
                         "id": queryResults.insertId,
-                        "email": queryArgs.email,
-                        "firstName": queryArgs.firstName,
-                        "lastName": queryArgs.lastName
+                        "email": req.body.email,
+                        "firstName": req.body.firstName,
+                        "lastName": req.body.lastName
                     }
                 ];
             }
@@ -80,30 +59,37 @@ router.post("/register", (req: Request, res: Response) => {
 });
 
 router.post("/login", (req: Request, res: Response) => {
-    const queryStatement: string = "SELECT * FROM users WHERE email = ?";
-    const queryArgs: LoginRequest = {
-        email: req.body.email,
-        password: req.body.password
-    };
-    const loginResponse: LoginResponse = {
+    const loginResponse: UserLoginResponse = {
         "error": {},
         "results": []
     };
-    db.query(queryStatement, queryArgs.email, (queryError: MysqlError | null, queryResults: any) => {
+
+    if (!isUserLoginRequest(req.body)) {
+        loginResponse.error = {
+            "message": "Invalid request parameters!"
+        };
+        res.json(loginResponse);
+        return;
+    }
+
+    const queryStatement: string = "SELECT * FROM users WHERE email = ?";
+    db.query(queryStatement, req.body.email, (queryError: MysqlError | null, queryResults: any) => {
         if (queryError) { 
             loginResponse.error = {
                 "message": queryError.sqlMessage
             };
+            res.json(loginResponse);
         } 
         else if (queryResults.length !== 1) { 
-                loginResponse.error = {
-                    "message": "Invalid email"
-                };
+            loginResponse.error = {
+                "message": "Invalid email"
+            };
+            res.json(loginResponse);
         }
         else {
-            bcrypt.compare(req.body.password, queryResults[0].hashedPassword, (compareError: Error, passwordsMatch: boolean) => {
+            bcrypt.compare(req.body.password, queryResults[0].password, (compareError: Error, passwordsMatch: boolean) => {
                 if (compareError) {
-                        loginResponse.error = compareError;
+                    loginResponse.error = compareError;
                 }
                 else if (passwordsMatch) {
                     loginResponse.results = [
@@ -121,26 +107,39 @@ router.post("/login", (req: Request, res: Response) => {
                     };
                 }; 
             });
+            res.json(loginResponse);    
         } 
-        res.json(loginResponse);      
     });
 });
 
-router.post("/find", (req: Request, res: Response) => {
-    const queryStatement: string = "SELECT * FROM users WHERE id = ?";
-    const queryArgs: FindRequest = {
-        "id": req.body.id
-    };
-    const findResponse: FindResponse = {
+router.post("/find", (req: Request, res: Response) => {    
+    const findResponse: UserFindResponse = {
         "error": {},
         "results": []
     };
-    db.query(queryStatement, queryArgs.id, (queryError: MysqlError | null, queryResults: any ) => {
-            findResponse.error = queryError ? {
+
+    if (!isUserFindRequest(req.body)) {
+        findResponse.error = {
+            "message": "Invalid request parameters!"
+        };
+        res.json(findResponse);
+        return;
+    }
+
+    const queryStatement: string = "SELECT id, email, firstName, lastName FROM users WHERE id = ?";
+    db.query(queryStatement, req.body.id, (queryError: MysqlError | null, queryResults: any ) => {
+        if (queryError) {
+            findResponse.error =  {
                 "message": queryError.sqlMessage
-            } : {};
-            findResponse.results = queryError ? [] : [queryResults];
-            res.json(findResponse);
+            };
+        } else if (queryResults.length !== 1) {
+            findResponse.error = {
+                "message": "No user found"
+            };
+        } else {
+            findResponse.results = queryResults;
+        }
+        res.json(findResponse);
     }); 
 });
 

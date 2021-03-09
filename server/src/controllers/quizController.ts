@@ -2,56 +2,84 @@ import bcrypt from "bcrypt";
 import db from "./../db";
 import express, { Response , Request } from "express";
 import { MysqlError } from "mysql";
+import {
+    SendQuizResultsRequest,
+    SendQuizResultsResponse,
+    FindQuizResultsResponse,
+    FindQuizResultsRequest
+} from "./../models/quizControllerModels";
+import {
+    isSendQuizResultsRequest,
+    isFindQuizResultsRequest,
+} from "./../checkers/quizControllerModelsChecker";
 
 const router = express.Router();
 
-interface SendQuizResultsRequest {
-    id: number;
-    quizResults: string;
-}
-
-interface SendQuizResultsResponse {
-    error: MysqlError | null;
-    results: boolean;
-}
-
-interface FindQuizResultsRequest {
-    id: number
-}
-
-interface FindQuizResultResponse {
-    error: MysqlError | null;
-    results: object[];
-}
-
 router.post("/send", (req: Request, res: Response) => {
-    const queryStatement: string = "INSERT * FROM users WHERE id = ?";
-    const queryArgs: SendQuizResultsRequest = {
-        "id": req.body.id,
-        "quizResults": req.body.quizResults
+    console.log(req.body);
+    const sendQuizResultsResponse: SendQuizResultsResponse = {
+        "error": {},
+        "results": []
     };
- 
-    db.query(queryStatement, queryArgs, (queryError: MysqlError | null, queryResults: any) => {
-        const sendQuizResultsResponse: SendQuizResultsResponse = {
-            "error": queryError,
-            "results": queryError ? false : true 
+    
+    if (!isSendQuizResultsRequest(req.body)) {
+        sendQuizResultsResponse.error = {
+            "message": "Invalid request parameters"
         };
+        res.json(sendQuizResultsResponse);
+        return;
+    }
+
+    const queryStatement: string = "INSERT INTO quizzes SET ?";
+    
+    const queryArgs = {
+        "id": req.body.id,
+        "quizResults": JSON.stringify(req.body.quizResults)
+    }
+
+    db.query(queryStatement, queryArgs, (queryError: MysqlError | null, queryResults: any) => {
+        if (queryError) {
+            sendQuizResultsResponse.error = {
+                "message": queryError.sqlMessage
+            };
+        } else {
+            sendQuizResultsResponse.results = [
+                {
+                    "id": queryResults[0].insertId
+                }
+            ];
+        }   
         res.json(sendQuizResultsResponse);
     });
 });  
 
 router.post("/find", (req: Request, res: Response) => {
-    const queryStatement: string = "SELECT quizResults FROM users WHERE id = ?";
-    const queryArgs: FindQuizResultsRequest = {
-        "id": req.body.id
+    console.log(req.body)
+    const findQuizResultsResponse: FindQuizResultsResponse = {
+        "error": {},
+        "results": []
     };
- 
-    db.query(queryStatement, queryArgs, (queryError: MysqlError | null, queryResults: any) => {
-        const findSendQuizResultsResponse: SendQuizResultsResponse = {
-            "error": queryError,
-            "results": queryError ? [] : queryResults 
+
+    if (!isFindQuizResultsRequest(req.body)) {
+        findQuizResultsResponse.error = {
+            "message": "Invalid request parameters"
         };
-        res.json(findSendQuizResultsResponse);
+        res.json(findQuizResultsResponse);
+        return;
+    }
+
+    const queryStatement: string = "SELECT quizResults FROM quizzes WHERE userId = ?";
+ 
+    db.query(queryStatement, req.body, (queryError: MysqlError | null, queryResults: any) => {
+        console.log("qwe", queryResults);
+        if (queryError) {
+            findQuizResultsResponse.error = {
+                "message": queryError.sqlMessage
+            };
+        } else {
+            findQuizResultsResponse.results = [JSON.parse(queryResults[0])];
+        }
+        res.json(findQuizResultsResponse);
     });
 });  
 
