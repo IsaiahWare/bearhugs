@@ -1,0 +1,141 @@
+.page {
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  /* scroll-snap-stop: always; */
+  scroll-snap-align: center;
+
+}
+.page-gradient {
+background: rgb(2,0,36);
+background: linear-gradient(180deg, rgba(2,0,36,0) 0%, rgba(9,9,121,0) 58%, rgba(255,0,33,0.6516807406556373) 100%);
+height: 40vh;
+}
+
+.fit-container-width {
+  width: 100%;
+}
+
+.padding-left-right-2 {
+  padding-left: 2rem;
+  padding-right: 2rem
+}
+
+.margin-left-right-1 {
+  margin-left: 1rem;
+  margin-right: 1rem;
+}
+.padding-top-1rem {
+  padding-top: 1rem;
+}
+.margin-5rem {
+  margin-top: 5rem;
+  margin-bottom: 5rem;
+}
+
+.row{
+  display: flex;
+  flex-direction: row;
+
+}
+.divider {
+  border-bottom: 2px solid rgba(177, 35, 35, 0.274) ;
+}
+.wraps {
+  flex-wrap: wrap;
+}
+.text-container {
+  max-width: 20rem;
+}
+.input {
+  padding: 0.5rem;
+  border: 1px solid lightgray;
+  border-radius: 0.2rem;
+  width: 100%;
+  display: inline;
+
+}
+
+.margin-1rem {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.input-row {
+  display: flex;
+  flex-direction: row;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  min-width: 100%;
+}
+
+.center-row {
+  justify-content: center;
+  align-items: center;
+
+}
+.match-img {
+  width:100%;
+  object-fit: contain;
+}
+.img-container {
+  max-height: 30em;
+  max-width: 30em;
+  overflow: hidden;
+}
+.center-col {
+  justify-content: center;
+  align-items: center;
+}
+.col{
+  display: flex;
+  flex-direction: column;
+
+}
+.block-display {
+  display: block;
+}
+
+.match-img-height {
+  min-height: 30em;
+  overflow: hidden;
+}
+.light-gray {
+  color: rgb(163, 163, 163);
+}
+.scroll-box {
+  overflow: auto;
+}
+form {
+  padding-left: 4rem;
+  padding-right: 4rem;
+  padding-bottom: 4rem;
+  padding-top: 2rem;
+}
+
+.box {
+  box-shadow: 5px 10px 18px #888888;
+}
+.red {
+  background-color:rgba(168, 34, 34, 0.973)
+}
+
+.full-width-button {
+  padding: 0.7rem;
+  font-size: small;
+  color: white;
+  border: none;
+  border-radius: 2px;
+  width: 100%;
+
+}
+
+
+.red-border {
+  border-style: solid;
+  border-width: 4px;
+  border-color: red;
+  border-radius: 0.5em;
+}
