@@ -27,6 +27,10 @@ export interface UserFindRequest {
    userId: string;
 }
 
+export interface UserFriendsRequest {
+    userId: number;
+}
+
 export interface UserRegisterResponse {
     error: MysqlError | object;
     results: object[];
@@ -40,5 +44,10 @@ export interface UserLoginResponse {
 export interface UserFindResponse {
     error: MysqlError | Error | object;
     results: User[]
+}
+
+export interface UserFriendsResponse {
+    error: MysqlError | Error | object;
+    results: User[];
 }
 

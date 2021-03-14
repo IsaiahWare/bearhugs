@@ -10,11 +10,14 @@ import {
     UserFindResponse,
     UserRegisterRequest,
     UserRegisterResponse,
+    UserFriendsRequest,
+    UserFriendsResponse
 } from "./../models/userControllerModels";
 import {
     isUserRegisterRequest,
     isUserLoginRequest,
     isUserFindRequest,
+    isUserFriendsRequest
 } from "./../checkers/userControllerModelsChecker";
 
 const saltRounds: number = 10;
@@ -121,7 +124,7 @@ router.post("/find", (req: Request, res: Response) => {
         "results": []
     };
 
-    if (!isUserFindRequest(req.body)) {
+    if (!isUserFriendsRequest(req.body)) {
         findResponse.error = {
             "message": "Invalid request parameters!"
         };
@@ -143,6 +146,33 @@ router.post("/find", (req: Request, res: Response) => {
             findResponse.results = queryResults;
         }
         res.json(findResponse);
+    }); 
+});
+
+router.post("/friends/findAll", (req: Request, res: Response) => {
+    const UserFriendsResponse = {
+        "error": {},
+        "results": []
+    };
+
+    if (!isUserFriendsRequest(req.body)) {
+        UserFriendsResponse.error = {
+            "message": "Invalid request parameters!"
+        };
+        res.json(UserFriendsResponse);
+        return;
+    }
+
+    const queryStatement: string = "SELECT friends.userId2 as friends FROM users INNER JOIN friends ON users.userId = friends.userId1 WHERE friends.userId1 = ?";
+    db.query(queryStatement, req.body.userId, (queryError: MysqlError | null, queryResults: any ) => {
+        if (queryError) {
+            UserFriendsResponse.error = {
+                "message": queryError.sqlMessage
+            };
+        } else {
+            UserFriendsResponse.results = queryResults;
+        }
+        res.json(UserFriendsResponse);
     }); 
 });
 
