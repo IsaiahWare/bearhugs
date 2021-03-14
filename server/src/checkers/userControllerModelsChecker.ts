@@ -1,4 +1,4 @@
-import { UserRegisterRequest, UserLoginRequest, UserFindRequest, UserFriendsRequest } from "../models/userControllerModels";
+import { UserRegisterRequest, UserLoginRequest, UserFindRequest } from "../models/userControllerModels";
 
 export function isUserRegisterRequest(obj: any): obj is UserRegisterRequest {
   return obj.email !== undefined &&
@@ -19,6 +19,3 @@ export function isUserFindRequest(obj: any): obj is UserFindRequest {
   return obj.userId !== undefined && Object.keys(obj).length === 1;
 }
 
-export function isUserFriendsRequest(obj: any): obj is UserFriendsRequest {
-  return obj.userId !== undefined && Object.keys(obj).length === 1;
-}
