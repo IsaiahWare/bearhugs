@@ -5,7 +5,8 @@ export function isUserRegisterRequest(obj: any): obj is UserRegisterRequest {
   obj.password !== undefined &&
   obj.firstName !== undefined &&
   obj.lastName !== undefined &&
-  Object.keys(obj).length === 4;
+  obj.age !== undefined &&
+  Object.keys(obj).length === 5;
 }
 
 export function isUserLoginRequest(obj: any): obj is UserLoginRequest {
@@ -15,6 +16,6 @@ export function isUserLoginRequest(obj: any): obj is UserLoginRequest {
 }
 
 export function isUserFindRequest(obj: any): obj is UserFindRequest {
-  return obj.id !== undefined && Object.keys(obj).length === 1;
+  return obj.userId !== undefined && Object.keys(obj).length === 1;
 }
 
