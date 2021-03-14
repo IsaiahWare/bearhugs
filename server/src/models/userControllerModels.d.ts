@@ -3,10 +3,11 @@ declare module "userControllerModels";
 import { MysqlError } from "mysql";
 
 export interface User {
-    id: number;
+    userId: number;
     email: string;
     firstName: string;
     lastName: string;
+    age: number;
 }
 
 export interface UserRegisterRequest {
@@ -14,6 +15,7 @@ export interface UserRegisterRequest {
    password: string;
    firstName: string;
    lastName: string;
+   age: number;
 }
 
 export interface UserLoginRequest {
@@ -22,7 +24,11 @@ export interface UserLoginRequest {
 }
 
 export interface UserFindRequest {
-   id: string;
+   userId: string;
+}
+
+export interface UserFriendsRequest {
+    userId: number;
 }
 
 export interface UserRegisterResponse {
@@ -38,5 +44,10 @@ export interface UserLoginResponse {
 export interface UserFindResponse {
     error: MysqlError | Error | object;
     results: User[]
+}
+
+export interface UserFriendsResponse {
+    error: MysqlError | Error | object;
+    results: User[];
 }
 

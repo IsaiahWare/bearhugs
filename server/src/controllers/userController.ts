@@ -10,11 +10,14 @@ import {
     UserFindResponse,
     UserRegisterRequest,
     UserRegisterResponse,
+    UserFriendsRequest,
+    UserFriendsResponse
 } from "./../models/userControllerModels";
 import {
     isUserRegisterRequest,
     isUserLoginRequest,
     isUserFindRequest,
+    isUserFriendsRequest
 } from "./../checkers/userControllerModelsChecker";
 
 const saltRounds: number = 10;
@@ -59,6 +62,7 @@ router.post("/register", (req: Request, res: Response) => {
 });
 
 router.post("/login", (req: Request, res: Response) => {
+    console.log(req.body)
     const loginResponse: UserLoginResponse = {
         "error": {},
         "results": []
@@ -74,6 +78,7 @@ router.post("/login", (req: Request, res: Response) => {
 
     const queryStatement: string = "SELECT * FROM users WHERE email = ?";
     db.query(queryStatement, req.body.email, (queryError: MysqlError | null, queryResults: any) => {
+        console.log(queryResults)
         if (queryError) { 
             loginResponse.error = {
                 "message": queryError.sqlMessage
@@ -94,10 +99,11 @@ router.post("/login", (req: Request, res: Response) => {
                 else if (passwordsMatch) {
                     loginResponse.results = [
                         {   
-                            "id": queryResults[0].id,
+                            "userId": queryResults[0].userId,
                             "email": queryResults[0].email,
                             "firstName": queryResults[0].firstName,
                             "lastName": queryResults[0].lastName,
+                            "age": queryResults[0].age
                         }
                     ];
                 }
@@ -106,8 +112,8 @@ router.post("/login", (req: Request, res: Response) => {
                         "message": "Invalid password"
                     };
                 }; 
+                res.json(loginResponse);    
             });
-            res.json(loginResponse);    
         } 
     });
 });
@@ -118,7 +124,7 @@ router.post("/find", (req: Request, res: Response) => {
         "results": []
     };
 
-    if (!isUserFindRequest(req.body)) {
+    if (!isUserFriendsRequest(req.body)) {
         findResponse.error = {
             "message": "Invalid request parameters!"
         };
@@ -126,8 +132,8 @@ router.post("/find", (req: Request, res: Response) => {
         return;
     }
 
-    const queryStatement: string = "SELECT id, email, firstName, lastName FROM users WHERE id = ?";
-    db.query(queryStatement, req.body.id, (queryError: MysqlError | null, queryResults: any ) => {
+    const queryStatement: string = "SELECT userId, email, firstName, lastName, age FROM users WHERE userId = ?";
+    db.query(queryStatement, req.body.userId, (queryError: MysqlError | null, queryResults: any ) => {
         if (queryError) {
             findResponse.error =  {
                 "message": queryError.sqlMessage
@@ -140,6 +146,33 @@ router.post("/find", (req: Request, res: Response) => {
             findResponse.results = queryResults;
         }
         res.json(findResponse);
+    }); 
+});
+
+router.post("/friends/findAll", (req: Request, res: Response) => {
+    const UserFriendsResponse = {
+        "error": {},
+        "results": []
+    };
+
+    if (!isUserFriendsRequest(req.body)) {
+        UserFriendsResponse.error = {
+            "message": "Invalid request parameters!"
+        };
+        res.json(UserFriendsResponse);
+        return;
+    }
+
+    const queryStatement: string = "SELECT friends.userId2 as friends FROM users INNER JOIN friends ON users.userId = friends.userId1 WHERE friends.userId1 = ?";
+    db.query(queryStatement, req.body.userId, (queryError: MysqlError | null, queryResults: any ) => {
+        if (queryError) {
+            UserFriendsResponse.error = {
+                "message": queryError.sqlMessage
+            };
+        } else {
+            UserFriendsResponse.results = queryResults;
+        }
+        res.json(UserFriendsResponse);
     }); 
 });
 

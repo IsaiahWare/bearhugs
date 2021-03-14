@@ -15,7 +15,7 @@ import {
 
 const router = express.Router();
 
-router.post("/send", (req: Request, res: Response) => {
+router.post("/create", (req: Request, res: Response) => {
     console.log(req.body);
     const sendQuizResultsResponse: SendQuizResultsResponse = {
         "error": {},
@@ -33,9 +33,9 @@ router.post("/send", (req: Request, res: Response) => {
     const queryStatement: string = "INSERT INTO quizzes SET ?";
     
     const queryArgs = {
-        "id": req.body.id,
+        "userId": req.body.userId,
         "quizResults": JSON.stringify(req.body.quizResults)
-    }
+    };
 
     db.query(queryStatement, queryArgs, (queryError: MysqlError | null, queryResults: any) => {
         if (queryError) {
@@ -45,7 +45,8 @@ router.post("/send", (req: Request, res: Response) => {
         } else {
             sendQuizResultsResponse.results = [
                 {
-                    "id": queryResults[0].insertId
+                    "quizId": queryResults.insertId,
+                    "quizResults": req.body.quizResults
                 }
             ];
         }   
@@ -68,7 +69,7 @@ router.post("/find", (req: Request, res: Response) => {
         return;
     }
 
-    const queryStatement: string = "SELECT quizResults FROM quizzes WHERE userId = ?";
+    const queryStatement: string = "SELECT * FROM quizzes WHERE userId = ?";
  
     db.query(queryStatement, req.body, (queryError: MysqlError | null, queryResults: any) => {
         console.log("qwe", queryResults);
@@ -77,7 +78,13 @@ router.post("/find", (req: Request, res: Response) => {
                 "message": queryError.sqlMessage
             };
         } else {
-            findQuizResultsResponse.results = [JSON.parse(queryResults[0])];
+            findQuizResultsResponse.results = [
+                {
+                    "userId": queryResults[0].userId,
+                    "quizId": queryResults[0].quizId,
+                    "quizResults": JSON.parse(queryResults[0].quizResults)
+                }
+            ]
         }
         res.json(findQuizResultsResponse);
     });

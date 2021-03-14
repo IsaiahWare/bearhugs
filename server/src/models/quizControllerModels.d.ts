@@ -3,7 +3,7 @@ declare module "quizControllerModels";
 import { MysqlError } from "mysql";
 
 export interface SendQuizResultsRequest {
-    id: number;
+    userId: number;
     quizResults: object;
 }
 
