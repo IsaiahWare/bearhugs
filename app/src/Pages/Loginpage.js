@@ -35,7 +35,8 @@ class LoginPage extends React.Component {
     })
      .then(response => {
 	   let responseData = response.json()
-        if (responseData.error==null) {
+       console.log(responseData)
+        if (responseData.error!=null) {
 		console.log(responseData.value)
 		UserToken.setUserId(responseData.results[0].id)
 		this.setState({redirect:true})
