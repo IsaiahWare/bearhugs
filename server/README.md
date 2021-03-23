@@ -166,7 +166,7 @@ Store a quiz for a particular user
 ```
 Request {
   userId: number
-  quizResults: JSON stringified
+  quizResults: JSON
 }
 ```
 ### `POST /quiz/find`
