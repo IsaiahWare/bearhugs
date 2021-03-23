@@ -19,7 +19,7 @@ function App() {
         <Route exact path='/' component={LoginPage} />
         <Route exact path="/register" component={RegisterPage}></Route>
         <Route exact path="/viewmatches" component={ViewProfilePage}></Route>
-       
+       <Route exact path="/editsettings" component={EditSettingsPage}></Route>
 
  
     </Switch>
