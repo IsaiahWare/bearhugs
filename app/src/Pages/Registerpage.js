@@ -14,7 +14,8 @@ class RegisterPage extends React.Component {
             email:"",
             password:"",
             errors:"",
-            age:18
+            age:18,
+            redirect: false
 
         }
         this.registerAccount = this.registerAccount.bind(this)
@@ -41,7 +42,13 @@ class RegisterPage extends React.Component {
         body: JSON.stringify(newRequest)
 
     })
-    .then(response => console.log(response.json()))
+    .then(res => res.json())
+    .then(responseData => {
+       // TODO: handle case where login is invalid 
+       if (responseData.error!=null) {
+           this.setState({redirect:true})
+       }
+   })
 }
 
 handleInputChange(event) {
@@ -54,6 +61,13 @@ handleInputChange(event) {
 
 
     render() {
+        const redirect = this.state.redirect
+	    if (redirect) {
+            return <Redirect
+            to= "/"
+            />
+    
+	 }
         return (
             <div className="page">
                    
