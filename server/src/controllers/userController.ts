@@ -170,13 +170,7 @@ router.post("/random", (req: Request, res: Response) => {
                 "message": queryError.sqlMessage
             };
         } else {
-            const max = req.body.count > queryResults.length ? req.body.count : queryResults.length;
-            const ret = []
-            for (let i = 0; i < max; i++) {
-                let user = queryResults.splice(Math.floor(Math.random() * queryResults.length));
-                ret.push(user);
-            }
-            randomResponse.results = ret;
+            randomResponse.results = queryResults;
         }
         res.json(randomResponse);
     }); 
