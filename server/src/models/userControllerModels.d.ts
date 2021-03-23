@@ -27,6 +27,10 @@ export interface UserFindRequest {
    userId: string;
 }
 
+export interface UserRandomRequest {
+   count: number; 
+}
+
 export interface UserRegisterResponse {
     error: MysqlError | object;
     results: object[];
@@ -42,3 +46,7 @@ export interface UserFindResponse {
     results: User[]
 }
 
+export interface UserRandomResponse {
+    error: MysqlError | Error | object;
+    results: User[]
+}

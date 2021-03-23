@@ -9,12 +9,15 @@ import {
     UserLoginRequest,
     UserLoginResponse,
     UserFindRequest,
-    UserFindResponse
+    UserFindResponse,
+    UserRandomRequest,
+    UserRandomResponse
 } from "./../models/userControllerModels";
 import {
     isUserRegisterRequest,
     isUserLoginRequest,
     isUserFindRequest,
+    isUserRandomRequest
 } from "./../checkers/userControllerModelsChecker";
 
 const saltRounds: number = 10;
@@ -143,6 +146,39 @@ router.post("/find", (req: Request, res: Response) => {
             findResponse.results = queryResults;
         }
         res.json(findResponse);
+    }); 
+});
+
+router.post("/random", (req: Request, res: Response) => {    
+    const randomResponse: UserRandomResponse = {
+        "error": {},
+        "results": []
+    };
+
+    if (!isUserRandomRequest(req.body)) {
+        randomResponse.error = {
+            "message": "Invalid request parameters!"
+        };
+        res.json(randomResponse);
+        return;
+    }
+
+    const queryStatement: string = "SELECT userId, email, firstName, lastName, age, description FROM users LIMIT ?";
+    db.query(queryStatement, req.body.count, (queryError: MysqlError | null, queryResults: any ) => {
+        if (queryError) {
+            randomResponse.error =  {
+                "message": queryError.sqlMessage
+            };
+        } else {
+            const max = req.body.count > queryResults.length ? req.body.count : queryResults.length;
+            const ret = []
+            for (let i = 0; i < max; i++) {
+                let user = queryResults.splice(Math.floor(Math.random() * queryResults.length));
+                ret.push(user);
+            }
+            randomResponse.results = ret;
+        }
+        res.json(randomResponse);
     }); 
 });
 
