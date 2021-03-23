@@ -1,5 +1,6 @@
 import { faPooStorm } from '@fortawesome/free-solid-svg-icons';
 import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import "../App.css"
 
@@ -15,7 +16,7 @@ class RegisterPage extends React.Component {
             password:"",
             errors:"",
             age:18,
-            redirect: false
+            feedback: " "
 
         }
         this.registerAccount = this.registerAccount.bind(this)
@@ -44,10 +45,17 @@ class RegisterPage extends React.Component {
     })
     .then(res => res.json())
     .then(responseData => {
-       // TODO: handle case where login is invalid 
-       if (responseData.error!=null) {
-           this.setState({redirect:true})
-       }
+       // TODO: handle case where login is invalid
+	    console.log(responseData)
+       if (!responseData.error) {
+         this.setState({
+		 feedback: "Register not successful :(" 
+	 })
+	 }else {
+		  this.setState({
+			  feedback: "Register successful :) Return to login and try your new account!"
+         })
+	 }
    })
 }
 
@@ -61,13 +69,6 @@ handleInputChange(event) {
 
 
     render() {
-        const redirect = this.state.redirect
-	    if (redirect) {
-            return <Redirect
-            to= "/"
-            />
-    
-	 }
         return (
             <div className="page">
                    
@@ -99,11 +100,12 @@ handleInputChange(event) {
                                     <div className="divider ">
                                     </div>
                                 </div>
-                                <span>{this.state.errors}</span>
                                 <div className="input-row center-row">
                                     <button className="full-width-button red" type="submit">Register!</button>
                                 </div>
-                                <span className="error-span">{this.state.errors}</span>
+				<div className="center-row">
+				  <span className="error-span">{this.state.feedback}</span>
+				</div>
                                 <div className="row center-row">
                                 <Link to="/" className="route-link">Back to Login </Link>
                             </div>

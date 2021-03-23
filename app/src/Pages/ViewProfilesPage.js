@@ -33,9 +33,15 @@ class ViewProfilePage extends React.Component {
         .then(res => res.json())
         .then(responseData => {
            // TODO: handle case where login is invalid 
-           if (responseData.error!=null) {
+              if (responseData.error!=null) {
                let setProfiles = responseData.results
-               this.setState({profiles: setProfiles})
+               let userToken = UserToken.getUserId()
+               let tempProfiles = setProfiles.filter((obj) => {
+                return obj.userId !== userToken
+                })
+                this.setState({
+                    profiles: tempProfiles
+                })
            }
        })
 
