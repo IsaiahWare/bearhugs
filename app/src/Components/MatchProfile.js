@@ -29,7 +29,7 @@ class MatchProfile extends React.Component {
                                 </div>
                             </div>
                             <div className="row center-row fit-container-width red">
-                            <div className="col center-col padding-left-right-2" onClick={() => this.props.onClickAccept(this.state.userId)}>
+                            <div className="col center-col padding-left-right-2" onClick={() => this.props.onClickAccept(this.props.userId)}>
                                 <div className="red">
                                     <FontAwesomeIcon icon={faHeart}
                                         color="#ffffff"
@@ -37,7 +37,7 @@ class MatchProfile extends React.Component {
                                     />
                                 </div>
                             </div>
-                            <div className="col center-col padding-left-right-2 margin-left-right-1 " onClick={() => this.props.onClickReject(this.state.userId)}>
+                            <div className="col center-col padding-left-right-2 margin-left-right-1 " onClick={() => this.props.onClickReject(this.props.userId)}>
                                     <div className="red">
                                         <FontAwesomeIcon icon={faHeartBroken}
                                             color="#ffffff"
