@@ -183,6 +183,36 @@ router.post("/random", (req: Request, res: Response) => {
         res.json(randomResponse);
     }); 
 });
+router.post("/match", (req: Request, res: Response) => {    
+    const findResponse: UserFindResponse = {
+        "error": {},
+        "results": []
+    };
+
+    if (!isUserFindRequest(req.body)) {
+        findResponse.error = {
+            "message": "Invalid request parameters!"
+        };
+        res.json(findResponse);
+        return;
+    }
+
+    const queryStatement: string = "SELECT userId, email, firstName, lastName, age FROM users WHERE userId = ?";
+    db.query(queryStatement, req.body.userId, (queryError: MysqlError | null, queryResults: any ) => {
+        if (queryError) {
+            findResponse.error =  {
+                "message": queryError.sqlMessage
+            };
+        } else if (queryResults.length !== 1) {
+            findResponse.error = {
+                "message": "No user found"
+            };
+        } else {
+            findResponse.results = queryResults;
+        }
+        res.json(findResponse);
+    }); 
+});
 
 export default router;
 

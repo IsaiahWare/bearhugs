@@ -87,7 +87,6 @@ handleInputChange(event) {
                                 </div>
                                 <div className="row center-row">
                                 <p>Don't have an account?  <Link to="/register" className="route-link">Register here! </Link></p>
-                                <Link to="/viewmatches" className="route-link">View matches prototype</Link>
                             </div>
                             </form>
 
