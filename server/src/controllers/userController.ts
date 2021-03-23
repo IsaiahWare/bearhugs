@@ -149,6 +149,13 @@ router.post("/find", (req: Request, res: Response) => {
     }); 
 });
 
+function shuffleArray(array: any) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+}
+
 router.post("/random", (req: Request, res: Response) => {    
     const randomResponse: UserRandomResponse = {
         "error": {},
@@ -170,7 +177,8 @@ router.post("/random", (req: Request, res: Response) => {
                 "message": queryError.sqlMessage
             };
         } else {
-            randomResponse.results = queryResults;
+            shuffleArray(queryResults);
+            randomResponse.results = queryResults.slice(0, req.body.count);
         }
         res.json(randomResponse);
     }); 
