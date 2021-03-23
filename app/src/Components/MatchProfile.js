@@ -24,28 +24,11 @@ class MatchProfile extends React.Component {
                             <div className="scroll-box margin-1rem">
                                 <div className="row center-row wraps">
                                     <div className="text-container">
-                                    <p>{this.props.descrip}</p>
+                                        <p>{this.props.descrip}</p>
                                     </div>
                                 </div>
                             </div>
-                            <div className="row center-row fit-container-width red">
-                            <div className="col center-col padding-left-right-2" onClick={() => this.props.onClickAccept(this.props.userId)}>
-                                <div className="red">
-                                    <FontAwesomeIcon icon={faHeart}
-                                        color="#ffffff"
-                                        size="4x"
-                                    />
-                                </div>
-                            </div>
-                            <div className="col center-col padding-left-right-2 margin-left-right-1 " onClick={() => this.props.onClickReject(this.props.userId)}>
-                                    <div className="red">
-                                        <FontAwesomeIcon icon={faHeartBroken}
-                                            color="#ffffff"
-                                            size="4x"
-                                        />
-                                    </div>
-                            </div>
-                            </div>
+                       
                         </div>
                     </div>
                 </div>

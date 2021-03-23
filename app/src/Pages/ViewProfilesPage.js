@@ -4,6 +4,9 @@ import "../App.css"
 import MatchProfile from '../Components/MatchProfile';
 import BearHugsNavbar from "../Components/BearHugsNavbar"
 import UserToken from "../Components/UserToken"
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faHeart, faHeartBroken } from '@fortawesome/free-solid-svg-icons'
+
 let baseDomain = "http://ec2-54-146-61-111.compute-1.amazonaws.com:3000"
 class ViewProfilePage extends React.Component {
     constructor(props) {
@@ -41,7 +44,7 @@ class ViewProfilePage extends React.Component {
     onClickAccept(userId) {
         let temp = this.state.profiles
         let tempProfiles = this.state.numProfiles-1
-        let tempResult = temp.filter((obj, userId) => {
+        let tempResult = temp.filter((obj) => {
         console.log(obj)
 		return obj.userId != userId
         })
@@ -57,7 +60,7 @@ class ViewProfilePage extends React.Component {
     onClickReject(userId) {
         let temp = this.state.profiles
         let tempProfiles = this.state.numProfiles-1
-        let tempResult = temp.filter((obj, userId) => {
+        let tempResult = temp.filter((obj) => {
 		console.log(obj)
 		console.log(userId)
             return obj.userId != userId
@@ -78,7 +81,27 @@ class ViewProfilePage extends React.Component {
                     <div className="col center-col">
                         {
                             this.state.profiles.map((profile) =>
-                                <MatchProfile key={profile.userId} userId={profile.userId}  onClickAccept={() => this.onClickAccept(profile.userId)} onClickReject={() => this.onClickReject(profile.userId)} imgsrc="mail-order-wife.png" firstName={profile.firstName} lastName={profile.lastName} age={profile.age} descrip={profile.descrip} ></MatchProfile>
+                            <div className="row">
+                                <MatchProfile key={profile.userId} userId={profile.userId} imgsrc="mail-order-wife.png" firstName={profile.firstName} lastName={profile.lastName} age={profile.age} descrip={profile.descrip}></MatchProfile>
+                                <div className="row center-row fit-container-width red">
+                                <div className="col center-col padding-left-right-2" onClick={() => this.props.onClickAccept(profile.userId)}>
+                                    <div className="red">
+                                        <FontAwesomeIcon icon={faHeart}
+                                            color="#ffffff"
+                                            size="4x"
+                                        />
+                                    </div>
+                                </div>
+                                <div className="col center-col padding-left-right-2 margin-left-right-1 " onClick={() => this.props.onClickReject(profile.userId)}>
+                                    <div className="red">
+                                        <FontAwesomeIcon icon={faHeartBroken}
+                                            color="#ffffff"
+                                            size="4x"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                                </div>
                             )
                         }
 
