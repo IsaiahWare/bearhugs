@@ -2,13 +2,13 @@ import React, { Component } from 'react';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import "../App.css"
 import MatchProfile from '../Components/MatchProfile';
-import Navbar from "../Components/Navbar"
+import BearHugsNavbar from "../Components/BearHugsNavbar"
 class ViewProfilePage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             profiles: [],
-            numProfiles=0
+            numProfiles:0
         }
     
     }
@@ -68,7 +68,7 @@ class ViewProfilePage extends React.Component {
     render() {
         return (
             <div className="page">
-                <Navbar></Navbar>
+                <BearHugsNavbar></BearHugsNavbar>
                 <div className="row center-row">
                     <div className="col center-col">
                         {

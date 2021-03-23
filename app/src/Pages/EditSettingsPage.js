@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUser, faCog } from '@fortawesome/free-solid-svg-icons'
 import "../App.css"
 import UserToken from '../Components/UserToken'
+import BearHugsNavbar from '../Components/BearHugsNavbar'
 
 let baseDomain = "http://ec2-54-146-61-111.compute-1.amazonaws.com:3000"
 
@@ -66,7 +67,9 @@ class EditSettingsPage extends React.Component {
     render() {
         return (
         <div className="page">
+            <BearHugsNavbar></BearHugsNavbar>
             <div className="col">
+
                 <form onSubmit={this.handleSubmit}>
 		<div className="row">
 		<h3>{this.state.feedback}</h3>
