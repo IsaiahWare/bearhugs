@@ -1,6 +1,6 @@
-import { UserFriendRequest } from "../models/friendControllerModels";
+import { UserFriendFindRequest } from "../models/friendControllerModels";
 
-export function isUserFriendRequest(obj: any): obj is UserFriendRequest {
+export function isUserFriendFindRequest(obj: any): obj is UserFriendFindRequest {
   return obj.userId !== undefined && Object.keys(obj).length === 1;
 }
 
