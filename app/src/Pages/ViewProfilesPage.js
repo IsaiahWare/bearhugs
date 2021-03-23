@@ -57,26 +57,21 @@ class ViewProfilePage extends React.Component {
 
     }
     onClickReject(userId) {
-        // let temp = this.state.profiles
-        // let tempProfiles = this.state.numProfiles-1
-        // let tempResult = temp.filter((obj) => {
-		// console.log(obj)
-		// console.log(userId)
-        // if (obj.userId === userId) {
-        //     console.log("remove " + JSON.stringify(obj))
-        // }
-        //     return obj.userId !== userId
-        // })
-	    // console.log("tempresult"+ JSON.stringify(tempResult))
-        // this.setState({
-        //     profiles: tempResult,
-        //     numProfiles:tempProfiles
-        // })
-    this.setState({items: this.state.profiles.filter(profile => profile.userId !== userId )}, ()=> {
-        console.log("click reject")
-        console.log(this.state.profiles)
-    })
-
+        let temp = this.state.profiles
+        let tempProfiles = this.state.numProfiles-1
+        let tempResult = temp.filter((obj) => {
+		console.log(obj)
+		console.log(userId)
+        if (obj.userId === userId) {
+            console.log("remove " + JSON.stringify(obj))
+        }
+            return obj.userId !== userId
+        })
+	    console.log("tempresult"+ JSON.stringify(tempResult))
+        this.setState({
+            profiles: tempResult,
+            numProfiles:tempProfiles
+        })
     }
     render() {
         return (
@@ -86,8 +81,8 @@ class ViewProfilePage extends React.Component {
                     <div className="col center-col">
                         {
                             this.state.profiles.map((profile) =>
-                            <div className="row">
-                                <MatchProfile key={profile.userId} userId={profile.userId} imgsrc="mail-order-wife.png" firstName={profile.firstName} lastName={profile.lastName} age={profile.age} descrip={profile.descrip}></MatchProfile>
+                            <div className="row center-row match-container" key = {"row0" + profile.userId}>
+                                <MatchProfile key={profile.userId} userId={profile.userId} imgsrc="mail-order-wife.png" firstName={profile.firstName} lastName={profile.lastName} age={profile.age} descrip={profile.description}></MatchProfile>
                                 <div key ={"row-" + profile.userId} className="row center-row fit-container-width red">
                                 <div key ={"col1-" + profile.userId} className="col center-col padding-left-right-2"  onClick={() => this.onClickAccept(profile.userId)}>
                                     <div key ={"red1-" + profile.userId}  className="red">
@@ -110,6 +105,7 @@ class ViewProfilePage extends React.Component {
                                 </div>
                             )
                         }
+
 
                     </div>
                 </div>
