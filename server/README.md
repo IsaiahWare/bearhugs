@@ -158,4 +158,32 @@ const response = {
   ]
 }
 ```
+## QUIZ
+### `POST /quiz/create`
 
+Store a quiz for a particular user
+
+```
+Request {
+  userId: number
+  quizResults: JSON stringified
+}
+```
+### `POST /quiz/find`
+
+Find a quiz for a particular user
+
+```
+Request {
+  userId: number
+}
+
+Response {
+  error: {}
+  results: [
+    {
+      "quizResults": JSON
+    }
+  ]
+}
+```
