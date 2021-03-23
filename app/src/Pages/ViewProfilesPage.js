@@ -62,6 +62,7 @@ class ViewProfilePage extends React.Component {
 		console.log(userId)
             return obj.userId != userId
         })
+	    console.log("tempresult"+ tempResult)
         this.setState({
             result: tempResult,
             numProfiles:tempProfiles
@@ -77,7 +78,7 @@ class ViewProfilePage extends React.Component {
                     <div className="col center-col">
                         {
                             this.state.profiles.map((profile) =>
-                                <MatchProfile key={profile.userId} userId={profile.userId}  onClickAccept={() => this.onClickAccept(userId)} onClickReject={() => this.onClickReject(userId)} imgsrc="mail-order-wife.png" firstName={profile.firstName} lastName={profile.lastName} age={profile.age} descrip={profile.descrip} ></MatchProfile>
+                                <MatchProfile key={profile.userId} userId={profile.userId}  onClickAccept={() => this.onClickAccept(profile.userId)} onClickReject={() => this.onClickReject(profile.userId)} imgsrc="mail-order-wife.png" firstName={profile.firstName} lastName={profile.lastName} age={profile.age} descrip={profile.descrip} ></MatchProfile>
                             )
                         }
 
