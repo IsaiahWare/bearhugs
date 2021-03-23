@@ -33,14 +33,14 @@ class LoginPage extends React.Component {
         },
         body: JSON.stringify(newRequest)
     })
-     .then(response => {
-	   let responseData = response.json()
-       console.log(responseData)
+    .then(res => res.json())
+     .then(responseData => {
+        // TODO: handle case where login is invalid 
         if (responseData.error!=null) {
-		console.log(responseData.value)
-		UserToken.setUserId(responseData.results[0].id)
-		this.setState({redirect:true})
-            
+            console.log(responseData.value)
+            UserToken.setUserId(responseData.results[0].id)
+            console.log(UserToken.getUserId())
+            this.setState({redirect:true})
         }
     })
 }

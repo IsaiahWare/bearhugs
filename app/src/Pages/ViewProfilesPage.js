@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import "../App.css"
 import MatchProfile from '../Components/MatchProfile';
 import BearHugsNavbar from "../Components/BearHugsNavbar"
+import UserToken from "../Components/UserToken"
 class ViewProfilePage extends React.Component {
     constructor(props) {
         super(props);
@@ -41,7 +42,7 @@ class ViewProfilePage extends React.Component {
     onClickAccept(userId) {
         let temp = this.state.profiles
         let tempProfiles = this.state.numProfiles-1
-        let result = temp.filter(obj, userId => {
+        let result = temp.filter((obj, userId) => {
             return obj.id != userId
         })
         this.setState({
@@ -55,7 +56,7 @@ class ViewProfilePage extends React.Component {
     onClickReject(userId) {
         let temp = this.state.profiles
         let tempProfiles = this.state.numProfiles-1
-        let result = temp.filter(obj, userId => {
+        let result = temp.filter((obj, userId) => {
             return obj.id != userId
         })
         this.setState({
@@ -73,7 +74,7 @@ class ViewProfilePage extends React.Component {
                     <div className="col center-col">
                         {
                             this.state.profiles.map((profile) =>
-                                <MatchProfile id={profile.id} userId={profile.id} onClickAccept={() => this.onClickAccept(userId)} onClickReject={() => this.onClickReject(userId)} imgsrc="mail-order-wife.png" firstName={profile.firstName} lastName={profile.lastName} age={profile.age} descrip={profile.descrip} ></MatchProfile>
+                                <MatchProfile id={profile.id} userId={profile.id} onClickAccept={() => this.onClickAccept(UserToken.getUserId())} onClickReject={() => this.onClickReject(UserToken.getUserId())} imgsrc="mail-order-wife.png" firstName={profile.firstName} lastName={profile.lastName} age={profile.age} descrip={profile.descrip} ></MatchProfile>
                             )
                         }
 
