@@ -5,6 +5,7 @@ import { faUser, faCog } from '@fortawesome/free-solid-svg-icons'
 import "../App.css"
 import UserToken from '../Components/UserToken'
 import BearHugsNavbar from '../Components/BearHugsNavbar'
+import Button from 'react-bootstrap/Button';
 
 let baseDomain = "http://ec2-54-146-61-111.compute-1.amazonaws.com:3000"
 
@@ -74,7 +75,7 @@ class EditSettingsPage extends React.Component {
 		<div className="row">
 		<h3>{this.state.feedback}</h3>
 		</div>
-               <div className="row">
+               <div className="input-row">
                    <div className="col">
                        <input type="text" placeholder="First Name" name="firstName" value={this.state.firstName} onChange={this.handleInputChange}></input>
                    </div>
@@ -82,10 +83,13 @@ class EditSettingsPage extends React.Component {
                        <input type="text" placeholder="Last Name" name="lastName" value={this.state.lastName} onChange={this.handleInputChange}></input>
                    </div>
                </div>
-               <div className="row">
+               <div className="input-row ">
                     <textarea rows="4" cols="50" placeholder="Write what you want people to see when they check your profile"  name="description" value={this.state.description} onChange={this.handleInputChange}></textarea>
                </div>
-               <button type="submit" className="full-width-button red" name="submit-button">Submit Changes</button>
+               <div className="input-row center-row">
+               <button type="submit" className="button red" name="submit-button">Submit Changes</button>
+               </div>
+              
                </form>
            </div>
         </div>
