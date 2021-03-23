@@ -57,22 +57,26 @@ class ViewProfilePage extends React.Component {
 
     }
     onClickReject(userId) {
-        let temp = this.state.profiles
-        let tempProfiles = this.state.numProfiles-1
-        let tempResult = temp.filter((obj) => {
-		console.log(obj)
-		console.log(userId)
-        if (obj.userId === userId) {
-            console.log("remove " + JSON.stringify(obj))
-        }
-            return obj.userId !== userId
-        })
-	    console.log("tempresult"+ JSON.stringify(tempResult))
-        this.setState({
-            profiles: tempResult,
-            numProfiles:tempProfiles
-        })
-	console.log("click reject")
+        // let temp = this.state.profiles
+        // let tempProfiles = this.state.numProfiles-1
+        // let tempResult = temp.filter((obj) => {
+		// console.log(obj)
+		// console.log(userId)
+        // if (obj.userId === userId) {
+        //     console.log("remove " + JSON.stringify(obj))
+        // }
+        //     return obj.userId !== userId
+        // })
+	    // console.log("tempresult"+ JSON.stringify(tempResult))
+        // this.setState({
+        //     profiles: tempResult,
+        //     numProfiles:tempProfiles
+        // })
+    this.setState({items: this.state.profiles.filter(profile => profile.userId !== userId )}, ()=> {
+        console.log("click reject")
+        console.log(this.state.profiles)
+    })
+
     }
     render() {
         return (
