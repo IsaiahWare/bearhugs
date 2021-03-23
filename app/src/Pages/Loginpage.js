@@ -38,7 +38,7 @@ class LoginPage extends React.Component {
         // TODO: handle case where login is invalid 
         if (responseData.error!=null) {
             console.log(responseData.value)
-            UserToken.setUserId(responseData.results[0].id)
+            UserToken.setUserId(responseData.results[0].userId)
             console.log(UserToken.getUserId())
             this.setState({redirect:true})
         }
