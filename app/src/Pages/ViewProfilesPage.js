@@ -15,7 +15,7 @@ class ViewProfilePage extends React.Component {
     
     }
     componentDidMount() {
-        let url = baseDomain + '/users/random'
+        let url = baseDomain + '/user/random'
         let newRequest = {
             count: 5
         }
@@ -41,29 +41,33 @@ class ViewProfilePage extends React.Component {
     onClickAccept(userId) {
         let temp = this.state.profiles
         let tempProfiles = this.state.numProfiles-1
-        let result = temp.filter((obj, userId) => {
-            return obj.id != userId
+        let tempResult = temp.filter((obj, userId) => {
+            	console.log(obj)
+		return obj.userId != userId
         })
         this.setState({
-            result: temp,
+            result: tempResult,
             numProfiles:tempProfiles
 
         })
+	    console.log("click accept")
 
 
     }
     onClickReject(userId) {
         let temp = this.state.profiles
         let tempProfiles = this.state.numProfiles-1
-        let result = temp.filter((obj, userId) => {
-            return obj.id != userId
+        let tempResult = temp.filter((obj, userId) => {
+		console.log(obj)
+		console.log(userId)
+            return obj.userId != userId
         })
         this.setState({
-            result: temp,
+            result: tempResult,
             numProfiles:tempProfiles
 
         })
-
+	console.log("click reject")
     }
     render() {
         return (
@@ -73,7 +77,7 @@ class ViewProfilePage extends React.Component {
                     <div className="col center-col">
                         {
                             this.state.profiles.map((profile) =>
-                                <MatchProfile id={profile.userId} userId={profile.userId}  onClickAccept={() => this.onClickAccept(UserToken.getUserId())} onClickReject={() => this.onClickReject(UserToken.getUserId())} imgsrc="mail-order-wife.png" firstName={profile.firstName} lastName={profile.lastName} age={profile.age} descrip={profile.descrip} ></MatchProfile>
+                                <MatchProfile key={profile.userId} userId={profile.userId}  onClickAccept={() => this.onClickAccept(UserToken.getUserId())} onClickReject={() => this.onClickReject(UserToken.getUserId())} imgsrc="mail-order-wife.png" firstName={profile.firstName} lastName={profile.lastName} age={profile.age} descrip={profile.descrip} ></MatchProfile>
                             )
                         }
 
