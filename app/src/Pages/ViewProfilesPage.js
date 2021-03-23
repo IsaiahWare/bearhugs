@@ -49,7 +49,7 @@ class ViewProfilePage extends React.Component {
 		return obj.userId != userId
         })
         this.setState({
-            result: tempResult,
+            profiles: tempResult,
             numProfiles:tempProfiles
 
         })
@@ -62,16 +62,15 @@ class ViewProfilePage extends React.Component {
         let tempResult = temp.filter((obj) => {
 		console.log(obj)
 		console.log(userId)
-        if (obj.userId !== userId) {
+        if (obj.userId === userId) {
             console.log("remove " + JSON.stringify(obj))
         }
             return obj.userId !== userId
         })
 	    console.log("tempresult"+ JSON.stringify(tempResult))
         this.setState({
-            result: tempResult,
+            profiles: tempResult,
             numProfiles:tempProfiles
-
         })
 	console.log("click reject")
     }
