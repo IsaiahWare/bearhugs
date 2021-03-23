@@ -83,8 +83,8 @@ class ViewProfilePage extends React.Component {
                             this.state.profiles.map((profile) =>
                             <div className="row">
                                 <MatchProfile key={profile.userId} userId={profile.userId} imgsrc="mail-order-wife.png" firstName={profile.firstName} lastName={profile.lastName} age={profile.age} descrip={profile.descrip}></MatchProfile>
-                                <div className="row center-row fit-container-width red">
-                                <div className="col center-col padding-left-right-2" onClick={() => this.props.onClickAccept(profile.userId)}>
+                                <div key={profile.userId} className="row center-row fit-container-width red">
+                                <div className="col center-col padding-left-right-2"  onClick={() => this.onClickAccept(profile.userId)}>
                                     <div className="red">
                                         <FontAwesomeIcon icon={faHeart}
                                             color="#ffffff"
@@ -92,7 +92,7 @@ class ViewProfilePage extends React.Component {
                                         />
                                     </div>
                                 </div>
-                                <div className="col center-col padding-left-right-2 margin-left-right-1 " onClick={() => this.props.onClickReject(profile.userId)}>
+                                <div className="col center-col padding-left-right-2 margin-left-right-1 " onClick={() => this.onClickReject(profile.userId)}>
                                     <div className="red">
                                         <FontAwesomeIcon icon={faHeartBroken}
                                             color="#ffffff"
