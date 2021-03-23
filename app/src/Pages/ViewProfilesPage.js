@@ -88,18 +88,19 @@ class ViewProfilePage extends React.Component {
                             this.state.profiles.map((profile) =>
                             <div className="row">
                                 <MatchProfile key={profile.userId} userId={profile.userId} imgsrc="mail-order-wife.png" firstName={profile.firstName} lastName={profile.lastName} age={profile.age} descrip={profile.descrip}></MatchProfile>
-                                <div key={profile.userId} className="row center-row fit-container-width red">
-                                <div className="col center-col padding-left-right-2"  onClick={() => this.onClickAccept(profile.userId)}>
-                                    <div className="red">
-                                        <FontAwesomeIcon icon={faHeart}
+                                <div key ={"row-" + profile.userId} className="row center-row fit-container-width red">
+                                <div key ={"col1-" + profile.userId} className="col center-col padding-left-right-2"  onClick={() => this.onClickAccept(profile.userId)}>
+                                    <div key ={"red1-" + profile.userId}  className="red">
+                                        <FontAwesomeIcon key ={"heart-" + profile.userId}  icon={faHeart}
                                             color="#ffffff"
                                             size="4x"
                                         />
                                     </div>
                                 </div>
-                                <div className="col center-col padding-left-right-2 margin-left-right-1 " onClick={() => this.onClickReject(profile.userId)}>
-                                    <div className="red">
+                                <div key ={"col2-" + profile.userId}  className="col center-col padding-left-right-2 margin-left-right-1 " onClick={() => this.onClickReject(profile.userId)}>
+                                    <div key ={"red2-" + profile.userId} className="red">
                                         <FontAwesomeIcon icon={faHeartBroken}
+                                          key ={"heartbroken-" + profile.userId} 
                                             color="#ffffff"
                                             size="4x"
                                         />
