@@ -23,34 +23,34 @@ class EditSettingsPage extends React.Component {
     }
 
     handleSubmit(event){
-        event.preventDefault();
-        let uid = UserToken.getUserId();
-        let url = baseDomain + 'endpoint'
-        let newRequest = {
-            "uid": uid,
-            "firstName": this.state.firstName,
-            "lastName": this.state.lastName,
-            "description": this.state.description
-        }
+         event.preventDefault();
+    //     let uid = UserToken.getUserId();
+    //     let url = baseDomain + 'endpoint'
+    //     let newRequest = {
+    //         "uid": uid,
+    //         "firstName": this.state.firstName,
+    //         "lastName": this.state.lastName,
+    //         "description": this.state.description
+    //     }
 
-        fetch(url, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(newRequest)
+    //     fetch(url, {
+    //     method: 'POST',
+    //     headers: {
+    //         'Content-Type': 'application/json'
+    //     },
+    //     body: JSON.stringify(newRequest)
 
-    })
-    .then(response => {
-        let responseText = response.json()
-        if (responseText.error==null) {
-            this.setState({feedback:"Changes successfully saved!"})
-        }
-        else {
-            this.setState({feedback:"Changes could not be saved, please try again :("})
-        }
+    // })
+    // .then(response => {
+    //     let responseText = response.json()
+    //     if (responseText.error==null) {
+    //         this.setState({feedback:"Changes successfully saved!"})
+    //     }
+    //     else {
+    //         this.setState({feedback:"Changes could not be saved, please try again :("})
+    //     }
   
-     })
+    //  })
 
     }
 
