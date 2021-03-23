@@ -103,7 +103,8 @@ router.post("/login", (req: Request, res: Response) => {
                             "email": queryResults[0].email,
                             "firstName": queryResults[0].firstName,
                             "lastName": queryResults[0].lastName,
-                            "age": queryResults[0].age
+                            "age": queryResults[0].age,
+                            "description": queryResults[0].description
                         }
                     ];
                 }
@@ -132,7 +133,7 @@ router.post("/find", (req: Request, res: Response) => {
         return;
     }
 
-    const queryStatement: string = "SELECT userId, email, firstName, lastName, age FROM users WHERE userId = ?";
+    const queryStatement: string = "SELECT userId, email, firstName, lastName, age, description FROM users WHERE userId = ?";
     db.query(queryStatement, req.body.userId, (queryError: MysqlError | null, queryResults: any ) => {
         if (queryError) {
             findResponse.error =  {
@@ -183,36 +184,42 @@ router.post("/random", (req: Request, res: Response) => {
         res.json(randomResponse);
     }); 
 });
-// router.post("/match", (req: Request, res: Response) => {    
-//     const findResponse: UserFindResponse = {
-//         "error": {},
-//         "results": []
-//     };
 
-//     if (!isUserFindRequest(req.body)) {
-//         findResponse.error = {
-//             "message": "Invalid request parameters!"
-//         };
-//         res.json(findResponse);
-//         return;
-//     }
+router.post("/update", (req: Request, res: Response) => {
+    const updateResponse: any = {
+        "error": {},
+        "results": []
+    };
+    
+    const queryStatement: string = "UPDATE users SET email = ?, firstName = ?, lastName = ?, age = ?, description = ? WHERE userId = ?";
+    const queryArgs = [
+        req.body.email,
+        req.body.firstName,
+        req.body.lastName,
+        req.body.age,
+        req.body.description,
+        req.body.userId
+    ];
 
-//     const queryStatement: string = "SELECT userId, email, firstName, lastName, age FROM users WHERE userId = ?";
-//     db.query(queryStatement, req.body.userId, (queryError: MysqlError | null, queryResults: any ) => {
-//         if (queryError) {
-//             findResponse.error =  {
-//                 "message": queryError.sqlMessage
-//             };
-//         } else if (queryResults.length !== 1) {
-//             findResponse.error = {
-//                 "message": "No user found"
-//             };
-//         } else {
-//             findResponse.results = queryResults;
-//         }
-//         res.json(findResponse);
-//     }); 
-// });
-
- export default router;
+    db.query(queryStatement, queryArgs, (queryError: MysqlError | null, queryResults: any) => {
+        if (queryError) {
+            updateResponse.error = {
+                "message": queryError.sqlMessage
+            };
+        } else {
+            updateResponse.results = [
+                {
+                    "userId": req.body.userId,
+                    "email": req.body.email,
+                    "firstName": req.body.firstName,
+                    "lastName": req.body.lastName,
+                    "age": req.body.age,
+                    "description": req.body.description
+                }
+            ];
+        }
+        res.json(updateResponse);
+    });
+});
+export default router;
 
