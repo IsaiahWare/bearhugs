@@ -3,37 +3,88 @@ import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUser, faCog } from '@fortawesome/free-solid-svg-icons'
 import "../App.css"
+import UserToken from '../Components/UserToken'
 
+let baseDomain = "http://ec2-54-146-61-111.compute-1.amazonaws.com:3000"
 
 class EditSettingsPage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            description: "",
+            firstName: "",
+            lastName: "",
+            feedback:""
 
         }
+        this.handleInputChange = this.handleInputChange.bind(this)
+        this.handleSubmit =this.handleSubmit.bind(this)
 
     }
+
+    handleSubmit(event){
+        event.preventDefault();
+        let uid = UserToken.getUserId();
+        let url = baseDomain + 'endpoint'
+        let newRequest = {
+            "uid": uid,
+            "firstName": this.state.firstName,
+            "lastName": this.state.lastName,
+            "description": this.state.description
+        }
+
+        fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(newRequest)
+
+    })
+    .then(response => {
+        let responseText = response.json()
+        if (responseText.error==null) {
+            this.setState({feedback:"Changes successfully saved!"})
+        }
+        else {
+            this.setState({feedback:"Changes could not be saved, please try again :("})
+        }
+  
+     })
+
+    }
+
+
+    handleInputChange(event) {
+        let target = event.target;
+        let value = target.value
+        let name = target.name;
+        this.setState({
+          [name]: value });
+    }
+
     render() {
         return (
         <div className="page">
-            <div className="col ">
-                <div className="row margin-1rem">
-                    <FontAwesomeIcon icon={faUser}
-                                    size="2x"
-                        />
-                    <Link to ="/profile/editprofile">My Profile</Link>
-                </div>
-                 <div className="row margin-1rem">
-                    <FontAwesomeIcon icon={faCog}
-                                    size="2x"
-                            />
-               
-                <Link to='/profile/settings'>Settings and Security</Link>
-                </div>
-            </div>
             <div className="col">
-                {this.props.children}
-            </div>
+                <form onSubmit={this.handleSubmit}>
+		<div className="row">
+		<h3>{this.state.feedback}</h3>
+		</div>
+               <div className="row">
+                   <div className="col">
+                       <input type="text" placeholder="First Name" name="firstName" value={this.state.firstName} onChange={this.handleInputChange}></input>
+                   </div>
+                   <div className="col">
+                       <input type="text" placeholder="Last Name" name="lastName" value={this.state.lastName} onChange={this.handleInputChange}></input>
+                   </div>
+               </div>
+               <div className="row">
+                    <textarea rows="4" cols="50" placeholder="Write what you want people to see when they check your profile"  name="description" value={this.state.description} onChange={this.handleInputChange}></textarea>
+               </div>
+               <button type="submit" className="full-width-button red" name="submit-button">Submit Changes</button>
+               </form>
+           </div>
         </div>
 
         );
@@ -41,3 +92,4 @@ class EditSettingsPage extends React.Component {
 }
 
 export default EditSettingsPage;
+

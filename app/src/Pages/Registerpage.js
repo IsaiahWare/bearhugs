@@ -5,7 +5,6 @@ import "../App.css"
 
 
 let baseDomain = "http://ec2-54-146-61-111.compute-1.amazonaws.com:3000"
-let corsHelper = "https://cors-anywhere.herokuapp.com/";
 class RegisterPage extends React.Component {
     constructor(props) {
         super(props);
@@ -14,7 +13,8 @@ class RegisterPage extends React.Component {
             lastName:"",
             email:"",
             password:"",
-            errors:""
+            errors:"",
+            age:18
 
         }
         this.registerAccount = this.registerAccount.bind(this)
@@ -24,14 +24,14 @@ class RegisterPage extends React.Component {
 
     registerAccount(event) {
         event.preventDefault();
-        let url = corsHelper + baseDomain + '/user/register'
+        let url =  baseDomain + '/user/register'
         let newRequest = {
             "firstName": this.state.firstName,
             "lastName": this.state.lastName,
             "email": this.state.email,
-            "password": this.state.password
+            "password": this.state.password,
+            "age": this.state.age
         }
-        console.log(newRequest)
 
     fetch(url, {
         method: 'POST',
@@ -79,7 +79,7 @@ handleInputChange(event) {
                                     <input className="input" type='text' value={this.state.lastName} onChange={this.handleInputChange} name='lastName' placeholder="Last Name"/>
                                 </div>
                                 <div className="input-row center-row">
-                                    <input className="input" type='number' name='Age' placeholder="Type age here"/>
+                                    <input className="input" type='number' name='age' onChange={this.handleInputChange} value={this.state.age} placeholder="Type age here"/>
                                 </div>
                                 <div className="center-row padding-top-1rem">
                                     <div className="divider ">
@@ -89,6 +89,7 @@ handleInputChange(event) {
                                 <div className="input-row center-row">
                                     <button className="full-width-button red" type="submit">Register!</button>
                                 </div>
+                                <span className="error-span">{this.state.errors}</span>
                                 <div className="row center-row">
                                 <Link to="/" className="route-link">Back to Login </Link>
                             </div>
@@ -107,3 +108,4 @@ handleInputChange(event) {
 }
 
 export default RegisterPage;
+

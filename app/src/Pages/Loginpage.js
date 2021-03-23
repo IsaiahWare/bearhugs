@@ -1,15 +1,16 @@
 import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import "../App.css"
-
+import UserToken from  "../Components/UserToken.js"
 let baseDomain = "http://ec2-54-146-61-111.compute-1.amazonaws.com:3000"
-let corsHelper = "https://cors-anywhere.herokuapp.com/";
 class LoginPage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             email:"",
-            password:""
+            password:"",
+	    redirect: false
 
         }
         this.logIn= this.logIn.bind(this)
@@ -18,7 +19,7 @@ class LoginPage extends React.Component {
 
     logIn(event) {
         event.preventDefault();
-        let url = corsHelper + baseDomain + '/user/register'
+        let url =  baseDomain + '/user/login'
         let newRequest = {
             "email": this.state.email,
             "password": this.state.password
@@ -31,9 +32,16 @@ class LoginPage extends React.Component {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(newRequest)
-
     })
-    .then(response => console.log(response.json()))
+     .then(response => {
+	   let responseData = response.json()
+        if (responseData.error==null) {
+		console.log(responseData.value)
+		UserToken.setUserId(responseData.results[0].id)
+		this.setState({redirect:true})
+            
+        }
+    })
 }
 
 handleInputChange(event) {
@@ -45,6 +53,14 @@ handleInputChange(event) {
 }
 
     render() {
+	    const redirect = this.state.redirect
+	    if (redirect) {
+		        console.log("Response not null")
+            return <Redirect
+            to= "/viewmatches"
+            />
+    
+	 }
         return (
             <div className="page">
                    
@@ -59,7 +75,7 @@ handleInputChange(event) {
                                     <input className="input" type='text' name='email' value={this.state.email} onChange={this.handleInputChange} placeholder="Email"/>
                                 </div>
                                 <div className="input-row center-row">
-                                    <input className="input" type='password' value={this.state.password} onChange={this.handleInputChange} name='Password' placeholder="Password"/>
+                                    <input className="input" type='password' value={this.state.password} onChange={this.handleInputChange} name='password' placeholder="Password"/>
                                 </div>
                                 <div className="center-row padding-top-1rem">
                                     <div className="divider ">
