@@ -4,6 +4,7 @@ import "../App.css"
 import MatchProfile from '../Components/MatchProfile';
 import BearHugsNavbar from "../Components/BearHugsNavbar"
 import UserToken from "../Components/UserToken"
+let baseDomain = "http://ec2-54-146-61-111.compute-1.amazonaws.com:3000"
 class ViewProfilePage extends React.Component {
     constructor(props) {
         super(props);
@@ -13,31 +14,28 @@ class ViewProfilePage extends React.Component {
         }
     
     }
-    // componentDidMount() {
-    //     let url = baseDomain + 'getusers'
-    //     let newRequest = {
+    componentDidMount() {
+        let url = baseDomain + '/users/random'
+        let newRequest = {
+            count: 5
+        }
 
-    //     }
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newRequest)
+        })
+        .then(res => res.json())
+        .then(responseData => {
+           // TODO: handle case where login is invalid 
+           if (responseData.error!=null) {
+               this.setState({profiles: results})
+           }
+       })
 
-
-    //     fetch(url, {
-    //         method: 'POST',
-    //         headers: {
-    //             'Content-Type': 'application/json'
-    //         },
-    //     })
-    //         .then(response => {
-    //             let responseData = response.json()
-    //             if (responseData.error == null) {
-    //                 UserToken.setUserId(responseData.results[0].id)
-    //                 this.setState({
-    //                     profiles: responseData.results.matches
-    //                 })
-
-    //             }
-    //         })
-
-    // }
+    }
 
     onClickAccept(userId) {
         let temp = this.state.profiles
@@ -74,7 +72,7 @@ class ViewProfilePage extends React.Component {
                     <div className="col center-col">
                         {
                             this.state.profiles.map((profile) =>
-                                <MatchProfile id={profile.id} userId={profile.id} onClickAccept={() => this.onClickAccept(UserToken.getUserId())} onClickReject={() => this.onClickReject(UserToken.getUserId())} imgsrc="mail-order-wife.png" firstName={profile.firstName} lastName={profile.lastName} age={profile.age} descrip={profile.descrip} ></MatchProfile>
+                                <MatchProfile id={profile.userId} userId={profile.userId}  onClickAccept={() => this.onClickAccept(UserToken.getUserId())} onClickReject={() => this.onClickReject(UserToken.getUserId())} imgsrc="mail-order-wife.png" firstName={profile.firstName} lastName={profile.lastName} age={profile.age} descrip={profile.descrip} ></MatchProfile>
                             )
                         }
 
