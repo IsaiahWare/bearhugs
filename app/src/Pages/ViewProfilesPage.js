@@ -53,7 +53,6 @@ class ViewProfilePage extends React.Component {
             numProfiles:tempProfiles
 
         })
-	    console.log("click accept")
 
 
     }
@@ -63,9 +62,12 @@ class ViewProfilePage extends React.Component {
         let tempResult = temp.filter((obj) => {
 		console.log(obj)
 		console.log(userId)
-            return obj.userId != userId
+        if (obj.userId !== userId) {
+            console.log("remove " + JSON.stringify(obj))
+        }
+            return obj.userId !== userId
         })
-	    console.log("tempresult"+ tempResult)
+	    console.log("tempresult"+ JSON.stringify(tempResult))
         this.setState({
             result: tempResult,
             numProfiles:tempProfiles
