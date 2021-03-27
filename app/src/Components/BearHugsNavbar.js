@@ -5,6 +5,14 @@ import { Navbar, Nav, NavItem, NavDropdown, MenuItem } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHome, faBell, faUserEdit, faSignOutAlt } from '@fortawesome/free-solid-svg-icons'
 class BearHugsNavbar extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+
+    }
+
+  }
+
     //
     render() {
         return (

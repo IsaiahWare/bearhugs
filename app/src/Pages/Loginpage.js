@@ -11,7 +11,6 @@ class LoginPage extends React.Component {
             email:"",
             password:"",
 	    redirect: false
-
         }
         this.logIn= this.logIn.bind(this)
         this.handleInputChange = this.handleInputChange.bind(this)
@@ -36,7 +35,7 @@ class LoginPage extends React.Component {
     .then(res => res.json())
      .then(responseData => {
         // TODO: handle case where login is invalid 
-        if (responseData.error!=null) {
+        if (!responseData.error) {
             console.log(responseData.value)
             UserToken.setUserId(responseData.results[0].userId)
             console.log(UserToken.getUserId())
