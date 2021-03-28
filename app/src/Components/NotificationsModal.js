@@ -23,4 +23,4 @@ import './NotificationsModal.css';
         );
     };
 
-export default NotificationsModal;
+export default Modal;

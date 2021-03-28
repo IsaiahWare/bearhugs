@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import { Navbar, Nav, NavItem, NavDropdown, MenuItem } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHome, faBell, faUserEdit, faSignOutAlt } from '@fortawesome/free-solid-svg-icons'
-import Modal from './Modal.js';
+import Modal from './NotificationsModal.js';
 
 class BearHugsNavbar extends React.Component {
   constructor(props) {

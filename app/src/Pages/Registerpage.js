@@ -14,6 +14,7 @@ class RegisterPage extends React.Component {
             lastName:"",
             email:"",
             password:"",
+            confirmPassword:"",
             errors:"",
             age:18,
             feedback: " "
@@ -21,11 +22,98 @@ class RegisterPage extends React.Component {
         }
         this.registerAccount = this.registerAccount.bind(this)
         this.handleInputChange = this.handleInputChange.bind(this)
+        this.filterInputs= this.filterInputs.bind(this)
 
     }
 
-    registerAccount(event) {
-        event.preventDefault();
+    filterInputs(event) {
+        event.preventDefault()
+        let age = this.state.age;
+        let firstName = this.state.firstName
+        let lastName = this.state.lastName
+        let email= this.state.email
+        let password = this.state.password
+        let confirmPassword = this.state.confirmPassword
+        let ageFilter = this.filterAge(age)
+        let nameFilter = this.filterName(firstName, lastName)
+        let emailFilter = this.filterEmail(email)
+        let passwordFilter = this.filterPassword(password)
+        let confirmPassWordCheck = this.checkPassword(password, confirmPassword)
+        if (ageFilter && nameFilter && emailFilter && passwordFilter && confirmPassWordCheck) {
+            this.registerAccount()
+        }
+
+    }
+
+    checkPassword(password, confirmPassword) {
+        if (password != confirmPassword) {
+            this.setState({
+                feedback: "Password and confirm password do not match. Please enter password/confirm password again."
+            })
+            return false
+        }
+        return true
+    }
+    filterPassword(password) {
+        const re = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/
+        if (!re.test(password)) {
+            this.setState({
+                feedback: "Password should contain at least eight characters, and it should have at least one uppercase character, one lowercase character, and one digit."
+            })
+            return false
+        }
+    }
+  //https://stackoverflow.com/questions/46155/how-to-validate-an-email-address-in-javascript
+    filterEmail(email) {
+        const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        if (!re.test(String(email).toLowerCase())) {
+            this.setState({
+                feedback: "Please enter a valid full email of the form 'wustlkey@wustl.edu."
+            })
+            return false
+        }
+        let afterAt = email.split('@')[1]
+        if (afterAt!= "wustl.edu") {
+            this.setState({
+                feedback: "Your email must be a wustl.edu email. Please enter a wustl.edu email"
+            })
+            return false
+        }
+        return true;
+    }
+
+
+    //https://www.codexworld.com/how-to/validate-first-last-name-with-regular-expression-using-javascript/
+    filterName(firstName, lastName) {
+        var regName = /^[a-zA-Z]+ [a-zA-Z]+$/;
+        if(!regName.test(firstName) || (!regName.test(lastName))){
+            this.setState({
+                feedback: "Please enter a valid full first and last name."
+            })
+            return false;
+        }else{
+            return true;
+        }
+
+    }
+
+    filterAge(age) {
+        if (age < 18){
+            this.setState({
+                feedback: "You have to be over 18 to use this service."
+            })
+            return false;
+        }
+        else if (age > 110) {
+            this.setState({
+                feedback: "Please enter a reasonable age."
+            })
+            return false;
+        }
+        return true;
+    }
+
+    registerAccount() {
         let url =  baseDomain + '/user/register'
         let newRequest = {
             "firstName": this.state.firstName,
@@ -75,7 +163,7 @@ handleInputChange(event) {
                 <div className="row center-row">
                     <div className="col center-col">
                         <div className="box margin-5rem ">
-                            <form onSubmit={this.registerAccount}>
+                            <form onSubmit={this.filterInputs}>
                             <div className="input-row center-row">
                             <h2 className="font-red">Register for Bear Hugs</h2>
                                 </div>
@@ -87,7 +175,7 @@ handleInputChange(event) {
                                     <input className="input" value={this.state.password} onChange={this.handleInputChange} type='password' name='password' placeholder="Password"/>
                                 </div>
                                 <div className="input-row center-row">
-                                    <input className="input" type='password' name='confirm_Password' placeholder="Confirm Password"/>
+                                    <input className="input" type='password' value={this.state.confirmPassword} onChange={this.handleInputChange} name='confirmPassword' placeholder="Confirm Password"/>
                                 </div>
                                 <div className="input-row center-row">
                                     <input className="input" type='text' value={this.state.firstName} onChange={this.handleInputChange} name='firstName' placeholder="First Name"/>
