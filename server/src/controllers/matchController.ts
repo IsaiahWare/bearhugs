@@ -7,7 +7,6 @@ import {
 import {
 } from "./../checkers/userControllerModelsChecker";
 
-const saltRounds: number = 10;
 const router = express.Router();
 
 router.post("/request", (req: Request, res: Response) => {    
@@ -23,15 +22,45 @@ router.post("/request", (req: Request, res: Response) => {
             matchResponse.error =  {
                 "message": queryError.sqlMessage
             };
+            res.json(matchResponse);
         } 
         else {
             if (queryResults.length === 1) {
-                const queryStatement2 = "INSERT INTO completeMatches SET ?";
+                const queryStatement2 = "DELETE FROM pendingMatches WHERE requesterId = ? AND requesteeID = ?";
+                const queryArgs2 = [req.body.requesteeId, req.body.requesterId];
+                db.query(queryStatement2, queryArgs2, (queryError2: MysqlError | null, queryResults2: any ) => {
+                    if (queryError2) {
+                        matchResponse.error =  {
+                            "message": queryError2.sqlMessage
+                        };
+                    } else {
+                        const queryStatement3 = "INSERT INTO completedMatches (userId1, userId2) VALUES (?,?), (?,?)";
+                        const queryArgs3 = [req.body.requesterId, req.body.requesteeId, req.body.requesteeId, req.body.requesterId];
+                        db.query(queryStatement3, queryArgs3, (queryError3: MysqlError | null, queryResults3: any ) => {
+                            if (queryError3) {
+                                matchResponse.error =  {
+                                    "message": queryError3.sqlMessage
+                                };
+                            } else {
+                                matchResponse.results = [
+                                    {
+                                        "matched": true
+                                    }
+                                ];
+                            }
+                            res.json(matchResponse);
+                        });
+                   }
+                });
+            } 
+            else {
+                const queryStatement2 = "INSERT INTO pendingMatches SET ?";
                 const queryArgs2 = {
                     "requesterId": req.body.requesterId,
                     "requesteeId": req.body.requesteeId
                 };
                 db.query(queryStatement2, queryArgs2, (queryError2: MysqlError | null, queryResults2: any ) => {
+                    console.log(queryResults2);
                     if (queryError2) {
                         matchResponse.error =  {
                             "message": queryError2.sqlMessage
@@ -39,22 +68,33 @@ router.post("/request", (req: Request, res: Response) => {
                     } else {
                         matchResponse.results = [
                             {
-                                "matched": true
+                                "matched": false
                             }
                         ];
                     }
+                    res.json(matchResponse);
                 });
-            } 
-            else {
-                matchResponse.results = [
-                    {
-                        "matched": false
-                    }
-                ];
             }
         }
-        res.json(matchResponse);
     }); 
+});
+
+router.post("/find", (req: Request, res: Response) => {
+    const matchResponse: any = {
+        "error": {},
+        "results": []
+    };
+    const queryStatement = "SELECT users.userId, users.email, users.firstName, users.lastName, users.age, users.description, users.genderIdentity, users.genderPreferences FROM users INNER JOIN completedMatches ON completedMatches.userId2 = users.userId WHERE completedMatches.userId1 = ?"; 
+    db.query(queryStatement, req.body.userId, (queryError: MysqlError | null, queryResults: any ) => {
+        if (queryError) {
+            matchResponse.error =  {
+                "message": queryError.sqlMessage
+            };
+        } else {
+            matchResponse.results = queryResults
+        }
+        res.json(matchResponse);
+    });
 });
 
 export default router;
