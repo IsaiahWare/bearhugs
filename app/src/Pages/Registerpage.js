@@ -85,8 +85,9 @@ class RegisterPage extends React.Component {
 
     //https://www.codexworld.com/how-to/validate-first-last-name-with-regular-expression-using-javascript/
     filterName(firstName, lastName) {
-        var regName = /^[a-zA-Z]$/;
-        if(!regName.test(firstName) || (!regName.test(lastName))){
+        var regName = /^[a-zA-Z]+ [a-zA-Z]+$/;
+        let fullName = firstName+" "+lastName
+        if(!regName.test(fullName)){
             this.setState({
                 feedback: "Please enter a valid full first and last name."
             })
