@@ -3,21 +3,8 @@ import db from "./../db";
 import express, { Response , Request } from "express";
 import { MysqlError } from "mysql";
 import {
-    User,
-    UserRegisterRequest,
-    UserRegisterResponse,
-    UserLoginRequest,
-    UserLoginResponse,
-    UserFindRequest,
-    UserFindResponse,
-    UserRandomRequest,
-    UserRandomResponse
 } from "./../models/userControllerModels";
 import {
-    isUserRegisterRequest,
-    isUserLoginRequest,
-    isUserFindRequest,
-    isUserRandomRequest
 } from "./../checkers/userControllerModelsChecker";
 
 const saltRounds: number = 10;
@@ -29,14 +16,42 @@ router.post("/match", (req: Request, res: Response) => {
         "results": []
     };
 
-    const queryStatement: string = "SELECT userId, email, firstName, lastName, age, description FROM users LIMIT ?";
-    db.query(queryStatement, req.body.count, (queryError: MysqlError | null, queryResults: any ) => {
+    const queryStatement: string = "SELECT requester FROM matchRequests WHERE requestee = ? AND requester = ?";
+    const queryArgs = [req.body.requester, req.body.requestee];
+    db.query(queryStatement, queryArgs, (queryError: MysqlError | null, queryResults: any ) => {
         if (queryError) {
             matchResponse.error =  {
                 "message": queryError.sqlMessage
             };
-        } else {
-            matchResponse.results = queryResults.slice(0, req.body.count);
+        } 
+        else {
+            if (queryResults.length === 1) {
+                const queryStatement2 = "INSERT INTO completeMatches SET ?";
+                const queryArgs2 = {
+                    "userId1": req.body.requester,
+                    "userId2": req.body.requestee
+                };
+                db.query(queryStatement2, queryArgs2, (queryError2: MysqlError | null, queryResults2: any ) => {
+                    if (queryError2) {
+                        matchResponse.error =  {
+                            "message": queryError2.sqlMessage
+                        };
+                    } else {
+                        matchResponse.results = [
+                            {
+                                "matched": true
+                            }
+                        ];
+                    }
+                });
+            } 
+            else {
+                matchResponse.results = [
+                    {
+                        "matched": false
+                    }
+                ];
+            }
         }
         res.json(matchResponse);
     }); 
