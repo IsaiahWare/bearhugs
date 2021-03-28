@@ -9,7 +9,7 @@ import {
 
 const router = express.Router();
 
-router.post("/request", (req: Request, res: Response) => {    
+router.post("/send", (req: Request, res: Response) => {    
     const matchResponse: any = {
         "error": {},
         "results": []
@@ -79,7 +79,7 @@ router.post("/request", (req: Request, res: Response) => {
     }); 
 });
 
-router.post("/find", (req: Request, res: Response) => {
+router.post("/matches", (req: Request, res: Response) => {
     const matchResponse: any = {
         "error": {},
         "results": []
@@ -92,6 +92,45 @@ router.post("/find", (req: Request, res: Response) => {
             };
         } else {
             matchResponse.results = queryResults
+        }
+        res.json(matchResponse);
+    });
+});
+
+router.post("/requests", (req: Request, res: Response) => {
+    const matchResponse: any = {
+        "error": {},
+        "results": []
+    };
+    const queryStatement = "SELECT users.userId, users.email, users.firstName, users.lastName, users.age, users.description, users.genderIdentity, users.genderPreferences FROM users INNER JOIN pendingMatches ON pendingMatches.requesterId = users.userId WHERE pendingMatches.requesteeId = ?"; 
+    db.query(queryStatement, req.body.userId, (queryError: MysqlError | null, queryResults: any ) => {
+        if (queryError) {
+            matchResponse.error =  {
+                "message": queryError.sqlMessage
+            };
+        } else {
+            matchResponse.results = queryResults;
+        }
+        res.json(matchResponse);
+    });
+});
+
+router.post("/unmatch", (req: Request, res: Response) => {
+    const matchResponse: any = {
+        "error": {},
+        "results": []
+    };
+    const queryStatement = "DELETE FROM completedMatches WHERE (userId1 = ? AND userId2 = ?) OR (userId1 = ? AND userId2 = ?)";
+    const queryArgs = [req.body.userId1, req.body.userId2, req.body.userId2, req.body.userId1];
+    db.query(queryStatement, queryArgs, (queryError: MysqlError | null, queryResults: any ) => {
+        if (queryError) {
+            matchResponse.error =  {
+                "message": queryError.sqlMessage
+            };
+        } else {
+            matchResponse.results = [{
+                "success": true
+            }]
         }
         res.json(matchResponse);
     });
