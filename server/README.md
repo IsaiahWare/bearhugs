@@ -269,7 +269,7 @@ Response {
   ]
 }
 ```
-## REQUESTS
+## FRIEND
 ### `POST /friend/send`
 ```
 Request {
