@@ -18,6 +18,7 @@ class LoginPage extends React.Component {
 
     logIn(event) {
         event.preventDefault();
+	  console.log("Login event")
         let url =  baseDomain + '/user/login'
         let newRequest = {
             "email": this.state.email,
@@ -34,13 +35,17 @@ class LoginPage extends React.Component {
     })
     .then(res => res.json())
      .then(responseData => {
-        // TODO: handle case where login is invalid 
-        if (!responseData.error) {
-            console.log(responseData.value)
+	     console.log("Data received")
+	     console.log(responseData)
+        // TODO: handle case where login is invalid
+	    if (JSON.stringify(responseData.error) === '{}') { 
+            console.log(responseData)
             UserToken.setUserId(responseData.results[0].userId)
             console.log(UserToken.getUserId())
-            this.setState({redirect:true})
-        }
+            this.setState({redirect:true},()=>
+		    console.log(this.state.redirect))
+	    }
+        
     })
 }
 
@@ -54,8 +59,9 @@ handleInputChange(event) {
 
     render() {
 	    const redirect = this.state.redirect
+	    console.log(redirect)
 	    if (redirect) {
-		        console.log("Response not null")
+		   console.log("Response not null")
             return <Redirect
             to= "/viewmatches"
             />
