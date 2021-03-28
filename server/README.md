@@ -269,3 +269,85 @@ Response {
   ]
 }
 ```
+## REQUESTS
+### `POST /friend/send`
+```
+Request {
+  requesterId: number, 
+  requesteeId: number
+}
+
+Response {
+  error: {}
+  results: [
+    {
+      matched: boolean
+    }
+  ]
+}
+```
+
+### `POST /friend/requests`
+```
+Request {
+  userId: number
+}
+
+Response {
+  error: {}
+  results: [
+    {
+      userId: number,
+      email: string,
+      firstName: string,
+      lastName: string,
+      age: number,
+      description: string,
+      genderIdentity: Enum('MALE', 'FEMALE', 'OTHER'),
+      genderPreferences: Enum('STRAIGHT', 'BISEXUAL', 'GAY', 'OTHER')
+    },
+    ...
+  ]
+}
+```
+
+### `POST /friend/friends`
+```
+Request {
+  userId: number
+}
+
+Response {
+  error: {}
+  results: [
+    {
+      userId: number,
+      email: string,
+      firstName: string,
+      lastName: string,
+      age: number,
+      description: string,
+      genderIdentity: Enum('MALE', 'FEMALE', 'OTHER'),
+      genderPreferences: Enum('STRAIGHT', 'BISEXUAL', 'GAY', 'OTHER')
+    },
+    ...
+  ]
+}
+```
+
+### `POST /friend/unfriend`
+```
+Request {
+  userId1: number, 
+  userId2: number
+}
+
+Response {
+  error: {}
+  results: [
+    {
+      success: boolean
+    }
+  ]
+}
+```
