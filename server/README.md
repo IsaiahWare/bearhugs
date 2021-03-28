@@ -188,7 +188,7 @@ Response {
 }
 ```
 ## MATCH
-### POST /match/request
+### `POST /match/request`
 ```
 Request {
   requesterId: number, 
