@@ -14,14 +14,12 @@ import EditSecurity from './Components/EditSecurity.js'
 
 function App() {
   return (
-    <Router basename={process.env.PUBLIC_URL}>
+  <Router basename={process.env.PUBLIC_URL}>
     <Switch>
         <Route exact path='/' component={LoginPage} />
         <Route exact path="/register" component={RegisterPage}></Route>
         <Route exact path="/viewmatches" component={ViewProfilePage}></Route>
        <Route exact path="/editsettings" component={EditSettingsPage}></Route>
-
- 
     </Switch>
 </Router>
   
