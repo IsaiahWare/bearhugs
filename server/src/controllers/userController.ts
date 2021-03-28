@@ -191,13 +191,15 @@ router.post("/update", (req: Request, res: Response) => {
         "results": []
     };
     
-    const queryStatement: string = "UPDATE users SET email = ?, firstName = ?, lastName = ?, age = ?, description = ? WHERE userId = ?";
+    const queryStatement: string = "UPDATE users SET email = ?, firstName = ?, lastName = ?, age = ?, description = ?, genderIdentity = ?, genderPreferences = ? WHERE userId = ?";
     const queryArgs = [
         req.body.email,
         req.body.firstName,
         req.body.lastName,
         req.body.age,
         req.body.description,
+        req.body.genderIdentity,
+        req.body.genderPreferences,
         req.body.userId
     ];
 
@@ -214,6 +216,8 @@ router.post("/update", (req: Request, res: Response) => {
                     "firstName": req.body.firstName,
                     "lastName": req.body.lastName,
                     "age": req.body.age,
+                    "genderIdentity": req.body.genderIdentity,
+                    "genderPreferences": req.body.genderPreferences,
                     "description": req.body.description
                 }
             ];

@@ -187,3 +187,20 @@ Response {
   ]
 }
 ```
+## MATCH
+### `POST /match/request`
+```
+Request {
+  requesterId: number, 
+  requesteeId: number
+}
+
+Response {
+  error: {}
+  results: [
+    {
+      "matched": boolean
+    }
+  ]
+}
+```
