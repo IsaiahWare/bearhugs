@@ -188,7 +188,7 @@ Response {
 }
 ```
 ## MATCH
-### `POST /match/request`
+### `POST /match/send`
 ```
 Request {
   requesterId: number, 
@@ -199,7 +199,72 @@ Response {
   error: {}
   results: [
     {
-      "matched": boolean
+      matched: boolean
+    }
+  ]
+}
+```
+
+### `POST /match/requests`
+```
+Request {
+  userId: number
+}
+
+Response {
+  error: {}
+  results: [
+    {
+      userId: number,
+      email: string,
+      firstName: string,
+      lastName: string,
+      age: number,
+      description: string,
+      genderIdentity: Enum('MALE', 'FEMALE', 'OTHER'),
+      genderPreferences: Enum('STRAIGHT', 'BISEXUAL', 'GAY', 'OTHER')
+    },
+    ...
+  ]
+}
+```
+
+### `POST /match/matches`
+```
+Request {
+  userId: number
+}
+
+Response {
+  error: {}
+  results: [
+    {
+      userId: number,
+      email: string,
+      firstName: string,
+      lastName: string,
+      age: number,
+      description: string,
+      genderIdentity: Enum('MALE', 'FEMALE', 'OTHER'),
+      genderPreferences: Enum('STRAIGHT', 'BISEXUAL', 'GAY', 'OTHER')
+    },
+    ...
+  ]
+}
+```
+
+### `POST /match/unmatch`
+```
+Request {
+  userId1: number, 
+  userId2: number
+}
+
+Response {
+  error: {}
+  results: [
+    {
+      success: boolean
     }
   ]
 }
