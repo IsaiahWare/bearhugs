@@ -85,7 +85,7 @@ class RegisterPage extends React.Component {
 
     //https://www.codexworld.com/how-to/validate-first-last-name-with-regular-expression-using-javascript/
     filterName(firstName, lastName) {
-        var regName = /^[a-zA-Z]+ [a-zA-Z]+$/;
+        var regName = /^[a-zA-Z]$/;
         if(!regName.test(firstName) || (!regName.test(lastName))){
             this.setState({
                 feedback: "Please enter a valid full first and last name."
@@ -99,6 +99,7 @@ class RegisterPage extends React.Component {
 
     filterAge(age) {
         if (age < 18){
+            console.log("Failed age check")
             this.setState({
                 feedback: "You have to be over 18 to use this service."
             })
