@@ -4,16 +4,27 @@ import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import { Navbar, Nav, NavItem, NavDropdown, MenuItem } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHome, faBell, faUserEdit, faSignOutAlt } from '@fortawesome/free-solid-svg-icons'
+import Modal from './Modal.js';
+
 class BearHugsNavbar extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-
-    }
-
+      open: false
+    };
+    this.openModal = this.openModal.bind(this);
+    this.closeModal = this.closeModal.bind(this);
   }
 
-    //
+  openModal = () => {
+    this.setState({open: true});
+
+  };
+
+  closeModal = () => {
+    this.setState({open: false})
+  };
+
     render() {
         return (
           
@@ -22,7 +33,10 @@ class BearHugsNavbar extends React.Component {
             <Navbar.Collapse id="basic-navbar-nav">
               <Nav className="mr-auto">
                 <Link to ="/viewmatches" className="nav-item nav-link mx-5" alt="Matches page"><FontAwesomeIcon icon={faHome}/></Link>
-                <Link to = "/notifications" className="nav-item nav-link mx-5"><FontAwesomeIcon icon={faBell}/></Link>
+                <Modal open={this.state.open} handleClose={this.closeModal}>
+                   <p>Notifications</p>
+                   </Modal>
+                <button onClick = {this.openModal} className="nav-item nav-link mx-5"><FontAwesomeIcon icon={faBell}/></button>
                 <Link to ="/editsettings" className="nav-item nav-link mx-5"><FontAwesomeIcon icon={faUserEdit}/></Link>
               </Nav>
               <Nav>

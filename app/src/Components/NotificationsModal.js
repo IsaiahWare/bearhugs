@@ -4,21 +4,23 @@ import ReactDOM from 'react-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHeart, faHeartBroken } from '@fortawesome/free-solid-svg-icons'
 
-class NotificationsModal extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
 
-        }
+   const Modal = ({handleClose, open, children}) => {
+       const showHideClassName = open ? "modal display-modal" : "modal display-none";
 
-    }
-
-    render() {
+    // render() {
         return (
-            <div className="box">
-
+            <div className={showHideClassName}>
+                <section className = "notificationsModal">
+                    {children}
+                    <button type="button" onClick={handleClose}>
+                        X
+                    </button>
+                </section>
             </div>
-        )
-    }
-}
+
+
+        );
+    };
+
 export default NotificationsModal;
