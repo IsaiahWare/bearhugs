@@ -3,7 +3,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import { Navbar, Nav, NavItem, NavDropdown, MenuItem } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faHome, faBell, faUserEdit, faSignOutAlt } from '@fortawesome/free-solid-svg-icons'
+import { faHome, faBell, faUserEdit, faSignOutAlt, faUserPlus } from '@fortawesome/free-solid-svg-icons'
 import Modal from './NotificationsModal.js';
 
 class BearHugsNavbar extends React.Component {
@@ -27,23 +27,22 @@ class BearHugsNavbar extends React.Component {
 
     render() {
         return (
-          
-            <Navbar bg="light" expand="lg">
-            <Navbar.Toggle aria-controls="basic-navbar-nav" />
-            <Navbar.Collapse id="basic-navbar-nav">
-              <Nav className="mr-auto">
-                <Link to ="/viewmatches" className="nav-item nav-link mx-5" alt="Matches page"><FontAwesomeIcon icon={faHome}/></Link>
+          <div>
+            <div className="navbarCust">                
+                <Link to ="/viewmatches" className="navbarItem" alt="Matches page"><FontAwesomeIcon icon={faHome}/></Link> 
+
+                {/*idk what the point of this is but I kept it */}
                 <Modal open={this.state.open} handleClose={this.closeModal}>
-                   <p>Notifications</p>
-                   </Modal>
-                <button onClick = {this.openModal} className="nav-item nav-link mx-5"><FontAwesomeIcon icon={faBell}/></button>
-                <Link to ="/editsettings" className="nav-item nav-link mx-5"><FontAwesomeIcon icon={faUserEdit}/></Link>
-              </Nav>
-              <Nav>
-                <Link to ="/" className="nav-item nav-link"><FontAwesomeIcon icon={faSignOutAlt}/></Link>
-              </Nav>
-            </Navbar.Collapse>
-          </Navbar>
+                  <p>Notifications</p>
+                </Modal>
+                <button onClick = {this.openModal} className="navbarItem nostyle"><FontAwesomeIcon icon={faBell}/></button>
+
+                <Link to ="/editsettings" className="navbarItem"><FontAwesomeIcon icon={faUserEdit}/></Link> 
+                <Link to ="/friends" className="navbarItem"><FontAwesomeIcon icon={faUserPlus}/></Link>  
+                <Link to ="/" className="navbarItem"><FontAwesomeIcon icon={faSignOutAlt}/></Link>
+            </div>
+            <div className="navbar-padding-top"></div>
+          </div>
         );
     }
 }
