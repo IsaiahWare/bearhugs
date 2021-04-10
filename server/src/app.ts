@@ -1,13 +1,12 @@
-import bcrypt from "bcrypt";
 import bodyParser from "body-parser";
 import cors from "cors";
 import express from "express";
-import mysql from "mysql";
 
 import userController from "./controllers/userController";
 import quizController from "./controllers/quizController";
 import friendController from "./controllers/friendController";
 import matchController from "./controllers/matchController";
+import wingmanController from "./controllers/wingmanController";
 
 const app = express();
 
@@ -25,6 +24,6 @@ app.use("/user", userController);
 app.use("/quiz", quizController);
 app.use("/friend", friendController);
 app.use("/match", matchController);
+app.use("/wingman", wingmanController);
 
 export default app;
-

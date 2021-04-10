@@ -1,4 +1,3 @@
-import bcrypt from "bcrypt";
 import db from "./../db";
 import express, { Response , Request } from "express";
 import { MysqlError } from "mysql";
@@ -10,7 +9,7 @@ import {
 const router = express.Router();
 
 router.post("/send", (req: Request, res: Response) => {    
-    const matchResponse: any = {
+    const friendResponse: any = {
         "error": {},
         "results": []
     };
@@ -19,10 +18,10 @@ router.post("/send", (req: Request, res: Response) => {
     const queryArgs = [req.body.requesterId, req.body.requesteeId];
     db.query(queryStatement, queryArgs, (queryError: MysqlError | null, queryResults: any ) => {
         if (queryError) {
-            matchResponse.error =  {
+            friendResponse.error =  {
                 "message": queryError.sqlMessage
             };
-            res.json(matchResponse);
+            res.json(friendResponse);
         } 
         else {
             if (queryResults.length === 1) {
@@ -30,7 +29,7 @@ router.post("/send", (req: Request, res: Response) => {
                 const queryArgs2 = [req.body.requesteeId, req.body.requesterId];
                 db.query(queryStatement2, queryArgs2, (queryError2: MysqlError | null, queryResults2: any ) => {
                     if (queryError2) {
-                        matchResponse.error =  {
+                        friendResponse.error =  {
                             "message": queryError2.sqlMessage
                         };
                     } else {
@@ -38,17 +37,17 @@ router.post("/send", (req: Request, res: Response) => {
                         const queryArgs3 = [req.body.requesterId, req.body.requesteeId, req.body.requesteeId, req.body.requesterId];
                         db.query(queryStatement3, queryArgs3, (queryError3: MysqlError | null, queryResults3: any ) => {
                             if (queryError3) {
-                                matchResponse.error =  {
+                                friendResponse.error =  {
                                     "message": queryError3.sqlMessage
                                 };
                             } else {
-                                matchResponse.results = [
+                                friendResponse.results = [
                                     {
                                         "matched": true
                                     }
                                 ];
                             }
-                            res.json(matchResponse);
+                            res.json(friendResponse);
                         });
                    }
                 });
@@ -62,17 +61,17 @@ router.post("/send", (req: Request, res: Response) => {
                 db.query(queryStatement2, queryArgs2, (queryError2: MysqlError | null, queryResults2: any ) => {
                     console.log(queryResults2);
                     if (queryError2) {
-                        matchResponse.error =  {
+                        friendResponse.error =  {
                             "message": queryError2.sqlMessage
                         };
                     } else {
-                        matchResponse.results = [
+                        friendResponse.results = [
                             {
                                 "matched": false
                             }
                         ];
                     }
-                    res.json(matchResponse);
+                    res.json(friendResponse);
                 });
             }
         }
@@ -80,43 +79,43 @@ router.post("/send", (req: Request, res: Response) => {
 });
 
 router.post("/friends", (req: Request, res: Response) => {
-    const matchResponse: any = {
+    const friendResponse: any = {
         "error": {},
         "results": []
     };
     const queryStatement = "SELECT users.userId, users.email, users.firstName, users.lastName, users.age, users.description, users.genderIdentity, users.genderPreferences FROM users INNER JOIN completedFriends ON completedFriends.userId2 = users.userId WHERE completedFriends.userId1 = ?"; 
     db.query(queryStatement, req.body.userId, (queryError: MysqlError | null, queryResults: any ) => {
         if (queryError) {
-            matchResponse.error =  {
+            friendResponse.error =  {
                 "message": queryError.sqlMessage
             };
         } else {
-            matchResponse.results = queryResults
+            friendResponse.results = queryResults
         }
-        res.json(matchResponse);
+        res.json(friendResponse);
     });
 });
 
 router.post("/requests", (req: Request, res: Response) => {
-    const matchResponse: any = {
+    const friendResponse: any = {
         "error": {},
         "results": []
     };
     const queryStatement = "SELECT users.userId, users.email, users.firstName, users.lastName, users.age, users.description, users.genderIdentity, users.genderPreferences FROM users INNER JOIN pendingFriends ON pendingFriends.requesterId = users.userId WHERE pendingFriends.requesteeId = ?"; 
     db.query(queryStatement, req.body.userId, (queryError: MysqlError | null, queryResults: any ) => {
         if (queryError) {
-            matchResponse.error =  {
+            friendResponse.error =  {
                 "message": queryError.sqlMessage
             };
         } else {
-            matchResponse.results = queryResults;
+            friendResponse.results = queryResults;
         }
-        res.json(matchResponse);
+        res.json(friendResponse);
     });
 });
 
 router.post("/unfriend", (req: Request, res: Response) => {
-    const matchResponse: any = {
+    const friendResponse: any = {
         "error": {},
         "results": []
     };
@@ -124,15 +123,15 @@ router.post("/unfriend", (req: Request, res: Response) => {
     const queryArgs = [req.body.userId1, req.body.userId2, req.body.userId2, req.body.userId1];
     db.query(queryStatement, queryArgs, (queryError: MysqlError | null, queryResults: any ) => {
         if (queryError) {
-            matchResponse.error =  {
+            friendResponse.error =  {
                 "message": queryError.sqlMessage
             };
         } else {
-            matchResponse.results = [{
+            friendResponse.results = [{
                 "success": true
             }]
         }
-        res.json(matchResponse);
+        res.json(friendResponse);
     });
 });
 
