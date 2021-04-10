@@ -45,12 +45,19 @@ router.post("/send", (req: Request, res: Response) => {
                         res.json(wingmanResponse);
                     } else if (queryResults3.length === 1) {
                         console.log(5)
-                        const queryStatement4: string = "INSERT INTO completedWingman SET ?";
-                        const queryArgs4 = {
-                            "wingmanId": req.body.wingmanId,
-                            "requesterId": req.body.requesterId,
-                            "requesteeId": req.body.requesteeId
-                        };
+                        const queryStatement4: string = "INSERT INTO completedWingman SET ?, ?";
+                        const queryArgs4 = [
+                            {
+                                "wingmanId": req.body.wingmanId,
+                                "requesterId": req.body.requesterId,
+                                "requesteeId": req.body.requesteeId
+                            },
+                            {
+                                "wingmanId": req.body.wingmanId,
+                                "requesterId": req.body.requesteeId,
+                                "requesteeId": req.body.requesterId
+                            }
+                        ];
                         db.query(queryStatement4, queryArgs4, (queryError4: MysqlError | null, queryResults4: any ) => {
                             console.log(6)
                             if (queryError4) {
@@ -79,19 +86,12 @@ router.post("/send", (req: Request, res: Response) => {
                         });
                     } else {
                         console.log(7)
-                        const queryStatement2 = "INSERT INTO pendingWingman SET ?, ?";
-                        const queryArgs2 = [
-                            {
-                                "wingmanId": req.body.wingmanId,
-                                "requesterId": req.body.requesterId,
-                                "requesteeId": req.body.requesteeId
-                            },
-                            {
-                                "wingmanId": req.body.wingmanId,
-                                "requesteeId": req.body.requesteeId,
-                                "requesterId": req.body.requesterId
-                            },
-                        ];
+                        const queryStatement2 = "INSERT INTO pendingWingman SET ?";
+                        const queryArgs2 = {
+                            "wingmanId": req.body.wingmanId,
+                            "requesterId": req.body.requesterId,
+                            "requesteeId": req.body.requesteeId
+                        };
                         db.query(queryStatement2, queryArgs2, (queryError2: MysqlError | null, queryResults2: any ) => {
                             console.log(8)
                             if (queryError2) {
