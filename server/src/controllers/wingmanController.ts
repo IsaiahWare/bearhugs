@@ -79,12 +79,19 @@ router.post("/send", (req: Request, res: Response) => {
                         });
                     } else {
                         console.log(7)
-                        const queryStatement2 = "INSERT INTO pendingWingman SET ?";
-                        const queryArgs2 = {
-                            "wingmanId": req.body.wingmanId,
-                            "requesterId": req.body.requesterId,
-                            "requesteeId": req.body.requesteeId
-                        };
+                        const queryStatement2 = "INSERT INTO pendingWingman SET ?, ?";
+                        const queryArgs2 = [
+                            {
+                                "wingmanId": req.body.wingmanId,
+                                "requesterId": req.body.requesterId,
+                                "requesteeId": req.body.requesteeId
+                            },
+                            {
+                                "wingmanId": req.body.wingmanId,
+                                "requesteeId": req.body.requesteeId,
+                                "requesterId": req.body.requesterId
+                            },
+                        ];
                         db.query(queryStatement2, queryArgs2, (queryError2: MysqlError | null, queryResults2: any ) => {
                             console.log(8)
                             if (queryError2) {
