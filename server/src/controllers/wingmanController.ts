@@ -178,11 +178,21 @@ router.post("/unmatch", (req: Request, res: Response) => {
                 "message": queryError.sqlMessage
             };
         } else {
-            wingmanResponse.results = [{
-                "success": true
-            }];
+            const queryStatement2 = "DELETE FROM completedWingman WHERE wingmanId = ? AND requesterId = ? AND requesteeId = ?";
+            const queryArgs2 = [req.body.wingmanId, req.body.requesteeId, req.body.requesterId];
+            db.query(queryStatement2, queryArgs2, (queryError2: MysqlError | null, queryResults2: any ) => {
+                if (queryError2) {
+                    wingmanResponse.error =  {
+                        "message": queryError2.sqlMessage
+                    };
+                } else {
+                    wingmanResponse.results = [{
+                        "success": true
+                    }];
+                }
+                res.json(wingmanResponse);
+            });
         }
-        res.json(wingmanResponse);
     });
 });
 
