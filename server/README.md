@@ -351,3 +351,104 @@ Response {
   ]
 }
 ```
+## MATCH
+### `POST /wingman/send`
+```
+Request {
+  wingmanId: number,
+  requesterId: number, 
+  requesteeId: number
+}
+
+Response {
+  error: {}
+  results: [
+    {
+      matched: boolean
+    }
+  ]
+}
+```
+
+### `POST /wingman/requests`
+```
+Request {
+  userId: number
+}
+
+Response {
+  error: {}
+  results: [
+    {
+      userId: number,
+      email: string,
+      firstName: string,
+      lastName: string,
+      age: number,
+      description: string,
+      genderIdentity: Enum('MALE', 'FEMALE', 'OTHER'),
+      genderPreferences: Enum('STRAIGHT', 'BISEXUAL', 'GAY', 'OTHER')
+    },
+    ...
+  ]
+}
+```
+
+### `POST /wingman/matches`
+```
+Request {
+  userId: number
+}
+
+Response {
+  error: {}
+  results: [
+    {
+      userId: number,
+      email: string,
+      firstName: string,
+      lastName: string,
+      age: number,
+      description: string,
+      genderIdentity: Enum('MALE', 'FEMALE', 'OTHER'),
+      genderPreferences: Enum('STRAIGHT', 'BISEXUAL', 'GAY', 'OTHER')
+    },
+    ...
+  ]
+}
+```
+
+### `POST /wingman/unmatch`
+```
+Request {
+  wingmanId: number,
+  requesterId: number, 
+  requesteeId: number
+}
+
+Response {
+  error: {}
+  results: [
+    {
+      success: boolean
+    }
+  ]
+}
+```
+
+### `POST /wingman/reject`
+```
+Request {
+  wingmanId: number,
+  requesterId: number,
+  requesteeId: number
+}
+
+Response {
+  error: {}
+  results: [
+    {
+      success: boolean
+    }
+  ]
+}
