@@ -353,6 +353,12 @@ Response {
 ```
 ## MATCH
 ### `POST /wingman/send`
+
+### IMPORTANT:
+wingmanId => Person who is suggesting the match
+requesterId => Person who the wingman is suggesting
+requesteeId => Target person for the match
+
 ```
 Request {
   wingmanId: number,
@@ -452,3 +458,4 @@ Response {
     }
   ]
 }
+```
