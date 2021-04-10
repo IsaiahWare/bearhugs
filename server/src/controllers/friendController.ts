@@ -129,7 +129,7 @@ router.post("/unfriend", (req: Request, res: Response) => {
         } else {
             friendResponse.results = [{
                 "success": true
-            }]
+            }];
         }
         res.json(friendResponse);
     });
@@ -150,7 +150,7 @@ router.post("/reject", (req: Request, res: Response) => {
         } else {
             friendResponse.results = [{
                 "success": true
-            }]
+            }];
         }
         res.json(friendResponse);
     });
