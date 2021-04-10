@@ -38,6 +38,7 @@ router.post("/send", (req: Request, res: Response) => {
                         wingmanResponse.error =  {
                             "message": queryError3.sqlMessage
                         };
+                        res.json(wingmanResponse);
                     } else if (queryResults3.length === 1) {
                         const queryStatement4: string = "INSERT INTO completedWingman SET ?";
                         const queryArgs4 = {
@@ -67,6 +68,7 @@ router.post("/send", (req: Request, res: Response) => {
                                     }
                                 });
                             }
+                            res.json(wingmanResponse);
                         });
                     } else {
                         const queryStatement2 = "INSERT INTO pendingWingman SET ?";
