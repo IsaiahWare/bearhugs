@@ -155,8 +155,8 @@ router.post("/unmatch", (req: Request, res: Response) => {
         "error": {},
         "results": []
     };
-    const queryStatement = "DELETE FROM completedWingman WHERE wingmanId = ? AND requesterId = ? AND requesteeId = ?";
-    const queryArgs = [req.body.wingmanId, req.body.requesterId, req.body.requesteeId];
+    const queryStatement = "DELETE FROM completedWingman WHERE (wingmanId = ? AND requesterId = ? AND requesteeId = ?) or (wingmanId = ? AND requesterId = ? AND requesteeId = ?)";
+    const queryArgs = [req.body.wingmanId, req.body.requesterId, req.body.requesteeId, req.body.wingmanId, req.body.requesteeId, req.body.requesterId];
     db.query(queryStatement, queryArgs, (queryError: MysqlError | null, queryResults: any ) => {
         if (queryError) {
             wingmanResponse.error =  {
@@ -164,21 +164,11 @@ router.post("/unmatch", (req: Request, res: Response) => {
             };
             res.json(wingmanResponse);
         } else {
-            const queryStatement2 = "DELETE FROM completedWingman WHERE wingmanId = ? AND requesterId = ? AND requesteeId = ?";
-            const queryArgs2 = [req.body.wingmanId, req.body.requesteeId, req.body.requesterId];
-            db.query(queryStatement2, queryArgs2, (queryError2: MysqlError | null, queryResults2: any ) => {
-                if (queryError2) {
-                    wingmanResponse.error =  {
-                        "message": queryError2.sqlMessage
-                    };
-                } else {
-                    wingmanResponse.results = [{
-                        "success": true
-                    }];
-                }
-                res.json(wingmanResponse);
-            });
+            wingmanResponse.results = [{
+                "success": true
+            }];
         }
+        res.json(wingmanResponse);
     });
 });
 
