@@ -66,8 +66,9 @@ router.post("/send", (req: Request, res: Response) => {
                                         };
                                         res.json(wingmanResponse);
                                     } else {
-                                        const queryStatement6: string = "DELETE FROM pendingWingman WHERE wingmanId = ? AND requesteeId = ? AND requesterId = ?";
-                                        const queryArgs6 = [req.body.wingmanId, req.body.requesteeId, req.body.requesterId];
+                                        const queryStatement6: string = "DELETE FROM pendingWingman WHERE wingmanId = ? AND requesterId = ? AND requesteeId = ?";
+                                        const queryArgs6 = [req.body.wingmanId, req.body.requesterId, req.body.requesteeId];
+                                        console.log(queryArgs6);
                                         db.query(queryStatement6, queryArgs6, (queryError6: MysqlError | null, queryResults6: any ) => {
                                             if (queryError6) {
                                                 wingmanResponse.error =  {
