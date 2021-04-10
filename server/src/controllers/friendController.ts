@@ -135,5 +135,25 @@ router.post("/unfriend", (req: Request, res: Response) => {
     });
 });
 
-export default router;
+router.post("/reject", (req: Request, res: Response) => {
+    const friendResponse: any = {
+        "error": {},
+        "results": []
+    };
+    const queryStatement = "DELETE FROM pendingFriends WHERE (requesterId = ? AND requesteeId = ?)";
+    const queryArgs = [req.body.requesterId, req.body.requesteeId];
+    db.query(queryStatement, queryArgs, (queryError: MysqlError | null, queryResults: any ) => {
+        if (queryError) {
+            friendResponse.error =  {
+                "message": queryError.sqlMessage
+            };
+        } else {
+            friendResponse.results = [{
+                "success": true
+            }]
+        }
+        res.json(friendResponse);
+    });
+});
 
+export default router;

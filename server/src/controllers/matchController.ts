@@ -136,4 +136,26 @@ router.post("/unmatch", (req: Request, res: Response) => {
     });
 });
 
+router.post("/reject", (req: Request, res: Response) => {
+    const matchResponse: any = {
+        "error": {},
+        "results": []
+    };
+    const queryStatement = "DELETE FROM pendingMatches WHERE requesterId = ? AND requesteeId = ?";
+    const queryArgs = [req.body.requesterId, req.body.requesteeId];
+    db.query(queryStatement, queryArgs, (queryError: MysqlError | null, queryResults: any ) => {
+        if (queryError) {
+            matchResponse.error =  {
+                "message": queryError.sqlMessage
+            };
+        } else {
+            matchResponse.results = [{
+                "success": true
+            }]
+        }
+        res.json(matchResponse);
+    });
+});
+
+
 export default router;
