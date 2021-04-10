@@ -40,12 +40,15 @@ router.post("/send", (req: Request, res: Response) => {
                         };
                         res.json(wingmanResponse);
                     } else if (queryResults3.length === 1) {
-                        const queryStatement4: string = "INSERT INTO completedWingman SET ?";
-                        const queryArgs4 = {
-                                "wingmanId": req.body.wingmanId,
-                                "requesterId": req.body.requesterId,
-                                "requesteeId": req.body.requesteeId
-                        };
+                        const queryStatement4: string = "INSERT INTO completedWingman (wingmanId, requesterId, requesteeId) VALUES (?,?,?), (?,?,?)";
+                        const queryArgs4 = [
+                               req.body.wingmanId,
+                               req.body.requesterId, 
+                               req.body.requesteeId,
+                               req.body.wingmanId,
+                               req.body.requesteeId, 
+                               req.body.requesterId
+                        ];
                         db.query(queryStatement4, queryArgs4, (queryError4: MysqlError | null, queryResults4: any ) => {
                             if (queryError4) {
                                 wingmanResponse.error =  {
@@ -53,36 +56,21 @@ router.post("/send", (req: Request, res: Response) => {
                                 };
                                 res.json(wingmanResponse);
                             } else {
-                                const queryStatement5: string = "INSERT INTO completedWingman SET ?";
-                                const queryArgs5 = {
-                                        "wingmanId": req.body.wingmanId,
-                                        "requesterId": req.body.requesteeId,
-                                        "requesteeId": req.body.requesterId
-                                };
-                                db.query(queryStatement5, queryArgs5, (queryError5: MysqlError | null, queryResults5: any ) => {
-                                    if (queryError5) {
+                                const queryStatement6: string = "DELETE FROM pendingWingman WHERE wingmanId = ? AND requesterId = ? AND requesteeId = ?";
+                                const queryArgs6 = [req.body.wingmanId, req.body.requesterId, req.body.requesteeId];
+                                db.query(queryStatement6, queryArgs6, (queryError6: MysqlError | null, queryResults6: any ) => {
+                                    if (queryError6) {
                                         wingmanResponse.error =  {
-                                            "message": queryError5.sqlMessage
+                                            "message": queryError6.sqlMessage
                                         };
-                                        res.json(wingmanResponse);
                                     } else {
-                                        const queryStatement6: string = "DELETE FROM pendingWingman WHERE wingmanId = ? AND requesterId = ? AND requesteeId = ?";
-                                        const queryArgs6 = [req.body.wingmanId, req.body.requesteeId, req.body.requesterId];
-                                        db.query(queryStatement6, queryArgs6, (queryError6: MysqlError | null, queryResults6: any ) => {
-                                            if (queryError6) {
-                                                wingmanResponse.error =  {
-                                                    "message": queryError6.sqlMessage
-                                                };
-                                            } else {
-                                                wingmanResponse.results = [
-                                                    {
-                                                        "match": true
-                                                    }
-                                                ];
+                                        wingmanResponse.results = [
+                                            {
+                                                "match": true
                                             }
-                                            res.json(wingmanResponse);
-                                        });
+                                        ];
                                     }
+                                    res.json(wingmanResponse);
                                 });
                             }
                         });
