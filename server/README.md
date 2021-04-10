@@ -269,6 +269,24 @@ Response {
   ]
 }
 ```
+
+### `POST /match/reject`
+```
+Request {
+  requesterId: number, 
+  requesteeId: number
+}
+
+Response {
+  error: {}
+  results: [
+    {
+      success: boolean
+    }
+  ]
+}
+```
+
 ## FRIEND
 ### `POST /friend/send`
 ```
@@ -351,6 +369,24 @@ Response {
   ]
 }
 ```
+
+### `POST /friend/reject`
+```
+Request {
+  requesterId: number, 
+  requesteeId: number
+}
+
+Response {
+  error: {}
+  results: [
+    {
+      success: boolean
+    }
+  ]
+}
+```
+
 ## MATCH
 ### `POST /wingman/send`
 
@@ -386,6 +422,7 @@ Response {
   error: {}
   results: [
     {
+      wingmanId: number,
       userId: number,
       email: string,
       firstName: string,
@@ -410,6 +447,7 @@ Response {
   error: {}
   results: [
     {
+      wingmanId: number,
       userId: number,
       email: string,
       firstName: string,
