@@ -4,6 +4,7 @@ import "../App.css"
 import MatchProfile from '../Components/MatchProfile';
 import BearHugsNavbar from "../Components/BearHugsNavbar"
 import UserToken from "../Components/UserToken"
+import { Redirect } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHeart, faHeartBroken } from '@fortawesome/free-solid-svg-icons'
 
@@ -13,11 +14,25 @@ class ViewMatchesPage extends React.Component {
         super(props);
         this.state = {
             profiles: [],
-            numProfiles:0
+            numProfiles:0,
+            redirect:false
         }
-    
+        this.checkUserLogIn = this.checkUserLogIn.bind(this)
+        this.getProfiles = this.getProfiles.bind(this)
+        
     }
-    componentDidMount() {
+
+    checkUserLogIn() {
+        let token =  UserToken.getUserId()
+        if(token==null || token==undefined || token=="") {
+            this.setState({
+                redirect:true
+            })
+        }
+
+    }
+    
+    getProfiles() {
         let url = baseDomain + '/user/random'
         let newRequest = {
             count: 5
@@ -46,12 +61,20 @@ class ViewMatchesPage extends React.Component {
        })
 
     }
+    componentDidMount() {
+        this.checkUserLogIn().then(() => {
+            if(!this.state.redirect) {
+            this.getProfiles()
+            }
+        })
+
+    }
+
 
     onClickAccept(userId) {
         let temp = this.state.profiles
         let tempProfiles = this.state.numProfiles-1
         let tempResult = temp.filter((obj) => {
-        console.log(obj)
 		return obj.userId != userId
         })
         this.setState({
@@ -66,20 +89,23 @@ class ViewMatchesPage extends React.Component {
         let temp = this.state.profiles
         let tempProfiles = this.state.numProfiles-1
         let tempResult = temp.filter((obj) => {
-		console.log(obj)
-		console.log(userId)
         if (obj.userId === userId) {
             console.log("remove " + JSON.stringify(obj))
         }
             return obj.userId !== userId
         })
-	    console.log("tempresult"+ JSON.stringify(tempResult))
         this.setState({
             profiles: tempResult,
             numProfiles:tempProfiles
         })
     }
     render() {
+        const redirect = this.state.redirect
+	    if (redirect) {
+            return <Redirect
+            to= "/"
+            />
+        }
         return (
             <div className="page">
                 <BearHugsNavbar></BearHugsNavbar>
@@ -120,4 +146,4 @@ class ViewMatchesPage extends React.Component {
     }
 }
 
-export default ViewProfilePage;
+export default ViewMatchesPage;

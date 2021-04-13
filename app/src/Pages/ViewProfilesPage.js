@@ -5,6 +5,7 @@ import MatchProfile from '../Components/MatchProfile';
 import BearHugsNavbar from "../Components/BearHugsNavbar"
 import UserToken from "../Components/UserToken"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { Redirect } from 'react-router-dom';
 import { faHeart, faHeartBroken } from '@fortawesome/free-solid-svg-icons'
 
 let baseDomain = "http://ec2-54-146-61-111.compute-1.amazonaws.com:3000"
@@ -13,16 +14,27 @@ class ViewProfilePage extends React.Component {
         super(props);
         this.state = {
             profiles: [],
-            numProfiles:0
+            numProfiles:0,
+            redirect:false
         }
-    
+        this.checkUserLogIn = this.checkUserLogIn.bind(this)
+        this.getProfiles = this.getProfiles.bind(this)
     }
-    componentDidMount() {
+
+   checkUserLogIn() {
+        let token =  UserToken.getUserId()
+        if(token==null || token==undefined || token=="") {
+            this.setState({
+                redirect:true
+            })
+        }
+    }
+
+    getProfiles() {
         let url = baseDomain + '/user/random'
         let newRequest = {
             count: 5
         }
-
         fetch(url, {
             method: 'POST',
             headers: {
@@ -45,6 +57,13 @@ class ViewProfilePage extends React.Component {
            }
        })
 
+    }
+
+    componentDidMount() {
+        this.checkUserLogIn()
+            if(!this.state.redirect) {
+                this.getProfiles()
+            }
     }
 
     onClickAccept(userId) {
@@ -79,7 +98,15 @@ class ViewProfilePage extends React.Component {
             numProfiles:tempProfiles
         })
     }
+    
     render() {
+        const redirect = this.state.redirect
+	    console.log("Hello" + redirect)
+	    if (redirect) {
+            return <Redirect
+            to= "/"
+            />
+        }
         return (
             <div className="page">
                 <BearHugsNavbar></BearHugsNavbar>

@@ -5,6 +5,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 
 class EditProfile extends React.Component {
+    constructor(props){
+        super(props);
+        this.state = {
+            redirect: false
+            
+        };
+    }
     render() {
         return (
            <div class="col">

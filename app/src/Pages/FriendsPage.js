@@ -5,17 +5,38 @@ import { faUser, faCog } from '@fortawesome/free-solid-svg-icons'
 import "../App.css"
 import BearHugsNavbar from "../Components/BearHugsNavbar";
 import ListedUser from "../Components/ListedUser";
-
+import { Redirect } from 'react-router-dom';
+import UserToken from  "../Components/UserToken.js"
 
 class FriendsPage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             addFriendUser: "",
-            friendInfo:[]
+            friendInfo:[],
+            redirect:false
 
         }
         this.handleInputChange = this.handleInputChange.bind(this)
+
+        
+        
+
+
+    }
+
+    componentDidMount() {
+        this.checkUserLogIn();
+    }
+
+    checkUserLogIn() {
+        let token =  UserToken.getUserId()
+        if(token==null || token==undefined || token=="") {
+            this.setState({
+                redirect:true
+            })
+        }
+
     }
 
     handleInputChange(event){
@@ -31,6 +52,13 @@ class FriendsPage extends React.Component {
     //Map each friend in friendInfo to a bootstrap row with some information about that friend. You can also
     //add remove icons for a friend. 
     render() {
+        const redirect = this.state.redirect
+	    if (redirect) {
+            return <Redirect
+            to= "/"
+            />
+        }
+
         return (
             <div className="page">
             <BearHugsNavbar></BearHugsNavbar>
@@ -42,7 +70,6 @@ class FriendsPage extends React.Component {
                     <div>
                         <p className="center">Your Friends:</p>
                         <ListedUser key="do this w map" firstName="Jessica" lastName="Schmidt" profPicSrc="possum-on-horse.png" age="18"></ListedUser>
-                        
                     </div>
                 </div>
             </div>

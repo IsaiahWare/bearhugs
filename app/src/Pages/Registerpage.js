@@ -35,15 +35,10 @@ class RegisterPage extends React.Component {
         let password = this.state.password
         let confirmPassword = this.state.confirmPassword
         let ageFilter = this.filterAge(age)
-	    console.log("agefilter" + ageFilter)
         let nameFilter = this.filterName(firstName, lastName)
-	    console.log("namefilter" + nameFilter)
         let emailFilter = this.filterEmail(email)
-	    console.log("Email filter" + emailFilter)
         let passwordFilter = this.filterPassword(password)
-		    console.log("Password filter" + passwordFilter)
         let confirmPassWordCheck = this.checkPassword(password, confirmPassword)
-	    console.log("Confirm pssword check" + confirmPassWordCheck)
         if (ageFilter && nameFilter && emailFilter && passwordFilter && confirmPassWordCheck) {
            console.log("Filters passed")
 		this.registerAccount()
