@@ -15,10 +15,12 @@ class ViewProfilePage extends React.Component {
         this.state = {
             profiles: [],
             numProfiles:0,
-            redirect:false
+            redirect:false,
+            unsuitableMatches:[]
         }
         this.checkUserLogIn = this.checkUserLogIn.bind(this)
         this.getProfiles = this.getProfiles.bind(this)
+        this.getPendingAndCurrent = this.getPendingAndCurrent.bind(this)
     }
 
    checkUserLogIn() {
@@ -31,10 +33,70 @@ class ViewProfilePage extends React.Component {
         }
     }
 
+    getCurrentMatches() {
+        let url = baseDomain + '/match/matches'
+        let newRequest = {
+            userId: UserToken.getUserId()
+        }
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newRequest)
+        })
+            .then(res => res.json())
+            .then(responseData => {
+                console.log(responseData)
+                if (JSON.stringify(responseData.error) === '{}') {
+                    this.setState({
+                        unsuitableMatches: this.state.unsuitableMatches.concat(responseData.results)
+                    })
+                }
+            })
+
+    }
+
+    getPendingMatches() {
+        let url = baseDomain + '/match/requests'
+        let newRequest = {
+            userId: UserToken.getUserId()
+        }
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newRequest)
+        })
+            .then(res => res.json())
+            .then(responseData => {
+                console.log("pending friends resposne data")
+                console.log(responseData)
+                if (JSON.stringify(responseData.error) === '{}') {
+                    this.setState({
+                        unsuitableMatches: this.state.unsuitableMatches.concat(responseData.results)
+                    })
+                    console.log("unsitable matches")
+                    console.log(this.state.unsuitableMatches)
+                }
+            })
+
+        }
+
+
+    getPendingAndCurrent() {
+        this.getCurrentMatches();
+        this.getPendingMatches();
+
+
+
+    }
+
     getProfiles() {
         let url = baseDomain + '/user/random'
         let newRequest = {
-            count: 10
+            count: 20
         }
         fetch(url, {
             method: 'POST',
@@ -45,8 +107,13 @@ class ViewProfilePage extends React.Component {
         })
         .then(res => res.json())
         .then(responseData => {
-           // TODO: handle case where login is invalid 
               if (responseData.error!=null) {
+                  this.getPendingAndCurrent();
+                for (let i = 0; i < responseData.results.length; ++i) {
+                    if (this.state.unsuitableMatches.includes(responseData.results[i])) {
+                        responseData.splice(i)
+                    }
+                }
                let setProfiles = responseData.results
                let userToken = UserToken.getUserId()
                let tempProfiles = setProfiles.filter((obj) => {
@@ -67,6 +134,8 @@ class ViewProfilePage extends React.Component {
             }
     }
 
+
+
     onClickAccept(userId) {
         let url = baseDomain + '/match/send'
         let newRequest = {
@@ -83,6 +152,7 @@ class ViewProfilePage extends React.Component {
         })
         .then(res => res.json())
         .then(responseData => {
+         
               if (JSON.stringify(responseData.error) === '{}') {
                   console.log(responseData)
                 let temp = this.state.profiles
@@ -138,7 +208,6 @@ class ViewProfilePage extends React.Component {
                                 firstName={profile.firstName} lastName={profile.lastName} age={profile.age} descrip={profile.description}
                                  matched={false}
                                  approveMatch={() => this.onClickAccept(profile.userId)} rejectMatch={() => this.onClickReject(profile.userId)}
-                                 
                                  ></MatchProfile>
                                  
                             </div>
