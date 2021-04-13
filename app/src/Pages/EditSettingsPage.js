@@ -202,7 +202,7 @@ class EditSettingsPage extends React.Component {
                         <Form.Group controlId="editForm.genderIdentity">
                             <Form.Label>Gender Identity</Form.Label>
                             <Form.Control as="select" defaultValue={this.state.genderIdentity}
-                                onChange={this.handleInputChange}>
+                                name = "genderIdentity" onChange={this.handleInputChange}>
                                 <option value="MALE">Male</option>
                                 <option value="FEMALE">Female</option>
                                 <option value="OTHER">Other</option>
@@ -211,7 +211,7 @@ class EditSettingsPage extends React.Component {
                         <Form.Group controlId="editForm.genderPreference">
                             <Form.Label>Gender Preference</Form.Label>
                             <Form.Control as="select" defaultValue={this.state.genderPreferences}
-                                onChange={this.handleInputChange}>
+                                name = "genderPreferences" onChange={this.handleInputChange}>
                                 <option value="STRAIGHT">Straight</option>
                                 <option value="GAY">Gay</option>
                                 <option value="BISEXUAL">Bisexual</option>
