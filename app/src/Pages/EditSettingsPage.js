@@ -23,8 +23,8 @@ class EditSettingsPage extends React.Component {
             feedback: "",
             redirect: false,
             pictures: [],
-            genderIdentity:"",
-            genderPreferences:"",
+            genderIdentity:"MALE",
+            genderPreferences:"STRAIGHT",
             firstName:"",
             lastName:"",
             age:-1
@@ -82,12 +82,22 @@ class EditSettingsPage extends React.Component {
                     this.setState({
                         email: responseData.results[0].email,
                         description: responseData.results[0].description,
-                        genderIdentity: responseData.results[0].genderIdentity,
-                        genderPreferences: responseData.results[0].genderPreferences,
                         firstName: responseData.results[0].firstName,
                         lastName: responseData.results[0].lastName,
                         age: responseData.results[0].age
                     })
+                    if (responseData.results[0].genderIdentity!=null){
+                        this.setState({
+                            genderIdentity: responseData.results[0].genderIdentity
+                        })
+                        
+                    }
+                    else if (responseData.results[0].genderPreferences!=null) {
+                        this.setState({
+                            genderPreferences: responseData.results[0].genderPreferences,
+                        })
+                        
+                    }
               
                 }
                 else {
@@ -191,7 +201,7 @@ class EditSettingsPage extends React.Component {
                         </Form.Group>
                         <Form.Group controlId="editForm.genderIdentity">
                             <Form.Label>Gender Identity</Form.Label>
-                            <Form.Control as="select" value={this.state.genderIdentity}
+                            <Form.Control as="select" defaultValue={this.state.genderIdentity}
                                 onChange={this.handleInputChange}>
                                 <option value="MALE">Male</option>
                                 <option value="FEMALE">Female</option>
