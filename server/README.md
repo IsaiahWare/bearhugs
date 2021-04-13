@@ -525,3 +525,38 @@ Response {
   ]
 }
 ```
+
+## PHOTO
+
+### `POST /photo/upload`
+```
+Request {
+  userId: number,
+  photoUrl: longtext
+}
+
+Response {
+  error: {}
+  results: [
+    {
+      matched: boolean
+    }
+  ]
+}
+```
+
+### `POST /photo/all`
+```
+Request {
+  userId: number,
+}
+
+Response {
+  error: {}
+  results: [
+    {
+      photoUrl: string
+    }
+  ]
+}
+```

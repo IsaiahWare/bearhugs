@@ -8,6 +8,7 @@ import friendController from "./controllers/friendController";
 import matchController from "./controllers/matchController";
 import wingmanController from "./controllers/wingmanController";
 import notificationController from "./controllers/notificationController"
+import photoController from "./controllers/photoController"
 
 const app = express();
 
@@ -27,5 +28,6 @@ app.use("/quiz", quizController);
 app.use("/friend", friendController);
 app.use("/match", matchController);
 app.use("/wingman", wingmanController);
+app.use("/photo", photoController);
 
 export default app;
