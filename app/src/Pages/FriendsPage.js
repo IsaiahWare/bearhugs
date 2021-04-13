@@ -383,7 +383,7 @@ class FriendsPage extends React.Component {
 
                                     {
                                         this.state.pendingFriendsRequest.map((friend) =>
-                                            <PendingFriend id={friend.userId} key={friend.userId} firstName={friend.firstName} lastName={friend.lastName} approveFriend={() => this.addFriendByButton(friend.userId)} rejectFriend={() => this.rejectFriend(friend.userId)} profPicSrc="possum-on-horse.png" age={friend.age}></PendingFriend>
+                                            <PendingFriend id={friend.userId} key={friend.userId} firstName={friend.firstName} lastName={friend.lastName} approveFriend={() => this.addFriendFromButton(friend.userId)} rejectFriend={() => this.rejectFriend(friend.userId)} profPicSrc="possum-on-horse.png" age={friend.age}></PendingFriend>
                                         )
                                     }
                                 </div>
