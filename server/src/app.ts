@@ -7,6 +7,7 @@ import quizController from "./controllers/quizController";
 import friendController from "./controllers/friendController";
 import matchController from "./controllers/matchController";
 import wingmanController from "./controllers/wingmanController";
+import notificationController from "./controllers/notificationController"
 
 const app = express();
 
@@ -20,6 +21,7 @@ app.get("/", (req: express.Request , res: express.Response) => {
     res.send("Welcome to the bearhugs.love internal API!");
 });
 
+app.use("/notifications", notificationController)
 app.use("/user", userController);
 app.use("/quiz", quizController);
 app.use("/friend", friendController);

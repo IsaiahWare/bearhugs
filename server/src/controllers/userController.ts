@@ -133,7 +133,7 @@ router.post("/find", (req: Request, res: Response) => {
         return;
     }
 
-    const queryStatement: string = "SELECT userId, email, firstName, lastName, age, description FROM users WHERE userId = ?";
+    const queryStatement: string = "SELECT userId, email, firstName, lastName, age, description, genderIdentity, genderPreferences FROM users WHERE userId = ?";
     db.query(queryStatement, req.body.userId, (queryError: MysqlError | null, queryResults: any ) => {
         if (queryError) {
             findResponse.error =  {
@@ -191,12 +191,11 @@ router.post("/update", (req: Request, res: Response) => {
         "results": []
     };
     
-    const queryStatement: string = "UPDATE users SET email = ?, firstName = ?, lastName = ?, age = ?, description = ?, genderIdentity = ?, genderPreferences = ? WHERE userId = ?";
+    const queryStatement: string = "UPDATE users SET email = ?, firstName = ?, lastName = ?, description = ?, genderIdentity = ?, genderPreferences = ? WHERE userId = ?";
     const queryArgs = [
         req.body.email,
         req.body.firstName,
         req.body.lastName,
-        req.body.age,
         req.body.description,
         req.body.genderIdentity,
         req.body.genderPreferences,
@@ -215,7 +214,6 @@ router.post("/update", (req: Request, res: Response) => {
                     "email": req.body.email,
                     "firstName": req.body.firstName,
                     "lastName": req.body.lastName,
-                    "age": req.body.age,
                     "genderIdentity": req.body.genderIdentity,
                     "genderPreferences": req.body.genderPreferences,
                     "description": req.body.description

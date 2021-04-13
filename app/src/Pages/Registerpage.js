@@ -40,7 +40,6 @@ class RegisterPage extends React.Component {
         let passwordFilter = this.filterPassword(password)
         let confirmPassWordCheck = this.checkPassword(password, confirmPassword)
         if (ageFilter && nameFilter && emailFilter && passwordFilter && confirmPassWordCheck) {
-           console.log("Filters passed")
 		this.registerAccount()
         }
 	    else {
@@ -51,7 +50,6 @@ class RegisterPage extends React.Component {
 
     checkPassword(password, confirmPassword) {
         if (password != confirmPassword) {
-		console.log("Confirm pssword check failed")
             this.setState({
                 feedback: "Password and confirm password do not match. Please enter password/confirm password again."
             })
@@ -62,7 +60,6 @@ class RegisterPage extends React.Component {
     filterPassword(password) {
         const re = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/
         if (!re.test(password)) {
-		console.log("Password strength check failed")
             this.setState({
                 feedback: "Password should contain at least eight characters, and it should have at least one uppercase character, one lowercase character, and one digit."
             })
@@ -74,7 +71,6 @@ class RegisterPage extends React.Component {
     filterEmail(email) {
         const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         if (!re.test(String(email).toLowerCase())) {
-		console.log("Email check failed")
             this.setState({
                 feedback: "Please enter a valid full email of the form 'wustlkey@wustl.edu."
             })
@@ -82,7 +78,6 @@ class RegisterPage extends React.Component {
         }
         let afterAt = email.split('@')[1]
         if (afterAt!= "wustl.edu") {
-		console.log("Not a wustl email")
             this.setState({
                 feedback: "Your email must be a wustl.edu email. Please enter a wustl.edu email"
             })
@@ -97,7 +92,6 @@ class RegisterPage extends React.Component {
         var regName = /^[a-zA-Z]+ [a-zA-Z]+$/;
         let fullName = firstName+" "+lastName
         if(!regName.test(fullName)){
-		console.log("Full name test failed")
             this.setState({
                 feedback: "Please enter a valid full first and last name."
             })
@@ -110,14 +104,12 @@ class RegisterPage extends React.Component {
 
     filterAge(age) {
         if (age < 18){
-            console.log("Failed age check")
             this.setState({
                 feedback: "You have to be over 18 to use this service."
             })
             return false;
         }
         else if (age > 110) {
-		console.log("Failed age check")
             this.setState({
                 feedback: "Please enter a reasonable age."
             })
@@ -147,7 +139,6 @@ class RegisterPage extends React.Component {
     .then(res => res.json())
     .then(responseData => {
        // TODO: handle case where login is invalid
-	    console.log(responseData)
        if(JSON.stringify(responseData.error) !== '{}') {
          this.setState({
 		 feedback: "Register not successful :(" 

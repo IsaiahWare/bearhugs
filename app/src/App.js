@@ -10,6 +10,7 @@ import EditSettingsPage from './Pages/EditSettingsPage';
 import EditProfile from './Components/EditProfile.js'
 import EditSecurity from './Components/EditSecurity.js'
 import FriendsPage from './Pages/FriendsPage';
+import NotificationsPage from './Pages/NotificationsPage.js';
 
 
 
@@ -22,6 +23,7 @@ function App() {
         <Route exact path="/viewmatches" component={ViewProfilePage}></Route>
         <Route exact path="/editsettings" component={EditSettingsPage}></Route>
         <Route exact path="/friends" component={FriendsPage}></Route>
+        <Route exact path="/notifications" component={NotificationsPage}></Route>
     </Switch>
 </Router>
   

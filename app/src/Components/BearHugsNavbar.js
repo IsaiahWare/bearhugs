@@ -4,7 +4,9 @@ import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import { Navbar, Nav, NavItem, NavDropdown, MenuItem } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHome, faBell, faUserEdit, faSignOutAlt, faUserPlus } from '@fortawesome/free-solid-svg-icons'
-import Modal from './NotificationsModal.js';
+import Modal from '../Pages/NotificationsPage.js';
+import NotificationsModal from '../Pages/NotificationsPage.js';
+
 
 class BearHugsNavbar extends React.Component {
   constructor(props) {
@@ -12,19 +14,16 @@ class BearHugsNavbar extends React.Component {
     this.state = {
       open: false
     };
-    this.openModal = this.openModal.bind(this);
-    this.closeModal = this.closeModal.bind(this);
+    this.handleModalState = this.handleModalState.bind(this);
   }
 
-  openModal = () => {
-    this.setState({open: true});
-
-  };
-
-  closeModal = () => {
-    this.setState({open: false})
-  };
-
+ handleModalState() {
+   let currentState = this.state.open
+   currentState = !currentState
+   this.setState({
+      open: currentState
+   })
+ }
     render() {
         return (
           <div>
@@ -32,11 +31,7 @@ class BearHugsNavbar extends React.Component {
                 <Link to ="/viewmatches" className="navbarItem" alt="Matches page"><FontAwesomeIcon icon={faHome}/></Link> 
 
                 {/*idk what the point of this is but I kept it */}
-                <Modal open={this.state.open} handleClose={this.closeModal}>
-                  <p>Notifications</p>
-                </Modal>
-                <button onClick = {this.openModal} className="navbarItem nostyle"><FontAwesomeIcon icon={faBell}/></button>
-
+                <Link to ="/notifications" className="navbarItem"><FontAwesomeIcon icon={faBell}/></Link>
                 <Link to ="/editsettings" className="navbarItem"><FontAwesomeIcon icon={faUserEdit}/></Link> 
                 <Link to ="/friends" className="navbarItem"><FontAwesomeIcon icon={faUserPlus}/></Link>  
                 <Link to ="/" className="navbarItem"><FontAwesomeIcon icon={faSignOutAlt}/></Link>

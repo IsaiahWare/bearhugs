@@ -8,7 +8,7 @@ import BearHugsNavbar from '../Components/BearHugsNavbar'
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { Redirect } from 'react-router-dom';
-import {Col} from 'react-bootstrap';
+import { Col } from 'react-bootstrap';
 import ImageUploader from 'react-images-upload';
 
 
@@ -19,15 +19,21 @@ class EditSettingsPage extends React.Component {
         super(props);
         this.state = {
             description: "",
-            email:"",
+            email: "",
             feedback: "",
             redirect: false,
-            pictures: []
+            pictures: [],
+            genderIdentity:"",
+            genderPreferences:"",
+            firstName:"",
+            lastName:"",
+            age:-1
 
         }
         this.handleInputChange = this.handleInputChange.bind(this)
         this.handleSubmit = this.handleSubmit.bind(this)
         this.onDrop = this.onDrop.bind(this);
+        this.getCurrentUserInfo = this.getCurrentUserInfo.bind(this);
 
     }
 
@@ -48,46 +54,100 @@ class EditSettingsPage extends React.Component {
     }
 
     componentDidMount() {
+        console.log("EDIT SETTINGS IS HERE")
         this.checkUserLogIn();
+        this.getCurrentUserInfo()
+        
+
+    }
+
+    getCurrentUserInfo() {
+        let uid = UserToken.getUserId();
+        console.log("user id in edit settings: " + uid)
+        let url = baseDomain + '/user/find'
+        let newRequest = {
+            "userId": uid,
+        }
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newRequest)
+
+        })
+        .then(res => res.json())
+        .then(responseData => {
+                // TODO: handle case where login is invalid
+                if (JSON.stringify(responseData.error) === '{}') {
+                    console.log(responseData.results[0])
+                    console.log("WHERE THE FUCK IS MY DATA")
+                    this.setState({
+                        email: responseData.results[0].email,
+                        description: responseData.results[0].description,
+                        genderIdentity: responseData.results[0].genderIdentity,
+                        genderPreferences: responseData.results[0].genderPreferences,
+                        firstName: responseData.results[0].firstName,
+                        lastName: responseData.results[0].lastName,
+                        age: responseData.results[0].age
+                    })
+              
+                }
+                else {
+                    console.log("No data for edit settings")
+                    console.log(responseData.error)
+                    this.setState({feedback: "Couldn't get data"})
+                }
+
+            })
+
+
     }
 
     handleSubmit(event) {
         event.preventDefault();
-        //     let uid = UserToken.getUserId();
-        //     let url = baseDomain + 'endpoint'
-        //     let newRequest = {
-        //         "uid": uid,
-        //         "firstName": this.state.firstName,
-        //         "lastName": this.state.lastName,
-        //         "description": this.state.description
-        //     }
+        let uid = UserToken.getUserId();
+        let url = baseDomain + '/user/update'
+        let newRequest = {
+            "userId": uid,
+            "email": this.state.email,
+            "description": this.state.description,
+            "genderIdentity": this.state.genderIdentity,
+            "genderPreferences": this.state.genderPreferences,
+            "firstName":this.state.firstName,
+            "lastName":this.state.lastName,
+            "age":this.state.age
+        }
 
-        //     fetch(url, {
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type': 'application/json'
-        //     },
-        //     body: JSON.stringify(newRequest)
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newRequest)
 
-        // })
-        // .then(response => {
-        //     let responseText = response.json()
-        //     if (responseText.error==null) {
-        //         this.setState({feedback:"Changes successfully saved!"})
-        //     }
-        //     else {
-        //         this.setState({feedback:"Changes could not be saved, please try again :("})
-        //     }
+        }).then(res => res.json())
+        .then(responseData => {
+                console.log("Data received")
+                console.log(responseData)
+                // TODO: handle case where login is invalid
+                if (JSON.stringify(responseData.error) === '{}') {
+                    this.setState({feedback: "Changes saved!"})
+                    
+                }
+                else {
+                    this.setState({feedback: "Changes could not be saved :( Please try again"})
+                }
 
-        //  })
-
-    }
-
+            })
+        }
 
     handleInputChange(event) {
         let target = event.target;
+  
         let value = target.value
         let name = target.name;
+        console.log(name + " " + value)
         this.setState({
             [name]: value
         });
@@ -103,13 +163,16 @@ class EditSettingsPage extends React.Component {
 
 
         return (
-            <div className="page">
+            <div className="page" >
                 <BearHugsNavbar></BearHugsNavbar>
+                <div className="row center-row">
+                            <h3>{this.state.feedback}</h3>
+                </div>
                 <div className="col">
                     <Form onSubmit={this.handleSubmit} controlId="editForm">
                         <Form.Row>
-                        <Form.Group as={Col} controlId="editForm.picture">
-                        <ImageUploader
+                            <Form.Group as={Col} controlId="editForm.picture">
+                                <ImageUploader
                                     withIcon={true}
                                     buttonText='Choose images'
                                     onChange={this.onDrop}
@@ -117,7 +180,7 @@ class EditSettingsPage extends React.Component {
                                     maxFileSize={5242880}
                                     singleImage={true}
                                 />
-                        </Form.Group>
+                            </Form.Group>
                         </Form.Row>
                         <Form.Group controlId="editForm.email">
                             <Form.Label>Email</Form.Label>
@@ -128,10 +191,29 @@ class EditSettingsPage extends React.Component {
                             <Form.Control as="textarea" name="description" value={this.state.description} rows={3} onChange={this.handleInputChange} placeholder="Write what you want 
                             people to see on your profile" />
                         </Form.Group>
-                        <Form.Row>
-                        <Form.Group as={Col} controlId="editForm.submit">
-                        <Button type="submit" variant="danger" name="submit-button">Submit Changes</Button>
+                        <Form.Group controlId="editForm.genderIdentity">
+                            <Form.Label>Gender Identity</Form.Label>
+                            <Form.Control as="select" value={this.state.genderIdentity}
+                                onChange={this.handleInputChange}>
+                                <option value="MALE">Male</option>
+                                <option value="FEMALE">Female</option>
+                                <option value="OTHER">Other</option>
+                            </Form.Control>
                         </Form.Group>
+                        <Form.Group controlId="editForm.genderPreference">
+                            <Form.Label>Gender Preference</Form.Label>
+                            <Form.Control as="select" defaultValue={this.state.genderPreferences}
+                                onChange={this.handleInputChange}>
+                                <option value="STRAIGHT">Straight</option>
+                                <option value="GAY">Gay</option>
+                                <option value="BISEXUAL">Bisexual</option>
+                                <option value="OTHER">Other</option>
+                            </Form.Control>
+                        </Form.Group>
+                        <Form.Row>
+                            <Form.Group as={Col} controlId="editForm.submit">
+                                <Button type="submit" variant="danger" name="submit-button">Submit Changes</Button>
+                            </Form.Group>
                         </Form.Row>
                     </Form>
 

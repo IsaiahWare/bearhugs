@@ -23,6 +23,7 @@ class ViewProfilePage extends React.Component {
 
    checkUserLogIn() {
         let token =  UserToken.getUserId()
+        console.log("token in edit settings " + token)
         if(token==null || token==undefined || token=="") {
             this.setState({
                 redirect:true
@@ -101,7 +102,6 @@ class ViewProfilePage extends React.Component {
     
     render() {
         const redirect = this.state.redirect
-	    console.log("Hello" + redirect)
 	    if (redirect) {
             return <Redirect
             to= "/"

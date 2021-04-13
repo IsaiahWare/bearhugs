@@ -24,7 +24,6 @@ class LoginPage extends React.Component {
             "email": this.state.email,
             "password": this.state.password
         }
-        console.log(newRequest)
 
     fetch(url, {
         method: 'POST',
@@ -35,15 +34,10 @@ class LoginPage extends React.Component {
     })
     .then(res => res.json())
      .then(responseData => {
-	     console.log("Data received")
-	     console.log(responseData)
         // TODO: handle case where login is invalid
 	    if (JSON.stringify(responseData.error) === '{}') { 
-            console.log(responseData)
             UserToken.setUserId(responseData.results[0].userId)
-            console.log(UserToken.getUserId())
-            this.setState({redirect:true},()=>
-		    console.log(this.state.redirect))
+            this.setState({redirect:true})
 	    }
         
     })
@@ -59,9 +53,7 @@ handleInputChange(event) {
 
     render() {
 	    const redirect = this.state.redirect
-	    console.log(redirect)
 	    if (redirect) {
-		   console.log("Response not null")
             return <Redirect
             to= "/viewmatches"
             />
