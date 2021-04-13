@@ -30,6 +30,8 @@ class ViewMatchesPage extends React.Component {
             })
         }
     }
+
+   //check for pending and completed and if so do not add to the thing
     
     getMatches() {
         let url = baseDomain + '/user/random'

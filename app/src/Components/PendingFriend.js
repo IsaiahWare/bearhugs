@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTimes } from '@fortawesome/free-solid-svg-icons'
+import { faTimes, faCheck} from '@fortawesome/free-solid-svg-icons'
 import "../App.css"
 
-class ListedUser extends React.Component {
+class PendingFriend extends React.Component {
     constructor(props){
         super(props);
         this.state = {
@@ -21,7 +21,10 @@ class ListedUser extends React.Component {
                     <p id="listedUser-age">{this.props.age}</p>
                 </div>
                 <div className="remove">
-                    <button class="removeFriend nostyle"><FontAwesomeIcon icon={faTimes}></FontAwesomeIcon></button>
+                    <button class="removeFriend nostyle" onClick={this.props.rejectFriend}><FontAwesomeIcon icon={faTimes}></FontAwesomeIcon></button>
+                </div>
+                <div className="remove">
+                    <button class="removeFriend nostyle" onClick={this.props.approveFriend}><FontAwesomeIcon icon={faCheck}></FontAwesomeIcon></button>
                 </div>
 
 
@@ -29,4 +32,4 @@ class ListedUser extends React.Component {
         );
     }
 }
-export default ListedUser;
+export default PendingFriend;

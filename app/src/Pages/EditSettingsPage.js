@@ -57,8 +57,6 @@ class EditSettingsPage extends React.Component {
         console.log("EDIT SETTINGS IS HERE")
         this.checkUserLogIn();
         this.getCurrentUserInfo()
-        
-
     }
 
     getCurrentUserInfo() {
@@ -81,7 +79,6 @@ class EditSettingsPage extends React.Component {
                 // TODO: handle case where login is invalid
                 if (JSON.stringify(responseData.error) === '{}') {
                     console.log(responseData.results[0])
-                    console.log("WHERE THE FUCK IS MY DATA")
                     this.setState({
                         email: responseData.results[0].email,
                         description: responseData.results[0].description,

@@ -6,7 +6,14 @@ import "../App.css"
 import BearHugsNavbar from "../Components/BearHugsNavbar";
 import ListedUser from "../Components/ListedUser";
 import { Redirect } from 'react-router-dom';
-import UserToken from  "../Components/UserToken.js"
+import UserToken from "../Components/UserToken.js"
+import Button from "react-bootstrap/Button"
+import Tab from "react-bootstrap/Tab"
+import Tabs from 'react-bootstrap/Tabs'
+import pendingFriends from "../Components/PendingFriend"
+import PendingFriend from '../Components/PendingFriend';
+import TabContent from 'react-bootstrap/TabContent'
+import Form from 'react-bootstrap/Form'
 
 let baseDomain = "http://ec2-54-146-61-111.compute-1.amazonaws.com:3000"
 
@@ -15,24 +22,38 @@ class FriendsPage extends React.Component {
         super(props);
         this.state = {
             addFriendUser: "",
-            friendInfo:[],
-            redirect:false
+            redirect: false,
+            feedback: "",
+            pendingFriends: [],
+            currentFriends:[],
+            key: "currentFriends"
 
         }
         this.handleInputChange = this.handleInputChange.bind(this)
+        this.getCurrentFriends = this.getCurrentFriends.bind(this)
+        this.getPendingFriends = this.getPendingFriends.bind(this)
+        this.addFriend = this.addFriend.bind(this)
+        // this.rejectFriend = this.rejectFriend.bind(this)
+
 
     }
 
     componentDidMount() {
         this.checkUserLogIn();
-        this.getProfiles();
+        this.getCurrentFriends();
+        this.getPendingFriends();
     }
 
+    setKey(k) {
+        this.setState({
+            key: k
+        })
+    }
     checkUserLogIn() {
-        let token =  UserToken.getUserId()
-        if(token==null || token==undefined || token=="") {
+        let token = UserToken.getUserId()
+        if (token == null || token == undefined || token == "") {
             this.setState({
-                redirect:true
+                redirect: true
             })
         }
 
@@ -40,7 +61,47 @@ class FriendsPage extends React.Component {
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    getProfiles() {
+    
+
+    removeFriend(id) {
+        let url = baseDomain + '/friend/unfriend'
+        let newRequest = {
+            userId1: UserToken.getUserId(),
+            userId2: id
+        }
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newRequest)
+        })
+            .then(res => res.json())
+            .then(responseData => {
+                if (JSON.stringify(responseData.error) === '{}') {
+                    let temp = this.state.currentFriends
+                    let tempResult = temp.filter((obj) => {
+                    if (obj.userId === id) {
+                        console.log("remove " + JSON.stringify(obj))
+                    }
+                        return obj.userId !== id
+                    })
+                    this.setState({
+                       currentFriends:tempResult,
+                       feedback: "Friend removed!"
+                    })
+                    
+                }
+                else {
+                    this.setState({
+                        feedback: "Friend could not be removed :("
+                    })
+                }
+            })
+
+
+    }
+    getCurrentFriends() {
         let url = baseDomain + '/friend/friends'
         let newRequest = {
             userId: UserToken.getUserId()
@@ -52,24 +113,138 @@ class FriendsPage extends React.Component {
             },
             body: JSON.stringify(newRequest)
         })
-        .then(res => res.json())
-        .then(responseData => {
-            if (JSON.stringify(responseData.error) === '{}') {
-                //console.log("first friend: "+ responseData.results[0].firstName);
-                //friendInfo = responseData.results;
-            }
-       })
+            .then(res => res.json())
+            .then(responseData => {
+                if (JSON.stringify(responseData.error) === '{}') {
+                    this.setState({
+                        friendInfo: responseData.results
+                    })
+                }
+            })
 
     }
 
-    handleSubmit(event){
+    getPendingFriends() {
+        let url = baseDomain + '/friend/requests'
+        let newRequest = {
+            userId: UserToken.getUserId()
+        }
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newRequest)
+        })
+            .then(res => res.json())
+            .then(responseData => {
+                if (JSON.stringify(responseData.error) === '{}') {
+                    this.setState({
+                        pendingFriends: responseData.results
+                    })
+                }
+            })
+
+    }
+
+
+    filterPendingAfterAdd(id) {
+        let temp = this.state.pendingFriends
+        let tempResult = temp.filter((obj) => {
+        console.log(obj)
+        if (obj.userId === id) {
+            console.log("remove " + JSON.stringify(obj))
+        }
+            return obj.userId !== id
+        })
+        this.setState({
+           pendingFriends:tempResult,
+        })
+    }
+
+    addFriend(id, isFromRequest) {
+            let url = baseDomain + '/friend/send'
+            let newRequest = {
+                requesterId: UserToken.getUserId(),
+                requesteeId: id
+            }
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(newRequest)
+            })
+            .then(res => res.json())
+            .then(responseData => {
+                if (JSON.stringify(responseData.error) === '{}') {
+                    if (isFromRequest) {
+                        this.filterPendingAfterAdd(id)
+                        
+                    }
+                    this.setState({
+                        feedback:"Friend added!"
+                    })
+                
+                }
+                else {
+                    this.setState({
+                        feedback:"Friend could not be added :("
+                    })
+                }
+           })
+
+    }
+
+    rejectFriend(id) {
+        let url = baseDomain + '/friend/reject'
+        let newRequest = {
+            requesterId: UserToken.getUserId(),
+            requesteeId: id
+        }
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newRequest)
+        })
+            .then(res => res.json())
+            .then(responseData => {
+                if (JSON.stringify(responseData.error) === '{}') {
+                    let temp = this.state.pendingFriends
+                    let tempResult = temp.filter((obj) => {
+                    console.log(obj)
+                    if (obj.userId === id) {
+                        console.log("remove " + JSON.stringify(obj))
+                    }
+                        return obj.userId !== id
+                    })
+                    this.setState({
+                       pendingFriends:tempResult,
+                       feedback: "Friend request rejected"
+                    })
+                }
+                else {
+                    this.setState({
+                        feedback: "Friend request could not be rejected"
+                    })
+                }
+            })
+
+
+
+    }
+
+    handleSubmit(event) {
         event.preventDefault();
         console.log("A name was submitted: " + this.state.addFriendUser);
-        //search for a friend
+        this.addFriend();
+
     }
 
 
-    handleInputChange(event){
+    handleInputChange(event) {
         this.setState({
             addFriendUser: event.target.value
         });
@@ -85,44 +260,62 @@ class FriendsPage extends React.Component {
     */
     render() {
         const redirect = this.state.redirect
-	    if (redirect) {
+        if (redirect) {
             return <Redirect
-            to= "/"
+                to="/"
             />
         }
 
         return (
             <div className="page">
-            <BearHugsNavbar></BearHugsNavbar>
-                <div className="friendsContainer">
-                <h1 className="pageTitle">Friends</h1>
-                    <div className="input-row center-row">
-                    <form onSubmit ={this.handleSubmit} className="input">
-                        <input type='text' value={this.state.addFriendUser} onChange = {this.handleInputChange} placeholder="Search by wustl email"/>
-                        <input type="submit" value="Search"></input>
-                    </form>
-                    </div>
-                    <div>
-                        <p className="center">Your Friends:</p>
+                <BearHugsNavbar></BearHugsNavbar>
+                    <Tabs
+                        id="friend-tabs"
+                        activeKey={this.state.key}
+                        onSelect={key => this.setState({ key })}
+                    >
+                        <Tab eventKey="currentFriends" title="Current Friends">
+                            <div className="friendsContainer">
+                                <div className="row center-row"><h1 className="pageTitle">Friends</h1></div>
+                                <div className="input-row center-row">
+                                    <Form onSubmit={this.handleSubmit} className="input">
+                                        <Form.Group>
+                                            <Form.Label>Search for User</Form.Label>
+                                            <Form.Control type="text" name="addFriendUser" value={this.state.addFriendUser} onChange={this.handleInputChange} placeholder="Add friend by WUSTL email" />
+                                        </Form.Group>
+                                        <Button type="submit" variant="danger" value="Search">Add Friend</Button>
+                                    </Form>
+                                </div>
+                                <div>
 
-                        {
-                            this.state.friendInfo.map((friend) =>
-                                <ListedUser key={friend.userId} firstName={friend.firstName} lastName={friend.lastName} profPicSrc="possum-on-horse.png" age={friend.age}></ListedUser>
-                            )
-                        }
-                        
-                        <ListedUser key="do this w map" firstName="Jessica" lastName="Schmidt" profPicSrc="possum-on-horse.png" age="18"></ListedUser>
-                        <ListedUser key="do this w map" firstName="Jessica" lastName="Schmidt" profPicSrc="possum-on-horse.png" age="19"></ListedUser>
-                        <ListedUser key="do this w map" firstName="Jessica" lastName="Schmidt" profPicSrc="possum-on-horse.png" age="20"></ListedUser>
-                        <ListedUser key="do this w map" firstName="Jessica" lastName="Schmidt" profPicSrc="possum-on-horse.png" age="21"></ListedUser>
-                        <ListedUser key="do this w map" firstName="Jessica" lastName="Schmidt" profPicSrc="possum-on-horse.png" age="18"></ListedUser>
-                        <ListedUser key="do this w map" firstName="Jessica" lastName="Schmidt" profPicSrc="possum-on-horse.png" age="18"></ListedUser>
-                        <ListedUser key="do this w map" firstName="Jessica" lastName="Schmidt" profPicSrc="possum-on-horse.png" age="18"></ListedUser>
-                        <ListedUser key="do this w map" firstName="Jessica" lastName="Schmidt" profPicSrc="possum-on-horse.png" age="18"></ListedUser>
-                        
-                    </div>
+                                    {
+                                        this.state.currentFriends.map((friend) =>
+                                            <ListedUser id={friend.userId} key={friend.userId} firstName={friend.firstName} lastName={friend.lastName} removeFriend={() => this.removeFriend(friend.userId)} profPicSrc="possum-on-horse.png" age={friend.age}></ListedUser>
+                                        )
+                                    }
+
+                                </div>
+                            </div>
+                        </Tab>
+                        <Tab eventKey="pendingFriends" title="Pending Friends">
+                            <div className="friendsContainer">
+                                <div className="row center-row">
+                                    <h1 className="pageTitle">Pending Friend Requests</h1>
+                                </div>
+
+                                <div>
+
+                                    {
+                                        this.state.pendingFriends.map((friend) =>
+                                            <PendingFriend id={friend.userId} key={friend.userId} firstName={friend.firstName} lastName={friend.lastName} approveFriend={() => this.addFriend(friend.userId, true)} rejectFriend={() => this.rejectFriend(friend.userId)} profPicSrc="possum-on-horse.png" age={friend.age}></PendingFriend>
+                                        )
+                                    }
+                                </div>
+                            </div>
+
+                        </Tab>
+                    </Tabs>
                 </div>
-            </div>
 
         );
     }
