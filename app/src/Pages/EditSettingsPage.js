@@ -36,7 +36,7 @@ class EditSettingsPage extends React.Component {
         this.handleInputChange = this.handleInputChange.bind(this)
         this.handleSubmit = this.handleSubmit.bind(this)
         this.getCurrentUserInfo = this.getCurrentUserInfo.bind(this);
-        // this.getPhotoInfo = this.getPhotoInfo.bind(this);
+        this.getPhotoInfo = this.getPhotoInfo.bind(this);
         this.uploadPhoto = this.uploadPhoto.bind(this);
 
     }
@@ -55,7 +55,7 @@ class EditSettingsPage extends React.Component {
         console.log("EDIT SETTINGS IS HERE")
         this.checkUserLogIn();
         this.getCurrentUserInfo()
-        // this.getPhotoInfo();
+        this.getPhotoInfo();
     }
 
     getCurrentUserInfo() {
@@ -110,45 +110,45 @@ class EditSettingsPage extends React.Component {
 
     }
 
-    // getPhotoInfo() {
-    //     let uid = UserToken.getUserId();
-    //     console.log("user id in get photo info: " + uid)
-    //     let url = baseDomain + '/photo/all'
-    //     let newRequest = {
-    //         "userId": uid,
-    //     }
-    //     fetch(url, {
-    //         method: 'POST',
-    //         headers: {
-    //             'Content-Type': 'application/json'
-    //         },
-    //         body: JSON.stringify(newRequest)
+    getPhotoInfo() {
+        let uid = UserToken.getUserId();
+        console.log("user id in get photo info: " + uid)
+        let url = baseDomain + '/photo/all'
+        let newRequest = {
+            "userId": uid,
+        }
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newRequest)
 
-    //     })
-    //     .then(res => res.json())
-    //     .then(responseData => {
-    //         console.log(JSON.stringify(responseData))
-    //             // TODO: handle case where login is invalid
-    //             if (JSON.stringify(responseData.error) === '{}') {
-    //                 console.log(responseData.results[0])
-    //                 if (responseData.results[0]!=null || responseData.results[0]!=undefined) {
-    //                     this.setState({
-    //                         photo: responseData.results[0].photoURL
-    //                     })
-    //                 }
+        })
+        .then(res => res.json())
+        .then(responseData => {
+            console.log(JSON.stringify(responseData))
+                // TODO: handle case where login is invalid
+                if (JSON.stringify(responseData.error) === '{}') {
+                    console.log(responseData.results[0])
+                    if (responseData.results.length!=0) {
+                        this.setState({
+                            photo: responseData.results[0].photoUrl
+                        })
+                    }
 
-    //             }
-    //             else {
-    //                 console.log("No data for edit settings")
-    //                 console.log(responseData.error)
-    //                 this.setState({feedback: "Couldn't get photo"})
-    //             }
+                }
+                else {
+                    console.log("No data for edit settings")
+                    console.log(responseData.error)
+                    this.setState({feedback: "Couldn't get photo"})
+                }
 
-    //         })
+            })
 
 
 
-    // }
+    }
 
     uploadPhoto() {
         let uid = UserToken.getUserId();
@@ -156,7 +156,7 @@ class EditSettingsPage extends React.Component {
         let url = baseDomain + '/photo/all'
         let newRequest = {
             "userId": uid,
-            "photoURL": this.state.photo
+            "photoUrl": this.state.photo
         }
         fetch(url, {
             method: 'POST',
@@ -170,6 +170,8 @@ class EditSettingsPage extends React.Component {
             .then(responseData => {
                 // TODO: handle case where login is invalid
                 if (JSON.stringify(responseData.error) === '{}') {
+                    console.log("photo re")
+                    console.log(responseData)
                     console.log(responseData.results[0])
                     this.setState({
                         feedback: "Photo and other info changed!"

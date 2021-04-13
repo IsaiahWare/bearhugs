@@ -68,19 +68,38 @@ class ViewProfilePage extends React.Component {
     }
 
     onClickAccept(userId) {
-        let temp = this.state.profiles
-        let tempProfiles = this.state.numProfiles-1
-        let tempResult = temp.filter((obj) => {
-        console.log(obj)
-		return obj.userId != userId
+        let url = baseDomain + '/match/send'
+        let newRequest = {
+            requesterId: UserToken.getUserId(),
+            requesteeId: userId
+        }
+        alert("matched " + UserToken.getUserId());
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newRequest)
         })
-        this.setState({
-            profiles: tempResult,
-            numProfiles:tempProfiles
-
-        })
-
-
+        .then(res => res.json())
+        .then(responseData => {
+              if (JSON.stringify(responseData.error) === '{}') {
+                  console.log(responseData)
+                let temp = this.state.profiles
+                let tempProfiles = this.state.numProfiles-1
+                let tempResult = temp.filter((obj) => {
+                console.log(obj)
+                return obj.userId != userId
+                })
+                this.setState({
+                    profiles: tempResult,
+                    numProfiles:tempProfiles
+        
+                })
+               console.log("was match successful? " + responseData.matched);
+           }
+       })
+                  
     }
     onClickReject(userId) {
         let temp = this.state.profiles
@@ -117,37 +136,16 @@ class ViewProfilePage extends React.Component {
                             <div className="row center-row match-container" key = {"row0" + profile.userId}>
                                 <MatchProfile key={profile.userId} userId={profile.userId} imgsrc="mail-order-wife.png" 
                                 firstName={profile.firstName} lastName={profile.lastName} age={profile.age} descrip={profile.description}
-                                 matched={false}></MatchProfile>
+                                 matched={false}
+                                 approveMatch={() => this.onClickAccept(profile.userId)} rejectMatch={() => this.onClickReject(profile.userId)}
                                  
-                                {/*<div key ={"row-" + profile.userId} className="row center-row fit-container-width red">
-                                <div key ={"col1-" + profile.userId} className="col center-col padding-left-right-2"  onClick={() => this.onClickAccept(profile.userId)}>
-                                    <div key ={"red1-" + profile.userId}  className="red">
-                                        <FontAwesomeIcon key ={"heart-" + profile.userId}  icon={faHeart}
-                                            color="#ffffff"
-                                            size="4x"
-                                        />
-                                    </div>
-                                </div>
-                                <div key ={"col2-" + profile.userId}  className="col center-col padding-left-right-2 margin-left-right-1 " onClick={() => this.onClickReject(profile.userId)}>
-                                    <div key ={"red2-" + profile.userId} className="red">
-                                        <FontAwesomeIcon icon={faHeartBroken}
-                                          key ={"heartbroken-" + profile.userId} 
-                                            color="#ffffff"
-                                            size="4x"
-                                        />
-                                    </div>
-                                </div>
-                            </div>*/}
+                                 ></MatchProfile>
+                                 
                             </div>
                             )
                         }
 
                         {/* for frontend testing */}
-
-                        <div className="row center-row match-container" key = {"row0" + 2}>
-                                <MatchProfile key="2" userId="2" imgsrc="mail-order-wife.png" firstName="Chuck" lastName="Bergalicious" age="21" descrip="Single mom no kids. Looking for something serious"></MatchProfile>
-                                
-                        </div>
 
 
                     </div>

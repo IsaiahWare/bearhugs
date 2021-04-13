@@ -23,11 +23,12 @@ class MatchProfile extends React.Component {
         if (swipeDirection === direction.RIGHT) {
           // handle right swipe
           this.setState({matched: true});
-          //this.matchProfile();
+          this.props.approveMatch()
           return;
         }
     
         if (swipeDirection === direction.LEFT) {
+            this.props.rejectMatch()
           // handle left swipe
           alert("swipe left on user "+this.props.userId+" :(");
           return;
@@ -35,25 +36,7 @@ class MatchProfile extends React.Component {
     }
 
     matchProfile(){
-        let url = baseDomain + '/match/send'
-        let newRequest = {
-            requesterId: UserToken.getUserId(),
-            requesteeId: this.props.userId
-        }
-        alert("matched " + UserToken.getUserId());
-        fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(newRequest)
-        })
-        .then(res => res.json())
-        .then(responseData => {
-              if (JSON.stringify(responseData.error) === '{}') {
-               console.log("was match successful? " + responseData.matched);
-           }
-       })
+     
     }
 
 
