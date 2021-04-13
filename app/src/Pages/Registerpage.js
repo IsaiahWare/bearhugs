@@ -3,6 +3,8 @@ import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import "../App.css"
+import UserToken from  "../Components/UserToken.js"
+
 
 
 let baseDomain = "http://ec2-100-24-237-42.compute-1.amazonaws.com:3000"
@@ -17,13 +19,38 @@ class RegisterPage extends React.Component {
             confirmPassword:"",
             errors:"",
             age:18,
-            feedback: " "
+            feedback: " ",
+            redirect: false
 
         }
         this.registerAccount = this.registerAccount.bind(this)
         this.handleInputChange = this.handleInputChange.bind(this)
         this.filterInputs= this.filterInputs.bind(this)
 
+    }
+
+    logIn() {
+	    console.log("Login event")
+        let url =  baseDomain + '/user/login'
+        let newRequest = {
+            "email": this.state.email,
+            "password": this.state.password
+        }
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newRequest)
+        })
+        .then(res => res.json())
+        .then(responseData => {
+            // TODO: handle case where login is invalid
+            if (JSON.stringify(responseData.error) === '{}') { 
+                UserToken.setUserId(responseData.results[0].userId)
+                this.setState({redirect:true})
+            }
+        })
     }
 
     filterInputs(event) {
@@ -40,7 +67,7 @@ class RegisterPage extends React.Component {
         let passwordFilter = this.filterPassword(password)
         let confirmPassWordCheck = this.checkPassword(password, confirmPassword)
         if (ageFilter && nameFilter && emailFilter && passwordFilter && confirmPassWordCheck) {
-		this.registerAccount()
+		    this.registerAccount()
         }
 	    else {
 		    console.log("Filters failed")
@@ -89,8 +116,9 @@ class RegisterPage extends React.Component {
 
     //https://www.codexworld.com/how-to/validate-first-last-name-with-regular-expression-using-javascript/
     filterName(firstName, lastName) {
-        var regName = /^[a-zA-Z]+ [a-zA-Z]+$/;
-        let fullName = firstName+" "+lastName
+        //should match names with multiple last names, hypens, and apostrophes
+        var regName = /^[ a-zA-Z\-\’]+$/;
+        let fullName = firstName+" "+lastName;
         if(!regName.test(fullName)){
             this.setState({
                 feedback: "Please enter a valid full first and last name."
@@ -128,39 +156,47 @@ class RegisterPage extends React.Component {
             "age": this.state.age
         }
 
-    fetch(url, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(newRequest)
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newRequest)
 
+        })
+        .then(res => res.json())
+        .then(responseData => {
+        // TODO: handle case where login is invalid
+        if(JSON.stringify(responseData.error) !== '{}') {
+            this.setState({
+            feedback: "Register not successful :(" 
+        })
+        } else {
+            this.setState({
+                feedback: "Register successful :) Return to login and try your new account!"
+            })
+            this.logIn();
+        }
     })
-    .then(res => res.json())
-    .then(responseData => {
-       // TODO: handle case where login is invalid
-       if(JSON.stringify(responseData.error) !== '{}') {
-         this.setState({
-		 feedback: "Register not successful :(" 
-	 })
-	 }else {
-		  this.setState({
-			  feedback: "Register successful :) Return to login and try your new account!"
-         })
-	 }
-   })
-}
+    }
 
-handleInputChange(event) {
-    let target = event.target;
-    let value = target.value
-    let name = target.name;
-    this.setState({
-      [name]: value });
-}
+    handleInputChange(event) {
+        let target = event.target;
+        let value = target.value
+        let name = target.name;
+        this.setState({
+        [name]: value });
+    }
 
 
     render() {
+        const redirect = this.state.redirect
+	    if (redirect) {
+            return <Redirect
+            to= "/viewmatches"
+            />
+	    }  
+
         return (
             <div className="page">
                    
