@@ -114,6 +114,7 @@ height: 40vh;
 }
 .scroll-box {
   overflow: auto;
+  min-width: fit-content;
 }
 form {
   padding-left: 4rem;

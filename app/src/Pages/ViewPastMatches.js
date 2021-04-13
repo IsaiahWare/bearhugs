@@ -14,27 +14,24 @@ import pendingFriends from "../Components/PendingFriend"
 import PendingFriend from '../Components/PendingFriend';
 import TabContent from 'react-bootstrap/TabContent'
 import Form from 'react-bootstrap/Form'
+import CompletedMatchesProfile from "../Components/CompletedMatchesProfile"
+import PendingMatchesProfile from "../Components/PendingMatchesProfile"
 
 let baseDomain = "http://ec2-100-24-237-42.compute-1.amazonaws.com:3000"
 
-class FriendsPage extends React.Component {
+class ViewPastMatches extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            addFriendUser: "",
             redirect: false,
             feedback: "",
-            pendingFriendsRequest: [],
-            pendingFriends:[],
-            currentFriends:[],
-            key: "currentFriends"
+            pendingMatches: [],
+            currentMatches: [],
+            key: "currentMatches"
 
         }
-        this.handleInputChange = this.handleInputChange.bind(this)
-        this.getCurrentFriends = this.getCurrentFriends.bind(this)
-        this.getPendingFriends = this.getPendingFriends.bind(this)
-        this.addFriend = this.addFriendByEmail.bind(this)
-        // this.rejectFriend = this.rejectFriend.bind(this)
+        this.getCurrentMatches = this.getCurrentMatches.bind(this)
+        this.getPendingMatches = this.getPendingMatches.bind(this)
         this.checkUserEmail = this.checkUserEmail.bind(this)
 
 
@@ -42,8 +39,8 @@ class FriendsPage extends React.Component {
 
     componentDidMount() {
         this.checkUserLogIn();
-        this.getCurrentFriends();
-        this.getPendingFriends();
+        this.getCurrentMatches();
+        this.getPendingMatches();
     }
 
     setKey(k) {
@@ -59,15 +56,13 @@ class FriendsPage extends React.Component {
             })
         }
 
-        this.handleInputChange = this.handleInputChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    
 
-    removeFriend(id) {
-        let url = baseDomain + '/friend/unfriend'
-        console.log("in remove friend " + id)
+
+    rejectMatch(id) {
+        let url = baseDomain + '/match/reject'
+        console.log("in reject match " + id)
         let newRequest = {
             userId1: UserToken.getUserId(),
             userId2: id
@@ -83,30 +78,30 @@ class FriendsPage extends React.Component {
             .then(responseData => {
                 console.log(responseData)
                 if (JSON.stringify(responseData.error) === '{}') {
-                    let temp = this.state.currentFriends
+                    let temp = this.state.pendingMatches
                     let tempResult = temp.filter((obj) => {
-                    if (obj.userId === id) {
-                        console.log("remove " + JSON.stringify(obj))
-                    }
+                        if (obj.userId === id) {
+                            console.log("remove " + JSON.stringify(obj))
+                        }
                         return obj.userId !== id
                     })
                     this.setState({
-                       currentFriends:tempResult,
-                       feedback: "Friend removed!"
+                        pendingMatches: tempResult,
+                        feedback: "Match removed!"
                     })
-                    
+
                 }
                 else {
                     this.setState({
-                        feedback: "Friend could not be removed :("
+                        feedback: "Match could not be rejected :("
                     })
                 }
             })
 
 
     }
-    getCurrentFriends() {
-        let url = baseDomain + '/friend/friends'
+    getCurrentMatches() {
+        let url = baseDomain + '/match/matches'
         let newRequest = {
             userId: UserToken.getUserId()
         }
@@ -119,18 +114,18 @@ class FriendsPage extends React.Component {
         })
             .then(res => res.json())
             .then(responseData => {
-		    console.log(responseData)
+                console.log(responseData)
                 if (JSON.stringify(responseData.error) === '{}') {
                     this.setState({
-                       currentFriends: responseData.results
+                        currentMatches: responseData.results
                     })
                 }
             })
 
     }
 
-    getPendingFriends() {
-        let url = baseDomain + '/friend/requests'
+    getPendingMatches() {
+        let url = baseDomain + '/match/requests'
         let newRequest = {
             userId: UserToken.getUserId()
         }
@@ -143,11 +138,11 @@ class FriendsPage extends React.Component {
         })
             .then(res => res.json())
             .then(responseData => {
-		    console.log( "pending friends resposne data")
-		    console.log(responseData)
+                console.log("pending friends resposne data")
+                console.log(responseData)
                 if (JSON.stringify(responseData.error) === '{}') {
                     this.setState({
-                        pendingFriendsRequest: responseData.results
+                        pendingMatches: responseData.results
                     })
                 }
             })
@@ -156,24 +151,25 @@ class FriendsPage extends React.Component {
 
 
     filterPendingAfterAdd(id) {
-        let temp = this.state.pendingFriendsRequest
+        let temp = this.state.pendingMatches
         let tempResult = temp.filter((obj) => {
-        console.log(obj)
-        if (obj.userId === id) {
-            console.log("remove " + JSON.stringify(obj))
-        }
+            console.log(obj)
+            if (obj.userId === id) {
+                console.log("remove " + JSON.stringify(obj))
+            }
             return obj.userId !== id
         })
         this.setState({
-           pendingFriendsRequest:tempResult,
+            pendingMatches: tempResult,
         })
     }
 
-    addFriendByEmail(id, newFriendInfo) {
-        console.log("IN add friend by email")
-        let url = baseDomain + '/friend/send'
+
+    addMatchFromButton(id) {
+        console.log("IN add match by button")
+        let url = baseDomain + '/match/send'
         let newRequest = {
-            requesterId:UserToken.getUserId(),
+            requesterId: UserToken.getUserId(),
             requesteeId: id
         }
         console.log(newRequest)
@@ -184,146 +180,57 @@ class FriendsPage extends React.Component {
             },
             body: JSON.stringify(newRequest)
         })
-        .then(res => res.json())
-        .then(responseData => {
-            if (JSON.stringify(responseData.error) === '{}') {
-                console.log(responseData)
-                this.setState({
-                    feedback:"Friend request sent!",
-                    pendingFriends: this.state.pendingFriends.concat(newFriendInfo)
-                })
-
-            }
-            else {
-                console.log(responseData)
-                this.setState({
-                    feedback:"Friend request could not be sent :(. Please try a different email"
-                })
-            }
-       })
-
-    }
-
-    addFriendFromButton(id) {
-        console.log("IN add friend by button")
-        let url = baseDomain + '/friend/send'
-        let newRequest = {
-            requesterId:UserToken.getUserId(),
-            requesteeId: id
-        }
-        console.log(newRequest)
-        fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(newRequest)
-        })
-        .then(res => res.json())
-        .then(responseData => {
-            if (JSON.stringify(responseData.error) === '{}') {
-                console.log(responseData)
-                this.setState({
-                    feedback:"Friend request accepted!",
-                })
-                this.getCurrentFriends()
-                this.filterPendingAfterAdd(id)
-
-            }
-            else {
-                console.log(responseData)
-                this.setState({
-                    feedback:"Friend request could not be sent :(. Please try a different email"
-                })
-            }
-       })
-
-    }
-
-    checkUserEmail() {
-            let url = baseDomain + '/user/findbyemail'
-            let newRequest = {
-                email: this.state.addFriendUser
-            }
-            console.log(newRequest)
-            fetch(url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(newRequest)
-            })
             .then(res => res.json())
             .then(responseData => {
                 if (JSON.stringify(responseData.error) === '{}') {
                     console.log(responseData)
                     this.setState({
-                        feedback:"Friend found!"
+                        feedback: "Match created",
+                    })
+                    this.getCurrentMatches()
+                    this.filterPendingAfterAdd(id)
+
+                }
+                else {
+                    console.log(responseData)
+                    this.setState({
+                        feedback: "Match could not be completed :(. Please try again later"
+                    })
+                }
+            })
+
+    }
+
+    checkUserEmail() {
+        let url = baseDomain + '/user/findbyemail'
+        let newRequest = {
+            email: this.state.addFriendUser
+        }
+        console.log(newRequest)
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newRequest)
+        })
+            .then(res => res.json())
+            .then(responseData => {
+                if (JSON.stringify(responseData.error) === '{}') {
+                    console.log(responseData)
+                    this.setState({
+                        feedback: "Friend found!"
                     })
                     this.addFriendByEmail(responseData.results[0].userId, responseData.results[0])
                 }
                 else {
                     console.log(responseData)
                     this.setState({
-                        feedback:"Friend could not be found :(. Please try a different email"
-                    })
-                }
-           })
-
-    }
-
-    rejectFriend(id) {
-        let url = baseDomain + '/friend/reject'
-        let newRequest = {
-            requesterId: UserToken.getUserId(),
-            requesteeId: id
-        }
-        fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(newRequest)
-        })
-            .then(res => res.json())
-            .then(responseData => {
-                if (JSON.stringify(responseData.error) === '{}') {
-                    let temp = this.state.pendingFriendsRequest
-                    let tempResult = temp.filter((obj) => {
-                    console.log(obj)
-                    if (obj.userId === id) {
-                        console.log("remove " + JSON.stringify(obj))
-                    }
-                        return obj.userId !== id
-                    })
-                    this.setState({
-                       pendingFriends:tempResult,
-                       feedback: "Friend request rejected"
-                    })
-                }
-                else {
-                    this.setState({
-                        feedback: "Friend request could not be rejected"
+                        feedback: "Friend could not be found :(. Please try a different email"
                     })
                 }
             })
 
-
-
-    }
-
-    handleSubmit(event) {
-        event.preventDefault();
-        console.log("A name was submitted: " + this.state.addFriendUser);
-        this.checkUserEmail();
-
-    }
-
-
-    handleInputChange(event) {
-        this.setState({
-            addFriendUser: event.target.value
-        });
     }
 
     /*
@@ -345,56 +252,52 @@ class FriendsPage extends React.Component {
         return (
             <div className="page">
                 <BearHugsNavbar></BearHugsNavbar>
-                    <Tabs
-                        id="friend-tabs"
-                        activeKey={this.state.key}
-                        onSelect={key => this.setState({ key })}
-                    >
-                        <Tab eventKey="currentFriends" title="Current Friends">
-                            <div className="friendsContainer">
-                                <div className="row center-row"><h1 className="pageTitle">Friends</h1></div>
-                                <div className="input-row center-row">
-                                    <Form onSubmit={this.handleSubmit} className="input">
-                                        <Form.Group>
-                                            <Form.Label>Search for User</Form.Label>
-                                            <Form.Control type="text" name="addFriendUser" value={this.state.addFriendUser} onChange={this.handleInputChange} placeholder="Add friend by WUSTL email" />
-                                        </Form.Group>
-                                        <Button type="submit" variant="danger" value="Search">Add Friend</Button>
-                                    </Form>
-                                </div>
-                                <div>
-
-                                    {
-                                        this.state.currentFriends.map((friend) =>
-                                            <ListedUser id={friend.userId} key={friend.userId} firstName={friend.firstName} lastName={friend.lastName} removeFriend={() => this.removeFriend(friend.userId)} profPicSrc="possum-on-horse.png" age={friend.age}></ListedUser>
-                                        )
-                                    }
-
-                                </div>
+                <Tabs
+                    id="match-tabs"
+                    activeKey={this.state.key}
+                    onSelect={key => this.setState({ key })}
+                >
+                    <Tab eventKey="currentMatches" title="Current Matches">
+                        <div className="row center-row">
+                            <h2>Completed Matches</h2>
+                        </div>
+                        <div className="row center-row">
+                            <div className="col center-col">
+                                {
+                                    this.state.currentMatches.map((profile) =>
+                                        <div className="row center-row match-container" key={"row0" + profile.userId}>
+                                            <CompletedMatchesProfile key={profile.userId} userId={profile.userId} imgsrc="mail-order-wife.png"
+                                                firstName={profile.firstName} lastName={profile.lastName} email={profile.email} age={profile.age} descrip={profile.description} genderIdentity={profile.genderIdentity} genderPreferences={profile.genderPreferences}
+                                                matched={true}></CompletedMatchesProfile>
+                                        </div>
+                                    )
+                                }
                             </div>
-                        </Tab>
-                        <Tab eventKey="pendingFriends" title="Pending Friends">
-                            <div className="friendsContainer">
-                                <div className="row center-row">
-                                    <h2 className="pageTitle">Pending Friend Requests</h2>
-                                </div>
-
-                                <div>
-
-                                    {
-                                        this.state.pendingFriendsRequest.map((friend) =>
-                                            <PendingFriend id={friend.userId} key={friend.userId} firstName={friend.firstName} lastName={friend.lastName} approveFriend={() => this.addFriendByButton(friend.userId)} rejectFriend={() => this.rejectFriend(friend.userId)} profPicSrc="possum-on-horse.png" age={friend.age}></PendingFriend>
-                                        )
-                                    }
-                                </div>
+                        </div>
+                    </Tab>
+                    <Tab eventKey="pendingMatches" title="Pending Matches">
+                        <div className="row center-row">
+                            <h2>Pending Matches</h2>
+                        </div>
+                        <div className="row center-row">
+                            <div className="col center-col">
+                                {
+                                    this.state.pendingMatches.map((profile) =>
+                                        <div className="row center-row match-container" key={"row0" + profile.userId}>
+                                            <PendingMatchesProfile key={profile.userId} userId={profile.userId} imgsrc="mail-order-wife.png"
+                                                firstName={profile.firstName} lastName={profile.lastName} email={profile.email} age={profile.age} descrip={profile.description} genderIdentity={profile.genderIdentity} genderPreferences={profile.genderPreferences}
+                                                matched={false} approveMatch={() => this.addMatchFromButton(profile.userId)} rejectMatch={() => this.rejectMatch(profile.userId)} ></PendingMatchesProfile>
+                                        </div>
+                                    )
+                                }
                             </div>
-
-                        </Tab>
-                    </Tabs>
-                </div>
+                        </div>
+                    </Tab>
+                </Tabs>
+            </div >
 
         );
     }
 }
 
-export default FriendsPage;
+export default ViewPastMatches;

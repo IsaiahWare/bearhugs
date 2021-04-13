@@ -21,6 +21,7 @@ class EditSettingsPage extends React.Component {
             description: "",
             email: "",
             feedback: "",
+            password: "",
             redirect: false,
             pictures: [],
             genderIdentity:"MALE",
