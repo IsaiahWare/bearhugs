@@ -539,7 +539,7 @@ Response {
   error: {}
   results: [
     {
-      matched: boolean
+      success: boolean
     }
   ]
 }
