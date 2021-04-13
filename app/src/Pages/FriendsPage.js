@@ -162,11 +162,10 @@ class FriendsPage extends React.Component {
         })
     }
 
-    addFriend(id, isFromRequest) {
-            let url = baseDomain + '/friend/send'
+    addFriend() {
+            let url = baseDomain + '/friend/findbyemail'
             let newRequest = {
-                requesterId: UserToken.getUserId(),
-                requesteeId: id
+                email: this.state.addFriendUser
             }
             fetch(url, {
                 method: 'POST',
@@ -178,16 +177,14 @@ class FriendsPage extends React.Component {
             .then(res => res.json())
             .then(responseData => {
                 if (JSON.stringify(responseData.error) === '{}') {
-                    if (isFromRequest) {
-                        this.filterPendingAfterAdd(id)
-                        
-                    }
+                    console.log(responseData)
                     this.setState({
-                        feedback:"Friend added!"
+                        feedback:"Friend found!"
                     })
                 
                 }
                 else {
+                    console.log(responseData)
                     this.setState({
                         feedback:"Friend could not be added :("
                     })

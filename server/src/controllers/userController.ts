@@ -150,6 +150,39 @@ router.post("/find", (req: Request, res: Response) => {
     }); 
 });
 
+router.post("/findbyemail", (req: Request, res: Response) => {    
+    const findResponse: UserFindResponse = {
+        "error": {},
+        "results": []
+    };
+
+    if (!isUserFindRequest(req.body)) {
+        findResponse.error = {
+            "message": "Invalid request parameters!"
+        };
+        res.json(findResponse);
+        return;
+    }
+
+    const queryStatement: string = "SELECT userId, email, firstName, lastName, age, description, genderIdentity, genderPreferences FROM users WHERE email= ?";
+    db.query(queryStatement, req.body.userId, (queryError: MysqlError | null, queryResults: any ) => {
+        if (queryError) {
+            findResponse.error =  {
+                "message": queryError.sqlMessage
+            };
+        } else if (queryResults.length !== 1) {
+            findResponse.error = {
+                "message": "No user found"
+            };
+        } else {
+            findResponse.results = queryResults;
+        }
+        res.json(findResponse);
+    }); 
+});
+
+
+
 function shuffleArray(array: any) {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
