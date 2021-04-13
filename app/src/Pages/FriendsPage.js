@@ -15,7 +15,7 @@ import PendingFriend from '../Components/PendingFriend';
 import TabContent from 'react-bootstrap/TabContent'
 import Form from 'react-bootstrap/Form'
 
-let baseDomain = "http://ec2-54-146-61-111.compute-1.amazonaws.com:3000"
+let baseDomain = "http://ec2-100-24-237-42.compute-1.amazonaws.com:3000"
 
 class FriendsPage extends React.Component {
     constructor(props) {

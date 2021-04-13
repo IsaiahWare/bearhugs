@@ -12,7 +12,7 @@ import { Col } from 'react-bootstrap';
 import ImageUploader from 'react-images-upload';
 
 
-let baseDomain = "http://ec2-54-146-61-111.compute-1.amazonaws.com:3000"
+let baseDomain = "http://ec2-100-24-237-42.compute-1.amazonaws.com:3000"
 
 class EditSettingsPage extends React.Component {
     constructor(props) {

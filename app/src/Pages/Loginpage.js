@@ -3,7 +3,7 @@ import { Redirect } from 'react-router-dom';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import "../App.css"
 import UserToken from  "../Components/UserToken.js"
-let baseDomain = "http://ec2-54-146-61-111.compute-1.amazonaws.com:3000"
+let baseDomain = "http://ec2-100-24-237-42.compute-1.amazonaws.com:3000"
 class LoginPage extends React.Component {
     constructor(props) {
         super(props);
