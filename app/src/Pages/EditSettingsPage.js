@@ -9,7 +9,9 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { Redirect } from 'react-router-dom';
 import { Col } from 'react-bootstrap';
+import { Row } from 'react-bootstrap';
 import ImageUploader from 'react-images-upload';
+import Image from "react-bootstrap/Image"
 
 
 let baseDomain = "http://ec2-100-24-237-42.compute-1.amazonaws.com:3000"
@@ -23,25 +25,20 @@ class EditSettingsPage extends React.Component {
             feedback: "",
             password: "",
             redirect: false,
-            pictures: [],
-            genderIdentity:"MALE",
-            genderPreferences:"STRAIGHT",
-            firstName:"",
-            lastName:"",
-            age:-1
+            photo: "",
+            genderIdentity: "MALE",
+            genderPreferences: "STRAIGHT",
+            firstName: "",
+            lastName: "",
+            age: -1
 
         }
         this.handleInputChange = this.handleInputChange.bind(this)
         this.handleSubmit = this.handleSubmit.bind(this)
-        this.onDrop = this.onDrop.bind(this);
         this.getCurrentUserInfo = this.getCurrentUserInfo.bind(this);
+        // this.getPhotoInfo = this.getPhotoInfo.bind(this);
+        this.uploadPhoto = this.uploadPhoto.bind(this);
 
-    }
-
-    onDrop(picture) {
-        this.setState({
-            pictures: this.state.pictures.concat(picture),
-        });
     }
 
     checkUserLogIn() {
@@ -58,6 +55,7 @@ class EditSettingsPage extends React.Component {
         console.log("EDIT SETTINGS IS HERE")
         this.checkUserLogIn();
         this.getCurrentUserInfo()
+        // this.getPhotoInfo();
     }
 
     getCurrentUserInfo() {
@@ -75,8 +73,8 @@ class EditSettingsPage extends React.Component {
             body: JSON.stringify(newRequest)
 
         })
-        .then(res => res.json())
-        .then(responseData => {
+            .then(res => res.json())
+            .then(responseData => {
                 // TODO: handle case where login is invalid
                 if (JSON.stringify(responseData.error) === '{}') {
                     console.log(responseData.results[0])
@@ -87,27 +85,104 @@ class EditSettingsPage extends React.Component {
                         lastName: responseData.results[0].lastName,
                         age: responseData.results[0].age
                     })
-                    if (responseData.results[0].genderIdentity!=null){
+                    if (responseData.results[0].genderIdentity != null) {
                         this.setState({
                             genderIdentity: responseData.results[0].genderIdentity
                         })
-                        
+
                     }
-                    else if (responseData.results[0].genderPreferences!=null) {
+                    else if (responseData.results[0].genderPreferences != null) {
                         this.setState({
                             genderPreferences: responseData.results[0].genderPreferences,
                         })
-                        
+
                     }
-              
+
                 }
                 else {
                     console.log("No data for edit settings")
                     console.log(responseData.error)
-                    this.setState({feedback: "Couldn't get data"})
+                    this.setState({ feedback: "Couldn't get data" })
                 }
 
             })
+
+
+    }
+
+    // getPhotoInfo() {
+    //     let uid = UserToken.getUserId();
+    //     console.log("user id in get photo info: " + uid)
+    //     let url = baseDomain + '/photo/all'
+    //     let newRequest = {
+    //         "userId": uid,
+    //     }
+    //     fetch(url, {
+    //         method: 'POST',
+    //         headers: {
+    //             'Content-Type': 'application/json'
+    //         },
+    //         body: JSON.stringify(newRequest)
+
+    //     })
+    //     .then(res => res.json())
+    //     .then(responseData => {
+    //         console.log(JSON.stringify(responseData))
+    //             // TODO: handle case where login is invalid
+    //             if (JSON.stringify(responseData.error) === '{}') {
+    //                 console.log(responseData.results[0])
+    //                 if (responseData.results[0]!=null || responseData.results[0]!=undefined) {
+    //                     this.setState({
+    //                         photo: responseData.results[0].photoURL
+    //                     })
+    //                 }
+
+    //             }
+    //             else {
+    //                 console.log("No data for edit settings")
+    //                 console.log(responseData.error)
+    //                 this.setState({feedback: "Couldn't get photo"})
+    //             }
+
+    //         })
+
+
+
+    // }
+
+    uploadPhoto() {
+        let uid = UserToken.getUserId();
+        console.log("user id in get photo info: " + uid)
+        let url = baseDomain + '/photo/all'
+        let newRequest = {
+            "userId": uid,
+            "photoURL": this.state.photo
+        }
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newRequest)
+
+        })
+            .then(res => res.json())
+            .then(responseData => {
+                // TODO: handle case where login is invalid
+                if (JSON.stringify(responseData.error) === '{}') {
+                    console.log(responseData.results[0])
+                    this.setState({
+                        feedback: "Photo and other info changed!"
+                    })
+                }
+                else {
+                    console.log("No data for edit settings")
+                    console.log(responseData.error)
+                    this.setState({ feedback: "Couldn't upload photo, but uploaded other data" })
+                }
+
+            })
+
 
 
     }
@@ -122,10 +197,11 @@ class EditSettingsPage extends React.Component {
             "description": this.state.description,
             "genderIdentity": this.state.genderIdentity,
             "genderPreferences": this.state.genderPreferences,
-            "firstName":this.state.firstName,
-            "lastName":this.state.lastName,
-            "age":this.state.age
+            "firstName": this.state.firstName,
+            "lastName": this.state.lastName,
+            "age": this.state.age,
         }
+
         console.log("New rquest" + newRequest)
 
         fetch(url, {
@@ -136,24 +212,24 @@ class EditSettingsPage extends React.Component {
             body: JSON.stringify(newRequest)
 
         }).then(res => res.json())
-        .then(responseData => {
+            .then(responseData => {
                 console.log("Data received")
                 console.log(responseData)
                 // TODO: handle case where login is invalid
                 if (JSON.stringify(responseData.error) === '{}') {
-                    this.setState({feedback: "Changes saved!"})
-                    
+                    this.setState({ feedback: "Changes saved!" })
+                    this.uploadPhoto()
                 }
                 else {
-                    this.setState({feedback: "Changes could not be saved :( Please try again"})
+                    this.setState({ feedback: "Changes could not be saved :( Please try again" })
                 }
 
             })
-        }
+    }
 
     handleInputChange(event) {
         let target = event.target;
-  
+
         let value = target.value
         let name = target.name;
         console.log(name + " " + value)
@@ -175,11 +251,16 @@ class EditSettingsPage extends React.Component {
             <div className="page" >
                 <BearHugsNavbar></BearHugsNavbar>
                 <div className="row center-row">
-                            <h3>{this.state.feedback}</h3>
+                    <h3>{this.state.feedback}</h3>
                 </div>
+                    <div className="row center-row">
+                            <Image src={this.state.photo} className="img-parent" />
+
+                    </div>
                 <div className="col">
+               
                     <Form onSubmit={this.handleSubmit} controlId="editForm">
-                        <Form.Row>
+                        {/* <Form.Row>
                             <Form.Group as={Col} controlId="editForm.picture">
                                 <ImageUploader
                                     withIcon={true}
@@ -190,7 +271,11 @@ class EditSettingsPage extends React.Component {
                                     singleImage={true}
                                 />
                             </Form.Group>
-                        </Form.Row>
+                        </Form.Row> */}
+                        <Form.Group>
+                            <Form.Label>Profile image URL</Form.Label>
+                            <Form.Control type="text" name="photo" value={this.state.photo} onChange={this.handleInputChange} placeholder="Place image URL from Internet" />
+                        </Form.Group>
                         <Form.Group controlId="editForm.email">
                             <Form.Label>Email</Form.Label>
                             <Form.Control type="email" name="email" value={this.state.email} onChange={this.handleInputChange} placeholder="newemail@wustl.edu" />
@@ -200,10 +285,11 @@ class EditSettingsPage extends React.Component {
                             <Form.Control as="textarea" name="description" value={this.state.description} rows={3} onChange={this.handleInputChange} placeholder="Write what you want 
                             people to see on your profile" />
                         </Form.Group>
+
                         <Form.Group controlId="editForm.genderIdentity">
                             <Form.Label>Gender Identity</Form.Label>
                             <Form.Control as="select" defaultValue={this.state.genderIdentity}
-                                name = "genderIdentity" onChange={this.handleInputChange}>
+                                name="genderIdentity" onChange={this.handleInputChange}>
                                 <option value="MALE">Male</option>
                                 <option value="FEMALE">Female</option>
                                 <option value="OTHER">Other</option>
@@ -212,7 +298,7 @@ class EditSettingsPage extends React.Component {
                         <Form.Group controlId="editForm.genderPreference">
                             <Form.Label>Gender Preference</Form.Label>
                             <Form.Control as="select" defaultValue={this.state.genderPreferences}
-                                name = "genderPreferences" onChange={this.handleInputChange}>
+                                name="genderPreferences" onChange={this.handleInputChange}>
                                 <option value="STRAIGHT">Straight</option>
                                 <option value="GAY">Gay</option>
                                 <option value="BISEXUAL">Bisexual</option>
