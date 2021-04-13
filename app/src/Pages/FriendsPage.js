@@ -67,6 +67,7 @@ class FriendsPage extends React.Component {
 
     removeFriend(id) {
         let url = baseDomain + '/friend/unfriend'
+        console.log("in remove friend " + id)
         let newRequest = {
             userId1: UserToken.getUserId(),
             userId2: id
@@ -80,6 +81,7 @@ class FriendsPage extends React.Component {
         })
             .then(res => res.json())
             .then(responseData => {
+                console.log(responseData)
                 if (JSON.stringify(responseData.error) === '{}') {
                     let temp = this.state.currentFriends
                     let tempResult = temp.filter((obj) => {

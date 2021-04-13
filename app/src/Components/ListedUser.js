@@ -21,7 +21,7 @@ class ListedUser extends React.Component {
                     <p id="listedUser-age">{this.props.age}</p>
                 </div>
                 <div className="remove">
-                    <button class="removeFriend nostyle"><FontAwesomeIcon icon={faTimes}></FontAwesomeIcon></button>
+                    <button class="removeFriend nostyle" onClick={this.props.removeFriend}><FontAwesomeIcon icon={faTimes}></FontAwesomeIcon></button>
                 </div>
 
 
