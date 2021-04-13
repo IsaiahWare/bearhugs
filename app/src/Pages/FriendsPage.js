@@ -119,9 +119,10 @@ class FriendsPage extends React.Component {
         })
             .then(res => res.json())
             .then(responseData => {
+		    console.log(responseData)
                 if (JSON.stringify(responseData.error) === '{}') {
                     this.setState({
-                        friendInfo: responseData.results
+                       currentFriends: responseData.results
                     })
                 }
             })
@@ -142,6 +143,8 @@ class FriendsPage extends React.Component {
         })
             .then(res => res.json())
             .then(responseData => {
+		    console.log( "pending friends resposne data")
+		    console.log(responseData)
                 if (JSON.stringify(responseData.error) === '{}') {
                     this.setState({
                         pendingFriendsRequest: responseData.results
