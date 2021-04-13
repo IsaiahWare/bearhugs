@@ -31,7 +31,7 @@ Start server in production mode (not implemented yet):
 
 # API
 ## BASE URL
-### http://ec2-54-146-61-111.compute-1.amazonaws.com:3000
+### bearhugs.love:3000
 ## USER
 ### `POST /user/register`
 
@@ -158,6 +158,32 @@ const response = {
   ]
 }
 ```
+
+### `POST /user/update`
+
+```
+Request {
+  userId: id
+  email: string
+  password: string
+  firstName: string
+  lastName: string
+  description: string
+  genderIdentity: Enum('MALE', 'FEMALE', 'OTHER'),
+  genderPreferences: Enum('STRAIGHT', 'BISEXUAL', 'GAY', 'OTHER')
+  phoneNumber: string
+}
+
+Response {
+  error: {}
+  results: [
+    {
+      success: boolean
+    }
+  ]
+}
+```
+
 ## QUIZ
 ### `POST /quiz/create`
 
@@ -394,6 +420,8 @@ Response {
 wingmanId => Person who is suggesting the match
 requesterId => Person who the wingman is suggesting
 requesteeId => Target person for the match
+
+### `POST /wingman/send`
 
 ```
 Request {

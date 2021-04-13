@@ -227,14 +227,16 @@ router.post("/update", (req: Request, res: Response) => {
         "results": []
     };
     
-    const queryStatement: string = "UPDATE users SET email = ?, firstName = ?, lastName = ?, description = ?, genderIdentity = ?, genderPreferences = ? WHERE userId = ?";
+    const queryStatement: string = "UPDATE users SET email = ?, password = ?, firstName = ?, lastName = ?, description = ?, genderIdentity = ?, genderPreferences = ?, phoneNumber = ? WHERE userId = ?";
     const queryArgs = [
         req.body.email,
+        req.body.password,
         req.body.firstName,
         req.body.lastName,
         req.body.description,
         req.body.genderIdentity,
         req.body.genderPreferences,
+        req.body.phoneNumber,
         req.body.userId
     ];
 
@@ -248,16 +250,19 @@ router.post("/update", (req: Request, res: Response) => {
                 {
                     "userId": req.body.userId,
                     "email": req.body.email,
+                    "password": req.body.password,
                     "firstName": req.body.firstName,
                     "lastName": req.body.lastName,
                     "genderIdentity": req.body.genderIdentity,
                     "genderPreferences": req.body.genderPreferences,
-                    "description": req.body.description
+                    "description": req.body.description,
+                    "phoneNumber": req.body.phoneNumber
                 }
             ];
         }
         res.json(updateResponse);
     });
 });
+
 export default router;
 
