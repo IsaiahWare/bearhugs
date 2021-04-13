@@ -163,7 +163,7 @@ const response = {
 
 ```
 Request {
-  userId: id
+  userId: number
   email: string
   password: string
   firstName: string
