@@ -7,6 +7,7 @@ export interface UserFriendFindRequest {
     userId: number;
 }
 
+
 export interface UserFriendFindResponse {
     error: {},
     results: User[]

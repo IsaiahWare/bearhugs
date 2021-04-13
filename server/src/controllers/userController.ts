@@ -11,9 +11,12 @@ import {
     UserFindRequest,
     UserFindResponse,
     UserRandomRequest,
-    UserRandomResponse
+    UserRandomResponse,
+    FindByEmailRequest,
+    FindByEmailResponse
 } from "./../models/userControllerModels";
 import {
+    isUserFindByEmailRequest,
     isUserRegisterRequest,
     isUserLoginRequest,
     isUserFindRequest,
@@ -151,12 +154,12 @@ router.post("/find", (req: Request, res: Response) => {
 });
 
 router.post("/findbyemail", (req: Request, res: Response) => {    
-    const findResponse: UserFindResponse = {
+    const findResponse: FindByEmailResponse = {
         "error": {},
         "results": []
     };
 
-    if (!isUserFindRequest(req.body)) {
+    if (!isUserFindByEmailRequest(req.body)) {
         findResponse.error = {
             "message": "Invalid request parameters!"
         };
@@ -165,7 +168,7 @@ router.post("/findbyemail", (req: Request, res: Response) => {
     }
 
     const queryStatement: string = "SELECT userId, email, firstName, lastName, age, description, genderIdentity, genderPreferences FROM users WHERE email= ?";
-    db.query(queryStatement, req.body.userId, (queryError: MysqlError | null, queryResults: any ) => {
+    db.query(queryStatement, req.body.email, (queryError: MysqlError | null, queryResults: any ) => {
         if (queryError) {
             findResponse.error =  {
                 "message": queryError.sqlMessage

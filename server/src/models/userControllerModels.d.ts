@@ -23,6 +23,9 @@ export interface UserLoginRequest {
    email: string;
    password: string;
 }
+export interface FindByEmailRequest {
+    email: string
+}
 
 export interface UserFindRequest {
    userId: string;
@@ -30,6 +33,11 @@ export interface UserFindRequest {
 
 export interface UserRandomRequest {
    count: number; 
+}
+
+export interface FindByEmailResponse {
+    error: MysqlError | Error | object;
+    results: User[]
 }
 
 export interface UserRegisterResponse {
