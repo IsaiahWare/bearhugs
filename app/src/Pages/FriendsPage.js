@@ -163,10 +163,12 @@ class FriendsPage extends React.Component {
     }
 
     addFriend() {
-            let url = baseDomain + '/friend/findbyemail'
+            console.log("IN add friend")
+            let url = baseDomain + '/user/findbyemail'
             let newRequest = {
                 email: this.state.addFriendUser
             }
+            console.log(newRequest)
             fetch(url, {
                 method: 'POST',
                 headers: {
