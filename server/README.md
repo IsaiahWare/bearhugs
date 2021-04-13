@@ -158,6 +158,32 @@ const response = {
   ]
 }
 ```
+
+### `POST /user/update`
+
+```
+Request {
+  userId: id
+  email: string
+  password: string
+  firstName: string
+  lastName: string
+  description: string
+  genderIdentity: Enum('MALE', 'FEMALE', 'OTHER'),
+  genderPreferences: Enum('STRAIGHT', 'BISEXUAL', 'GAY', 'OTHER')
+  phoneNumber: string
+}
+
+Response {
+  error: {}
+  results: [
+    {
+      success: boolean
+    }
+  ]
+}
+```
+
 ## QUIZ
 ### `POST /quiz/create`
 
