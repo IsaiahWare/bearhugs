@@ -18,7 +18,7 @@ class ViewMatchesPage extends React.Component {
             redirect:false
         }
         this.checkUserLogIn = this.checkUserLogIn.bind(this)
-        this.getProfiles = this.getProfiles.bind(this)
+        this.getMatches = this.getMatches.bind(this)
         
     }
 
@@ -29,13 +29,13 @@ class ViewMatchesPage extends React.Component {
                 redirect:true
             })
         }
-
     }
     
-    getProfiles() {
+    getMatches() {
         let url = baseDomain + '/user/random'
         let newRequest = {
             count: 5
+            //userId: UserToken.getUserId()
         }
 
         fetch(url, {
@@ -47,58 +47,23 @@ class ViewMatchesPage extends React.Component {
         })
         .then(res => res.json())
         .then(responseData => {
-           // TODO: handle case where login is invalid 
            if (responseData.error!=null) {
-               let setProfiles = responseData.results
-               let userToken = UserToken.getUserId()
-               let tempProfiles = setProfiles.filter((obj) => {
-                return obj.userId !== userToken
-                })
-                this.setState({
-                    profiles: tempProfiles
-                })
+               this.setState({
+                   profiles: responseData.results
+               })
            }
        })
-
     }
+
     componentDidMount() {
-        this.checkUserLogIn().then(() => {
-            if(!this.state.redirect) {
-            this.getProfiles()
-            }
-        })
-
-    }
-
-
-    onClickAccept(userId) {
-        let temp = this.state.profiles
-        let tempProfiles = this.state.numProfiles-1
-        let tempResult = temp.filter((obj) => {
-		return obj.userId != userId
-        })
-        this.setState({
-            profiles: tempResult,
-            numProfiles:tempProfiles
-
-        })
-
-
-    }
-    onClickReject(userId) {
-        let temp = this.state.profiles
-        let tempProfiles = this.state.numProfiles-1
-        let tempResult = temp.filter((obj) => {
-        if (obj.userId === userId) {
-            console.log("remove " + JSON.stringify(obj))
+        this.checkUserLogIn();
+        if(!this.state.redirect) {
+            this.getMatches()
         }
-            return obj.userId !== userId
-        })
-        this.setState({
-            profiles: tempResult,
-            numProfiles:tempProfiles
-        })
     }
+
+    
+
     render() {
         const redirect = this.state.redirect
 	    if (redirect) {
@@ -113,27 +78,10 @@ class ViewMatchesPage extends React.Component {
                     <div className="col center-col">
                         {
                             this.state.profiles.map((profile) =>
-                            <div className="row center-row match-container" key = {"row0" + profile.userId}>
-                                <MatchProfile key={profile.userId} userId={profile.userId} imgsrc="mail-order-wife.png" firstName={profile.firstName} lastName={profile.lastName} age={profile.age} descrip={profile.description}></MatchProfile>
-                                <div key ={"row-" + profile.userId} className="row center-row fit-container-width red">
-                                <div key ={"col1-" + profile.userId} className="col center-col padding-left-right-2"  onClick={() => this.onClickAccept(profile.userId)}>
-                                    <div key ={"red1-" + profile.userId}  className="red">
-                                        <FontAwesomeIcon key ={"heart-" + profile.userId}  icon={faHeart}
-                                            color="#ffffff"
-                                            size="4x"
-                                        />
-                                    </div>
-                                </div>
-                                <div key ={"col2-" + profile.userId}  className="col center-col padding-left-right-2 margin-left-right-1 " onClick={() => this.onClickReject(profile.userId)}>
-                                    <div key ={"red2-" + profile.userId} className="red">
-                                        <FontAwesomeIcon icon={faHeartBroken}
-                                          key ={"heartbroken-" + profile.userId} 
-                                            color="#ffffff"
-                                            size="4x"
-                                        />
-                                    </div>
-                                </div>
-                            </div>
+                                <div className="row center-row match-container" key = {"row0" + profile.userId}>
+                                    <MatchProfile key={profile.userId} userId={profile.userId} imgsrc="mail-order-wife.png"
+                                     firstName={profile.firstName} lastName={profile.lastName} age={profile.age}
+                                      descrip={profile.description} matched={true}></MatchProfile>
                                 </div>
                             )
                         }

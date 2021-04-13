@@ -9,6 +9,7 @@
   justify-content: center;
   /* scroll-snap-stop: always; */
   scroll-snap-align: center;
+  overflow-x:hidden;
 
 }
 .page-gradient {
@@ -49,7 +50,8 @@ height: 40vh;
   flex-wrap: wrap;
 }
 .text-container {
-  max-width: 20rem;
+  max-width: 90%;
+  color: #262626;
 }
 .input {
   padding: 0.5rem;
@@ -165,6 +167,7 @@ form {
   left: 0;
   padding: .8rem 0;
   background-color: #e3e3e3;
+  z-index: 5;
 }
 .navbarItem{
   width: 20%;
@@ -221,4 +224,37 @@ form {
   color: darkred;
   float: right;
   padding: 1.3rem 1rem;
+}
+
+.swiper{
+  /*https://stackoverflow.com/questions/826782/how-to-disable-text-selection-highlighting*/
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none;
+  width: 100%;
+  padding: 1rem 0;
+}
+.swiperElement{
+  width: 33%;
+  height: 2rem;
+  text-align: center;
+  float: left;
+}
+.itsAMatch{
+  color: darkgreen;
+  background-color: #0eb20080;
+  width: 100%;
+  text-align: center;
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 1.5rem;
+  padding: 1rem 0;
+  border-radius: 5px;
+  margin-bottom: 1rem;
+}
+.itsAMatch h2{
+  font-size: 1rem;
+  font-style: italic;
 }
