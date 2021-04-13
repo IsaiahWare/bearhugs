@@ -21,7 +21,7 @@ export function isUserFindRequest(obj: any): obj is UserFindRequest {
 
 
 export function isUserFindByEmailRequest(obj: any): obj is FindByEmailRequest {
-  return obj.userId !== undefined && Object.keys(obj).length === 1;
+  return obj.email !== undefined && Object.keys(obj).length === 1;
 }
 
 export function isUserRandomRequest(obj: any): obj is UserRandomRequest {
