@@ -115,6 +115,7 @@ class EditSettingsPage extends React.Component {
             "lastName":this.state.lastName,
             "age":this.state.age
         }
+        console.log("New rquest" + newRequest)
 
         fetch(url, {
             method: 'POST',
