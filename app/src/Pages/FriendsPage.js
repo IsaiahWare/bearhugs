@@ -24,7 +24,8 @@ class FriendsPage extends React.Component {
             addFriendUser: "",
             redirect: false,
             feedback: "",
-            pendingFriends: [],
+            pendingFriendsRequest: [],
+            pendingFriends:[],
             currentFriends:[],
             key: "currentFriends"
 
@@ -32,8 +33,9 @@ class FriendsPage extends React.Component {
         this.handleInputChange = this.handleInputChange.bind(this)
         this.getCurrentFriends = this.getCurrentFriends.bind(this)
         this.getPendingFriends = this.getPendingFriends.bind(this)
-        this.addFriend = this.addFriend.bind(this)
+        this.addFriend = this.addFriendByEmail.bind(this)
         // this.rejectFriend = this.rejectFriend.bind(this)
+        this.checkUserEmail = this.checkUserEmail.bind(this)
 
 
     }
@@ -140,7 +142,7 @@ class FriendsPage extends React.Component {
             .then(responseData => {
                 if (JSON.stringify(responseData.error) === '{}') {
                     this.setState({
-                        pendingFriends: responseData.results
+                        pendingFriendsRequest: responseData.results
                     })
                 }
             })
@@ -149,7 +151,7 @@ class FriendsPage extends React.Component {
 
 
     filterPendingAfterAdd(id) {
-        let temp = this.state.pendingFriends
+        let temp = this.state.pendingFriendsRequest
         let tempResult = temp.filter((obj) => {
         console.log(obj)
         if (obj.userId === id) {
@@ -158,12 +160,82 @@ class FriendsPage extends React.Component {
             return obj.userId !== id
         })
         this.setState({
-           pendingFriends:tempResult,
+           pendingFriendsRequest:tempResult,
         })
     }
 
-    addFriend() {
-            console.log("IN add friend")
+    addFriendByEmail(id, newFriendInfo) {
+        console.log("IN add friend by email")
+        let url = baseDomain + '/friend/send'
+        let newRequest = {
+            requesterId:UserToken.getUserId(),
+            requesteeId: id
+        }
+        console.log(newRequest)
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newRequest)
+        })
+        .then(res => res.json())
+        .then(responseData => {
+            if (JSON.stringify(responseData.error) === '{}') {
+                console.log(responseData)
+                this.setState({
+                    feedback:"Friend request sent!",
+                    pendingFriends: this.state.pendingFriends.concat(newFriendInfo)
+                })
+
+            }
+            else {
+                console.log(responseData)
+                this.setState({
+                    feedback:"Friend request could not be sent :(. Please try a different email"
+                })
+            }
+       })
+
+    }
+
+    addFriendFromButton(id) {
+        console.log("IN add friend by button")
+        let url = baseDomain + '/friend/send'
+        let newRequest = {
+            requesterId:UserToken.getUserId(),
+            requesteeId: id
+        }
+        console.log(newRequest)
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newRequest)
+        })
+        .then(res => res.json())
+        .then(responseData => {
+            if (JSON.stringify(responseData.error) === '{}') {
+                console.log(responseData)
+                this.setState({
+                    feedback:"Friend request accepted!",
+                })
+                this.getCurrentFriends()
+                this.filterPendingAfterAdd(id)
+
+            }
+            else {
+                console.log(responseData)
+                this.setState({
+                    feedback:"Friend request could not be sent :(. Please try a different email"
+                })
+            }
+       })
+
+    }
+
+    checkUserEmail() {
             let url = baseDomain + '/user/findbyemail'
             let newRequest = {
                 email: this.state.addFriendUser
@@ -183,12 +255,12 @@ class FriendsPage extends React.Component {
                     this.setState({
                         feedback:"Friend found!"
                     })
-                
+                    this.addFriendByEmail(responseData.results[0].userId, responseData.results[0])
                 }
                 else {
                     console.log(responseData)
                     this.setState({
-                        feedback:"Friend could not be added :("
+                        feedback:"Friend could not be found :(. Please try a different email"
                     })
                 }
            })
@@ -211,7 +283,7 @@ class FriendsPage extends React.Component {
             .then(res => res.json())
             .then(responseData => {
                 if (JSON.stringify(responseData.error) === '{}') {
-                    let temp = this.state.pendingFriends
+                    let temp = this.state.pendingFriendsRequest
                     let tempResult = temp.filter((obj) => {
                     console.log(obj)
                     if (obj.userId === id) {
@@ -238,7 +310,7 @@ class FriendsPage extends React.Component {
     handleSubmit(event) {
         event.preventDefault();
         console.log("A name was submitted: " + this.state.addFriendUser);
-        this.addFriend();
+        this.checkUserEmail();
 
     }
 
@@ -299,14 +371,14 @@ class FriendsPage extends React.Component {
                         <Tab eventKey="pendingFriends" title="Pending Friends">
                             <div className="friendsContainer">
                                 <div className="row center-row">
-                                    <h1 className="pageTitle">Pending Friend Requests</h1>
+                                    <h2 className="pageTitle">Pending Friend Requests</h2>
                                 </div>
 
                                 <div>
 
                                     {
-                                        this.state.pendingFriends.map((friend) =>
-                                            <PendingFriend id={friend.userId} key={friend.userId} firstName={friend.firstName} lastName={friend.lastName} approveFriend={() => this.addFriend(friend.userId, true)} rejectFriend={() => this.rejectFriend(friend.userId)} profPicSrc="possum-on-horse.png" age={friend.age}></PendingFriend>
+                                        this.state.pendingFriendsRequest.map((friend) =>
+                                            <PendingFriend id={friend.userId} key={friend.userId} firstName={friend.firstName} lastName={friend.lastName} approveFriend={() => this.addFriendByButton(friend.userId)} rejectFriend={() => this.rejectFriend(friend.userId)} profPicSrc="possum-on-horse.png" age={friend.age}></PendingFriend>
                                         )
                                     }
                                 </div>
