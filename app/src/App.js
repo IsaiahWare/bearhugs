@@ -13,6 +13,7 @@ import FriendsPage from './Pages/FriendsPage';
 import NotificationsPage from './Pages/NotificationsPage.js';
 import ViewMatchesPage from './Pages/ViewMatches';
 import ViewPastMatches from "./Pages/ViewPastMatches"
+import WingManPage from './Pages/WingmanPage';
 
 
 
@@ -27,6 +28,7 @@ function App() {
         <Route exact path="/friends" component={FriendsPage}></Route>
         <Route exact path="/notifications" component={NotificationsPage}></Route>
         <Route exact path="/mymatches" component={ViewPastMatches}></Route>
+        <Route exact path="/wingman" component={WingManPage}></Route>
     </Switch>
 </Router>
   

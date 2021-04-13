@@ -13,6 +13,7 @@ class ListedUser extends React.Component {
     }
 
     render(){
+        
         return(
             <div className="listedUser">
                 <img className="listedUser-pic" src={this.props.profPicSrc}></img>

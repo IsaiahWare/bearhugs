@@ -3,7 +3,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import { Navbar, Nav, NavItem, NavDropdown, MenuItem } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faHome, faHeart,faBell, faUserEdit, faSignOutAlt, faUserPlus } from '@fortawesome/free-solid-svg-icons'
+import { faHome, faHeart,faBell, faUserEdit, faSignOutAlt, faUserPlus, faDove } from '@fortawesome/free-solid-svg-icons'
 import Modal from '../Pages/NotificationsPage.js';
 import NotificationsModal from '../Pages/NotificationsPage.js';
 import {Col} from "react-bootstrap"
@@ -38,6 +38,7 @@ class BearHugsNavbar extends React.Component {
                 <Nav.Item className="margin-left-right-1"><Link to="/notifications" className="navbarItem"><FontAwesomeIcon icon={faBell} /></Link></Nav.Item>
                 <Nav.Item className="margin-left-right-1"> <Link to="/friends" className="navbarItem"><FontAwesomeIcon icon={faUserPlus} /></Link></Nav.Item>
                 <Nav.Item className="margin-left-right-1"><Link to ="/mymatches" className="navbarItem"><FontAwesomeIcon icon={faHeart}/></Link> </Nav.Item>
+                <Nav.Item className="margin-left-right-1"><Link to ="/wingman" className="navbarItem"><FontAwesomeIcon icon={faDove}/></Link> </Nav.Item>
               </Row>
               <Row>
                 
