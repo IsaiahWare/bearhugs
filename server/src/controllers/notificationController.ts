@@ -8,38 +8,38 @@ import {
 const router = express.Router();
 
 router.post("/sendtwouser", (req: Request, res: Response) => {    
-    const notificationResponse: any = {
+    const AddTwoNotificationResponse: any = {
         "error": {},
         "results": []
     };
 
     const queryStatement: string = "INSERT INTO notifications (userId1,userId2, message) VALUES (?,?,?)";
-    const queryArgs = [req.body.uidOne, req.body.uidTwo, req.body.message];
+    const queryArgs = [req.body.userId1, req.body.userId2, req.body.message];
     db.query(queryStatement, queryArgs, (queryError: MysqlError | null, queryResults: any ) => {
         if (queryError) {
-            notificationResponse.error =  {
+            AddTwoNotificationResponse.error =  {
                 "message": queryError.sqlMessage
             };
-            res.json(notificationResponse);
+            res.json(AddTwoNotificationResponse);
         } 
 
     }); 
 });
 
 router.post("/sendthreeuser", (req: Request, res: Response) => {    
-    const notificationResponse: any = {
+    const AddThreeNotificationResponse: any = {
         "error": {},
         "results": []
     };
 
     const queryStatement: string = "INSERT INTO notifications (userId1,userId2, userId3, message) VALUES (?,?, ?,?)";
-    const queryArgs = [req.body.uidOne, req.body.uidTwo, req.body.message];
+    const queryArgs = [req.body.userId1, req.body.userId2, req.body.userId3, req.body.message];
     db.query(queryStatement, queryArgs, (queryError: MysqlError | null, queryResults: any ) => {
         if (queryError) {
-            notificationResponse.error =  {
+            AddThreeNotificationResponse.error =  {
                 "message": queryError.sqlMessage
             };
-            res.json(notificationResponse);
+            res.json(AddThreeNotificationResponse);
         } 
 
     }); 

@@ -152,7 +152,6 @@ class ViewProfilePage extends React.Component {
         })
         .then(res => res.json())
         .then(responseData => {
-         
               if (JSON.stringify(responseData.error) === '{}') {
                   console.log(responseData)
                 let temp = this.state.profiles
@@ -161,6 +160,7 @@ class ViewProfilePage extends React.Component {
                 console.log(obj)
                 return obj.userId != userId
                 })
+                this.notifyRequesteeofMatch(requesteeId)
                 this.setState({
                     profiles: tempResult,
                     numProfiles:tempProfiles
@@ -170,6 +170,30 @@ class ViewProfilePage extends React.Component {
            }
        })
                   
+    }
+
+    notifyRequesteeofMatch(userId) {
+        let url = baseDomain + '/notifications/sendtwouser'
+        let newRequest = {
+            userId1: userId,
+            userId2: UserToken.getUserId(),
+            message: UserToken.getUserName() + "has swiped on you! Check pending matches to see more."
+        }
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newRequest)
+        })
+        .then(res => res.json())
+        .then(responseData => {
+              if (JSON.stringify(responseData.error) === '{}') {
+    
+           }
+       })
+
+
     }
     onClickReject(userId) {
         let temp = this.state.profiles
