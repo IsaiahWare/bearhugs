@@ -147,6 +147,7 @@ router.post("/reject", (req: Request, res: Response) => {
             friendResponse.error =  {
                 "message": queryError.sqlMessage
             };
+            res.json(friendResponse);
         } else {
             const queryStatement2 = "INSERT INTO rejectedFriends SET ?";
             const queryArgs2 = {
@@ -166,7 +167,6 @@ router.post("/reject", (req: Request, res: Response) => {
                 res.json(friendResponse);
             });
         }
-        res.json(friendResponse);
     });
 });
 
