@@ -148,9 +148,43 @@ router.post("/reject", (req: Request, res: Response) => {
                 "message": queryError.sqlMessage
             };
         } else {
-            friendResponse.results = [{
-                "success": true
-            }];
+            const queryStatement2 = "INSERT INTO rejectedFriends SET ?";
+            const queryArgs2 = {
+                "requesterId": req.body.requesterId,
+                "requesteeId": req.body.requesteeId
+            };
+            db.query(queryStatement2, queryArgs2, (queryError2: MysqlError | null, queryResults2: any ) => {
+                if (queryError2) {
+                    friendResponse.error =  {
+                        "message": queryError2.sqlMessage
+                    };
+                } else {
+                    friendResponse.results = [{
+                        "success": true
+                    }];
+                }
+                res.json(friendResponse);
+            });
+        }
+        res.json(friendResponse);
+    });
+});
+
+router.post("/rejectedFriends", (req: Request, res: Response) => {
+    const friendResponse: any = {
+        "error": {},
+        "results": []
+    };
+    const queryStatement = `SELECT users.userId, users.email, users.firstName, users.lastName, users.age, users.description, users.genderIdentity, users.genderPreferences,
+    users.phoneNumber FROM users INNER JOIN rejectedFriends ON rejectedFriends.requesterId = users.userId WHERE rejectedFriends.requesteeId = ? OR rejectedFriends.requesterId = ?`;
+    const queryArgs = [req.body.userId, req.body.userId];
+    db.query(queryStatement, queryArgs, (queryError: MysqlError | null, queryResults: any ) => {
+        if (queryError) {
+            friendResponse.error =  {
+                "message": queryError.sqlMessage
+            };
+        } else {
+            friendResponse.results = queryResults;
         }
         res.json(friendResponse);
     });
