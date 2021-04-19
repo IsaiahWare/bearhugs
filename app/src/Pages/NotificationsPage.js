@@ -16,10 +16,37 @@ class NotificationsPage extends React.Component {
 
         }
         this.checkUserLogIn = this.checkUserLogIn.bind(this)
+        this.getUserNotifications = this.getUserNotifications.bind(this)
 
     }
     componentDidMount() {
         this.checkUserLogIn();
+        this.getUserNotifications();
+    }
+
+    getUserNotifications() {
+        let url = baseDomain + '/notifications/getnotifications'
+        let newRequest = {
+            userId: UserToken.getUserId()
+        }
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newRequest)
+        })
+            .then(res => res.json())
+            .then(responseData => {
+		    console.log(responseData)
+                if (JSON.stringify(responseData.error) === '{}') {
+                    this.setState({
+                       notification: responseData.results
+                    })
+                }
+            })
+
+
     }
 
     checkUserLogIn() {

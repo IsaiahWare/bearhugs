@@ -7,7 +7,7 @@ import {
 
 const router = express.Router();
 
-router.post("/send", (req: Request, res: Response) => {    
+router.post("/sendtwouser", (req: Request, res: Response) => {    
     const notificationResponse: any = {
         "error": {},
         "results": []
@@ -26,13 +26,32 @@ router.post("/send", (req: Request, res: Response) => {
     }); 
 });
 
+router.post("/sendthreeuser", (req: Request, res: Response) => {    
+    const notificationResponse: any = {
+        "error": {},
+        "results": []
+    };
+
+    const queryStatement: string = "INSERT INTO notifications (userId1,userId2, userId3, message) VALUES (?,?, ?,?)";
+    const queryArgs = [req.body.uidOne, req.body.uidTwo, req.body.message];
+    db.query(queryStatement, queryArgs, (queryError: MysqlError | null, queryResults: any ) => {
+        if (queryError) {
+            notificationResponse.error =  {
+                "message": queryError.sqlMessage
+            };
+            res.json(notificationResponse);
+        } 
+
+    }); 
+});
+
 
 router.post("/getnotifications", (req: Request, res: Response) => {
     const notificationResponse: any = {
         "error": {},
         "results": []
     };
-    const queryStatement = "SELECT * FROM notifications WHERE userId1 = ?"; 
+    const queryStatement = "SELECT * FROM notifications WHERE userId1 = ? ORDER BY notificationDate "; 
     db.query(queryStatement, req.body.userId, (queryError: MysqlError | null, queryResults: any ) => {
         if (queryError) {
             notificationResponse.error =  {
