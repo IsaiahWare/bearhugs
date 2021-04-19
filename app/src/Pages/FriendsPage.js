@@ -192,7 +192,7 @@ class FriendsPage extends React.Component {
                     feedback:"Friend request sent!",
                     pendingFriends: this.state.pendingFriends.concat(newFriendInfo)
                 })
-
+                this.createAddFriendNotification(id)
             }
             else {
                 console.log(responseData)
@@ -202,6 +202,59 @@ class FriendsPage extends React.Component {
             }
        })
 
+    }
+
+    createAddFriendNotification(friendId) {
+        let url = baseDomain + '/notifications/sendtwouser'
+        let newRequest = {
+            userId1: friendId,
+            userId2: UserToken.getUserId(),
+            message: UserToken.getUserName() + " has sent you a friend request! Go to your pending friend requests to review this request."
+        }
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newRequest)
+        })
+        .then(res => res.json())
+        .then(responseData => {
+            if (JSON.stringify(responseData.error) === '{}') {
+                console.log(responseData)
+
+            }
+            else {
+                console.log(responseData)
+            }
+       })
+
+    }
+
+    createAcceptedFriendRequestNotification(friendId) {
+        let url = baseDomain + '/notifications/sendtwouser'
+        let newRequest = {
+            userId1: friendId,
+            userId2: UserToken.getUserId(),
+            message: UserToken.getUserName() + " has accepted your friends request."
+        }
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newRequest)
+        })
+        .then(res => res.json())
+        .then(responseData => {
+            if (JSON.stringify(responseData.error) === '{}') {
+                console.log(responseData)
+
+            }
+            else {
+                console.log(responseData)
+            }
+       })
     }
 
     addFriendFromButton(id) {
@@ -228,6 +281,7 @@ class FriendsPage extends React.Component {
                 })
                 this.getCurrentFriends()
                 this.filterPendingAfterAdd(id)
+                this.createAcceptedFriendRequestNotification(id)
 
             }
             else {

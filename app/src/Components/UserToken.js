@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 var UserToken = (function() {
     var userId ="";
+    var userName=""
   
     var getUserId = function() {
       return userId;    // Or pull this from cookie/localStorage
@@ -11,10 +12,21 @@ var UserToken = (function() {
       userId= newId;     
       // Also set this in cookie/localStorage
     };
+    var getUserName = function() {
+      return userName;    // Or pull this from cookie/localStorage
+    };
+  
+    var setUserName = function(newName) {
+      userName= newName;     
+      // Also set this in cookie/localStorage
+    };
+  
   
     return {
       setUserId: setUserId,
-      getUserId: getUserId
+      getUserId: getUserId,
+      getUserName: getUserName,
+      setUserName: setUserName
     }
   
   })();

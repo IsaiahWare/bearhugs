@@ -41,7 +41,7 @@ class NotificationsPage extends React.Component {
 		    console.log(responseData)
                 if (JSON.stringify(responseData.error) === '{}') {
                     this.setState({
-                       notification: responseData.results
+                       notifications: responseData.results
                     })
                 }
             })
