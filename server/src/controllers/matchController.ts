@@ -148,12 +148,26 @@ router.post("/reject", (req: Request, res: Response) => {
             matchResponse.error =  {
                 "message": queryError.sqlMessage
             };
+            res.json(matchResponse);
         } else {
-            matchResponse.results = [{
-                "success": true
-            }]
+            const queryStatement2 = "INSERT INTO rejectedMatches SET ?";
+            const queryArgs2 = {
+                "requesterId": req.body.requesterId,
+                "requesteeId": req.body.requesteeId
+            };
+            db.query(queryStatement2, queryArgs2, (queryError2: MysqlError | null, queryResults2: any ) => {
+                if (queryError2) {
+                    matchResponse.error =  {
+                        "message": queryError2.sqlMessage
+                    };
+                } else {
+                    matchResponse.results = [{
+                        "success": true
+                    }];
+                }
+                res.json(matchResponse);
+            });
         }
-        res.json(matchResponse);
     });
 });
 
