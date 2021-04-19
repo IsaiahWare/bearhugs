@@ -157,5 +157,24 @@ router.post("/reject", (req: Request, res: Response) => {
     });
 });
 
+router.post("/rejectedMatches", (req: Request, res: Response) => {
+    const matchResponse: any = {
+        "error": {},
+        "results": []
+    };
+    const queryStatement = `SELECT users.userId, users.email, users.firstName, users.lastName, users.age, users.description, users.genderIdentity, users.genderPreferences,
+    users.phoneNumber FROM users INNER JOIN rejected ON rejectedMatches.requesterId = users.userId WHERE rejectedMatches.requesteeId = ? OR rejectedMatches.requesterId = ?`;
+    const queryArgs = [req.body.userId, req.body.userId];
+    db.query(queryStatement, queryArgs, (queryError: MysqlError | null, queryResults: any ) => {
+        if (queryError) {
+            matchResponse.error =  {
+                "message": queryError.sqlMessage
+            };
+        } else {
+            matchResponse.results = queryResults;
+        }
+        res.json(matchResponse);
+    });
+});
 
 export default router;
