@@ -313,6 +313,31 @@ Response {
 }
 ```
 
+
+### `POST /match/rejectedMatches`
+```
+Request {
+  userId: number
+}
+
+Response {
+  error: {}
+  results: [
+    {
+      userId: number,
+      email: string,
+      firstName: string,
+      lastName: string,
+      age: number,
+      description: string,
+      genderIdentity: Enum('MALE', 'FEMALE', 'OTHER'),
+      genderPreferences: Enum('STRAIGHT', 'BISEXUAL', 'GAY', 'OTHER'),
+      phoneNumber: number
+    }
+  ]
+}
+```
+
 ## FRIEND
 ### `POST /friend/send`
 ```
@@ -413,7 +438,32 @@ Response {
 }
 ```
 
-## MATCH
+
+### `POST /friend/rejectedFriends`
+```
+Request {
+  userId: number
+}
+
+Response {
+  error: {}
+  results: [
+    {
+      userId: number,
+      email: string,
+      firstName: string,
+      lastName: string,
+      age: number,
+      description: string,
+      genderIdentity: Enum('MALE', 'FEMALE', 'OTHER'),
+      genderPreferences: Enum('STRAIGHT', 'BISEXUAL', 'GAY', 'OTHER'),
+      phoneNumber: number
+    }
+  ]
+}
+```
+
+## WINGMAN
 ### `POST /wingman/send`
 
 ### IMPORTANT:
@@ -521,6 +571,31 @@ Response {
   results: [
     {
       success: boolean
+    }
+  ]
+}
+```
+
+
+### `POST /wingman/rejectedMatches`
+```
+Request {
+  userId: number
+}
+
+Response {
+  error: {}
+  results: [
+    {
+      userId: number,
+      email: string,
+      firstName: string,
+      lastName: string,
+      age: number,
+      description: string,
+      genderIdentity: Enum('MALE', 'FEMALE', 'OTHER'),
+      genderPreferences: Enum('STRAIGHT', 'BISEXUAL', 'GAY', 'OTHER'),
+      phoneNumber: number
     }
   ]
 }
