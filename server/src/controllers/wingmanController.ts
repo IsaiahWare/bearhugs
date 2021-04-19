@@ -172,10 +172,41 @@ router.post("/reject", (req: Request, res: Response) => {
             wingmanResponse.error =  {
                 "message": queryError.sqlMessage
             };
+            res.json(wingmanResponse);
         } else {
-            wingmanResponse.results = [{
-                "success": true
-            }]
+            const queryStatement2 = "DELETE FROM pendingWingman WHERE wingmanId = ? AND requesterId = ? AND requesteeId = ?";
+            const queryArgs2 = [req.body.wingmanId, req.body.requesterId, req.body.requesteeId];
+            db.query(queryStatement2, queryArgs2, (queryError2: MysqlError | null, queryResults2: any ) => {
+                if (queryError2) {
+                    wingmanResponse.error =  {
+                        "message": queryError2.sqlMessage
+                    };
+                } else {
+                    wingmanResponse.results = [{
+                        "success": true
+                    }]
+                }
+                res.json(wingmanResponse);
+            });
+        }
+    });
+});
+
+router.post("/rejectedMatches", (req: Request, res: Response) => {
+    const wingmanResponse: any = {
+        "error": {},
+        "results": []
+    };
+    const queryStatement = `SELECT users.userId, users.email, users.firstName, users.lastName, users.age, users.description, users.genderIdentity, users.genderPreferences,
+    users.phoneNumber FROM users INNER JOIN rejectedWingman ON rejectedWingman.requesterId = users.userId WHERE rejectedWingman.requesteeId = ? OR rejectedWingman.requesterId = ?`;
+    const queryArgs = [req.body.userId, req.body.userId];
+    db.query(queryStatement, queryArgs, (queryError: MysqlError | null, queryResults: any ) => {
+        if (queryError) {
+            wingmanResponse.error =  {
+                "message": queryError.sqlMessage
+            };
+        } else {
+            wingmanResponse.results = queryResults;
         }
         res.json(wingmanResponse);
     });
