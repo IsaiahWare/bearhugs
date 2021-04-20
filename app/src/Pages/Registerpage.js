@@ -222,6 +222,7 @@ class RegisterPage extends React.Component {
                                     <input className="input" type='text' value={this.state.lastName} onChange={this.handleInputChange} name='lastName' placeholder="Last Name"/>
                                 </div>
                                 <div className="input-row center-row">
+                                    <label for="age" className="agelabel">Your age:</label>
                                     <input className="input" type='number' name='age' onChange={this.handleInputChange} value={this.state.age} placeholder="Type age here"/>
                                 </div>
                                 <div className="center-row padding-top-1rem">

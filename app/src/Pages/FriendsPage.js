@@ -420,7 +420,9 @@ class FriendsPage extends React.Component {
 
                                     {
                                         this.state.currentFriends.map((friend) =>
-                                            <ListedUser id={friend.userId} key={friend.userId} firstName={friend.firstName} lastName={friend.lastName} removeFriend={() => this.removeFriend(friend.userId)} profPicSrc="possum-on-horse.png" age={friend.age}></ListedUser>
+                                            <ListedUser id={friend.userId} key={friend.userId} firstName={friend.firstName}
+                                             lastName={friend.lastName} removeFriend={() => this.removeFriend(friend.userId)}
+                                            removeTrue = {true} profPicSrc="possum-on-horse.png" age={friend.age}></ListedUser>
                                         )
                                     }
 

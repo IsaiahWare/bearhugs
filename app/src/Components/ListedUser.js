@@ -13,7 +13,17 @@ class ListedUser extends React.Component {
     }
 
     render(){
-        
+        let removeButton;
+        if(this.props.removeTrue){
+            removeButton =
+            <div className="remove">
+                <FontAwesomeIcon icon={faTimes} onClick={this.props.removeFriend}></FontAwesomeIcon>
+            </div>
+        }
+        else{
+            removeButton = null;
+        }
+
         return(
             <div className="listedUser">
                 <img className="listedUser-pic" src={this.props.profPicSrc}></img>
@@ -21,9 +31,7 @@ class ListedUser extends React.Component {
                     <p id="listedUser-name">{this.props.firstName} {this.props.lastName}</p>
                     <p id="listedUser-age">{this.props.age}</p>
                 </div>
-                <div className="remove">
-                   <FontAwesomeIcon icon={faTimes} onClick={this.props.removeFriend}></FontAwesomeIcon>
-                </div>
+                {removeButton}
 
 
             </div>
