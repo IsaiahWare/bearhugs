@@ -41,7 +41,7 @@ class NotificationsPage extends React.Component {
 		    console.log(responseData)
                 if (JSON.stringify(responseData.error) === '{}') {
                     this.setState({
-                       notifications: responseData.results
+                       notifications: responseData.results.reverse()
                     })
                 }
             })
@@ -70,7 +70,7 @@ class NotificationsPage extends React.Component {
         return (
             <div className="page">
                 <BearHugsNavbar></BearHugsNavbar>
-                <div className="friendsContainer">
+                <div className="friendsContainer notificationsContainer">
                     <div className="row center-row">
                     <h1 className="pageTitle">Notifications</h1>
                     </div>
@@ -78,9 +78,12 @@ class NotificationsPage extends React.Component {
                     <div>
                         {
                             this.state.notifications.map((notification) =>
-                                <div className="row center-row match-container" key={"row" + notification.id}>
+                                <div className="row center-row notification-box" key={"row" + notification.id}>
                                     <div key={"col-"+ notification.id} className="col">
                                         <p>{notification.message}</p>
+                                    </div>
+                                    <div key={"col-"+ notification.id + " date"} className="col">
+                                        <p>{notification.notificationDate}</p>
                                     </div>
                                 </div>
                             )

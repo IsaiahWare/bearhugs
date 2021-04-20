@@ -27,6 +27,8 @@ class FriendsPage extends React.Component {
             pendingFriendsRequest: [],
             pendingFriends:[],
             currentFriends:[],
+            pendingPhotos:[],
+            currentPhotos:[],
             key: "currentFriends"
 
         }
@@ -36,6 +38,7 @@ class FriendsPage extends React.Component {
         this.addFriend = this.addFriendByEmail.bind(this)
         // this.rejectFriend = this.rejectFriend.bind(this)
         this.checkUserEmail = this.checkUserEmail.bind(this)
+        
 
 
     }
@@ -63,11 +66,131 @@ class FriendsPage extends React.Component {
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    
+    getPhotoForPendingUser(id) {
+        console.log("get photo for user " + id)
+        let url = baseDomain + '/photo/all'
+        let newRequest = {
+            "userId": id,
+        }
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newRequest)
+
+        })
+        .then(res => res.json())
+        .then(responseData => {
+            console.log(JSON.stringify(responseData))
+                // TODO: handle case where login is invalid
+                if (JSON.stringify(responseData.error) === '{}') {
+                    console.log(responseData.results)
+                    if (responseData.results.length!=0) {
+                        console.log("return actual photo")
+                            this.setState(prevState => ({
+                                pendingPhotos: [...prevState.pendingPhotos, {id: id, imgsrc: responseData.results[0].photoUrl}]
+                            }))
+                    
+                    }
+                    else {
+                        console.log("Reutnr defualt")
+                        this.setState(prevState => ({
+                            pendingPhotos: [...prevState.pendingPhotos, {id: id, imgsrc: "mail-order-wife.png"}]
+                        }))
+                    }
+
+                }
+                else {
+                    console.log(responseData.error)
+                    this.setState(prevState => ({
+                        pendingPhotos: [...prevState.pendingPhotos, {id: id, imgsrc: "mail-order-wife.png"}]
+                    }))
+                }
+
+            })
+
+    }
+
+
+    getCurrentPhotos() {
+        for (let i=0; i < this.state.currentFriends.length; ++i) {
+           this.getPhotoForCurrentUser(this.state.currentFriends[i].userId);
+          
+        }
+        // console.log("temp current")
+        // console.log(tempCurrent)
+        // this.setState({
+        //     currentPhotos:tempCurrent
+        // })
+    }
+    getPendingPhotos() {
+        for (let i=0; i < this.state.pendingFriendsRequest.length; ++i) {
+            this.getPhotoForPendingUser(this.state.pendingFriendsRequest[i].userId);
+           
+        }
+        // for (let i=0; i < this.state.wingmanMatches.length; ++i) {
+        //     let newelement = this.getPhotoForUser(this.state.wingmanMatches[i].userId);
+        //     tempWingman.push(newelement);
+        // }
+        // this.setState({
+        //     wingmanPhotos:tempWingman
+        // })
+
+    }
+
+
+    getPhotoForCurrentUser(id) {
+        console.log("get photo for user " + id)
+        let url = baseDomain + '/photo/all'
+        let newRequest = {
+            "userId": id,
+        }
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newRequest)
+
+        })
+        .then(res => res.json())
+        .then(responseData => {
+            console.log(JSON.stringify(responseData))
+                // TODO: handle case where login is invalid
+                if (JSON.stringify(responseData.error) === '{}') {
+                    console.log(responseData.results)
+                    if (responseData.results.length!=0) {
+                        console.log("return actual photo")
+                        console.log({id: id, imgsrc: responseData.results[0]})
+                            this.setState(prevState => ({
+                                currentPhotos: [...prevState.currentPhotos, {id: id, imgsrc:responseData.results[0].photoUrl}]
+                            }))
+                    
+                    }
+                    else {
+                        console.log("Reutnr defualt")
+                        this.setState(prevState => ({
+                            currentPhotos: [...prevState.currentPhotos, {id: id, imgsrc:"mail-order-wife.png"}]
+                        }))
+                        console.log({id: id, imgsrc: responseData.results[0]})
+                    }
+
+                }
+                else {
+                    console.log(responseData.error)
+                    this.setState(prevState => ({
+                        currentPhotos: [...prevState.currentPhotos, {id: id, imgsrc: "mail-order-wife.png"}]
+                    }))
+                }
+
+            })
+
+    }
+
 
     removeFriend(id) {
         let url = baseDomain + '/friend/unfriend'
-        console.log("in remove friend " + id)
         let newRequest = {
             userId1: UserToken.getUserId(),
             userId2: id
@@ -84,14 +207,20 @@ class FriendsPage extends React.Component {
                 console.log(responseData)
                 if (JSON.stringify(responseData.error) === '{}') {
                     let temp = this.state.currentFriends
+                    let tempPhotos = this.state.currentPhotos
                     let tempResult = temp.filter((obj) => {
                     if (obj.userId === id) {
-                        console.log("remove " + JSON.stringify(obj))
                     }
                         return obj.userId !== id
                     })
+                    let tempPhotoResult = tempPhotos.filter((obj) => {
+                        if (obj.id === id) {
+                        }
+                            return obj.id !== id
+                        })
                     this.setState({
                        currentFriends:tempResult,
+                       currentPhotos:tempPhotoResult,
                        feedback: "Friend removed!"
                     })
                     
@@ -122,8 +251,13 @@ class FriendsPage extends React.Component {
 		    console.log(responseData)
                 if (JSON.stringify(responseData.error) === '{}') {
                     this.setState({
-                       currentFriends: responseData.results
-                    })
+                       currentFriends: responseData.results,
+                       currentPhotos: []
+                    },() => {
+                        if (responseData.results.length > 0) {
+                            this.getCurrentPhotos(); 
+                        }
+                    });
                 }
             })
 
@@ -143,12 +277,17 @@ class FriendsPage extends React.Component {
         })
             .then(res => res.json())
             .then(responseData => {
-		    console.log( "pending friends resposne data")
 		    console.log(responseData)
                 if (JSON.stringify(responseData.error) === '{}') {
                     this.setState({
-                        pendingFriendsRequest: responseData.results
-                    })
+                        pendingFriendsRequest: responseData.results,
+                        pendingPhotos: []
+                    },() => {
+                        if (responseData.results.length > 0) {
+                            this.getPendingPhotos(); 
+                        }
+                    
+                    });
                 }
             })
 
@@ -157,26 +296,30 @@ class FriendsPage extends React.Component {
 
     filterPendingAfterAdd(id) {
         let temp = this.state.pendingFriendsRequest
+        let tempPhotos = this.state.pendingPhotos
         let tempResult = temp.filter((obj) => {
         console.log(obj)
         if (obj.userId === id) {
-            console.log("remove " + JSON.stringify(obj))
         }
             return obj.userId !== id
         })
+        let tempPhotoResult = tempPhotos.filter((obj) => {
+            if (obj.id === id) {
+            }
+                return obj.id !== id
+            })
         this.setState({
            pendingFriendsRequest:tempResult,
+           pendingPhotos: tempPhotoResult
         })
     }
 
     addFriendByEmail(id, newFriendInfo) {
-        console.log("IN add friend by email")
         let url = baseDomain + '/friend/send'
         let newRequest = {
             requesterId:UserToken.getUserId(),
             requesteeId: id
         }
-        console.log(newRequest)
         fetch(url, {
             method: 'POST',
             headers: {
@@ -187,15 +330,14 @@ class FriendsPage extends React.Component {
         .then(res => res.json())
         .then(responseData => {
             if (JSON.stringify(responseData.error) === '{}') {
-                console.log(responseData)
                 this.setState({
                     feedback:"Friend request sent!",
                     pendingFriends: this.state.pendingFriends.concat(newFriendInfo)
                 })
+                this.getPendingPhotos()
                 this.createAddFriendNotification(id)
             }
             else {
-                console.log(responseData)
                 this.setState({
                     feedback:"Friend request could not be sent :(. Please try a different email"
                 })
@@ -220,13 +362,8 @@ class FriendsPage extends React.Component {
         })
         .then(res => res.json())
         .then(responseData => {
-            if (JSON.stringify(responseData.error) === '{}') {
                 console.log(responseData)
 
-            }
-            else {
-                console.log(responseData)
-            }
        })
 
     }
@@ -247,13 +384,7 @@ class FriendsPage extends React.Component {
         })
         .then(res => res.json())
         .then(responseData => {
-            if (JSON.stringify(responseData.error) === '{}') {
                 console.log(responseData)
-
-            }
-            else {
-                console.log(responseData)
-            }
        })
     }
 
@@ -275,7 +406,6 @@ class FriendsPage extends React.Component {
         .then(res => res.json())
         .then(responseData => {
             if (JSON.stringify(responseData.error) === '{}') {
-                console.log(responseData)
                 this.setState({
                     feedback:"Friend request accepted!",
                 })
@@ -285,7 +415,6 @@ class FriendsPage extends React.Component {
 
             }
             else {
-                console.log(responseData)
                 this.setState({
                     feedback:"Friend request could not be sent :(. Please try a different email"
                 })
@@ -310,14 +439,12 @@ class FriendsPage extends React.Component {
             .then(res => res.json())
             .then(responseData => {
                 if (JSON.stringify(responseData.error) === '{}') {
-                    console.log(responseData)
                     this.setState({
                         feedback:"Friend found!"
                     })
                     this.addFriendByEmail(responseData.results[0].userId, responseData.results[0])
                 }
                 else {
-                    console.log(responseData)
                     this.setState({
                         feedback:"Friend could not be found :(. Please try a different email"
                     })
@@ -346,7 +473,6 @@ class FriendsPage extends React.Component {
                     let tempResult = temp.filter((obj) => {
                     console.log(obj)
                     if (obj.userId === id) {
-                        console.log("remove " + JSON.stringify(obj))
                     }
                         return obj.userId !== id
                     })
@@ -354,6 +480,7 @@ class FriendsPage extends React.Component {
                        pendingFriends:tempResult,
                        feedback: "Friend request rejected"
                     })
+                    this.getPendingPhotos()
                 }
                 else {
                     this.setState({
@@ -368,7 +495,6 @@ class FriendsPage extends React.Component {
 
     handleSubmit(event) {
         event.preventDefault();
-        console.log("A name was submitted: " + this.state.addFriendUser);
         this.checkUserEmail();
 
     }
@@ -407,6 +533,7 @@ class FriendsPage extends React.Component {
                         <Tab eventKey="currentFriends" title="Current Friends">
                             <div className="friendsContainer">
                                 <div className="row center-row"><h1 className="pageTitle">Friends</h1></div>
+                                <div>{this.state.feedback}</div>
                                 <div className="input-row center-row">
                                     <Form onSubmit={this.handleSubmit} className="input">
                                         <Form.Group>
@@ -419,10 +546,10 @@ class FriendsPage extends React.Component {
                                 <div>
 
                                     {
-                                        this.state.currentFriends.map((friend) =>
+                                        this.state.currentFriends.map((friend, i) =>
                                             <ListedUser id={friend.userId} key={friend.userId} firstName={friend.firstName}
                                              lastName={friend.lastName} removeFriend={() => this.removeFriend(friend.userId)}
-                                            removeTrue = {true} profPicSrc="possum-on-horse.png" age={friend.age}></ListedUser>
+                                            removeTrue = {true} profPicSrc="mail-order-wife.png" age={friend.age}></ListedUser>
                                         )
                                     }
 
@@ -434,12 +561,12 @@ class FriendsPage extends React.Component {
                                 <div className="row center-row">
                                     <h2 className="pageTitle">Pending Friend Requests</h2>
                                 </div>
+                                <div>{this.state.feedback}</div>
 
                                 <div>
-
                                     {
-                                        this.state.pendingFriendsRequest.map((friend) =>
-                                            <PendingFriend id={friend.userId} key={friend.userId} firstName={friend.firstName} lastName={friend.lastName} approveFriend={() => this.addFriendFromButton(friend.userId)} rejectFriend={() => this.rejectFriend(friend.userId)} profPicSrc="possum-on-horse.png" age={friend.age}></PendingFriend>
+                                        this.state.pendingFriendsRequest.map((friend, i) =>
+                                            <PendingFriend id={friend.userId} key={friend.userId} firstName={friend.firstName} lastName={friend.lastName} approveFriend={() => this.addFriendFromButton(friend.userId)} rejectFriend={() => this.rejectFriend(friend.userId)} profPicSrc="mail-order-wife.png" age={friend.age}></PendingFriend>
                                         )
                                     }
                                 </div>

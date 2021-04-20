@@ -16,11 +16,14 @@ class ViewProfilePage extends React.Component {
             profiles: [],
             numProfiles:0,
             redirect:false,
-            unsuitableMatches:[]
+            unsuitableMatches:[],
+            currentPhotos:[]
         }
         this.checkUserLogIn = this.checkUserLogIn.bind(this)
         this.getProfiles = this.getProfiles.bind(this)
         this.getPendingAndCurrent = this.getPendingAndCurrent.bind(this)
+        this.getRejectedMatches = this.getRejectedMatches.bind(this)
+        this.getCurrentPhotos = this.getCurrentPhotos.bind(this)
     }
 
    checkUserLogIn() {
@@ -52,6 +55,32 @@ class ViewProfilePage extends React.Component {
                     this.setState({
                         unsuitableMatches: this.state.unsuitableMatches.concat(responseData.results)
                     })
+                }
+            })
+
+    }
+
+    getRejectedMatches() {
+        let url = baseDomain + '/match/rejectedMatches'
+        let newRequest = {
+            userId: UserToken.getUserId()
+        }
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newRequest)
+        })
+            .then(res => res.json())
+            .then(responseData => {
+                console.log("pending friends resposne data")
+                console.log(responseData)
+                if (JSON.stringify(responseData.error) === '{}') {
+                    this.setState({
+                        unsuitableMatches: this.state.unsuitableMatches.concat(responseData.results)
+                    })
+                    console.log(this.state.unsuitableMatches)
                 }
             })
 
@@ -122,7 +151,11 @@ class ViewProfilePage extends React.Component {
                 this.setState({
                     profiles: tempProfiles
                 })
+                  
            }
+       }).then(()=>{
+        console.log("call get photos")
+        this.getCurrentPhotos();
        })
 
     }
@@ -195,6 +228,69 @@ class ViewProfilePage extends React.Component {
 
 
     }
+
+    getPhotoForCurrentUser(id) {
+        console.log("get photo for user " + id)
+        let url = baseDomain + '/photo/all'
+        let newRequest = {
+            "userId": id,
+        }
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newRequest)
+
+        })
+        .then(res => res.json())
+        .then(responseData => {
+            console.log("current photo response : ")
+            console.log(responseData)
+            console.log(JSON.stringify(responseData))
+                // TODO: handle case where login is invalid
+                if (JSON.stringify(responseData.error) === '{}') {
+                    console.log(responseData.results)
+                    if (responseData.results.length!=0) {
+                        console.log("return actual photo")
+                            this.setState(prevState => ({
+                                currentPhotos: [...prevState.currentPhotos, {id: id, imgsrc: responseData.results[0].photoUrl}]
+                            }))
+                    
+                    }
+                    else {
+                        console.log("Reutnr defualt")
+                        this.setState(prevState => ({
+                            currentPhotos: [...prevState.currentPhotos, {id: id, imgsrc:"mail-order-wife.png"}]
+                        }))
+                    }
+
+                }
+                else {
+                    console.log(responseData.error)
+                    this.setState(prevState => ({
+                        currentPhotos: [...prevState.currentPhotos, {id: id, imgsrc:"mail-order-wife.png"}]
+                    }))
+                }
+
+            })
+
+    }
+
+
+    getCurrentPhotos() {
+        console.log("get current photos")
+        for (let i=0; i < this.state.profiles.length; ++i) {
+            console.log(this.state.profiles[i])
+           this.getPhotoForCurrentUser(this.state.profiles[i].userId);
+          
+        }
+        // console.log("temp current")
+        // console.log(tempCurrent)
+        // this.setState({
+        //     currentPhotos:tempCurrent
+        // })
+    }
     onClickReject(userId) {
         let temp = this.state.profiles
         let tempProfiles = this.state.numProfiles-1
@@ -226,9 +322,9 @@ class ViewProfilePage extends React.Component {
                 <div className="row center-row">
                     <div className="col center-col">
                         {
-                            this.state.profiles.map((profile) =>
+                            this.state.profiles.map((profile,i) =>
                             <div className="row center-row match-container" key = {"row0" + profile.userId}>
-                                <MatchProfile key={profile.userId} userId={profile.userId} imgsrc="mail-order-wife.png" 
+                                <MatchProfile key={profile.userId} userId={profile.userId} imgsrc="mail-order-wife.png"
                                 firstName={profile.firstName} lastName={profile.lastName} age={profile.age} descrip={profile.description}
                                  matched={false}
                                  approveMatch={() => this.onClickAccept(profile.userId)} rejectMatch={() => this.onClickReject(profile.userId)}

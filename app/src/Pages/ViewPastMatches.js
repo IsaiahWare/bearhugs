@@ -27,20 +27,29 @@ class ViewPastMatches extends React.Component {
             feedback: "",
             pendingMatches: [],
             currentMatches: [],
+            wingmanMatches:[],
+            pendingPhotos: [],
+            currentPhotos:[],
+            wingmanPhotos:[],
             key: "currentMatches"
 
         }
         this.getCurrentMatches = this.getCurrentMatches.bind(this)
         this.getPendingMatches = this.getPendingMatches.bind(this)
         this.checkUserEmail = this.checkUserEmail.bind(this)
-
+        this.getCurrentPhotos = this.getCurrentPhotos.bind(this);
+        this.getPendingPhotos = this.getPendingPhotos.bind(this);
 
     }
+
+
 
     componentDidMount() {
         this.checkUserLogIn();
         this.getCurrentMatches();
-        this.getPendingMatches();
+        this.getPendingMatches()
+        console.log("Current photos")
+        console.log(this.state.currentPhotos);
     }
 
     setKey(k) {
@@ -58,6 +67,124 @@ class ViewPastMatches extends React.Component {
 
     }
 
+    getPhotoForPendingUser(id) {
+        console.log("get photo for user " + id)
+        let url = baseDomain + '/photo/all'
+        let newRequest = {
+            "userId": id,
+        }
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newRequest)
+
+        })
+        .then(res => res.json())
+        .then(responseData => {
+            console.log(JSON.stringify(responseData))
+                // TODO: handle case where login is invalid
+                if (JSON.stringify(responseData.error) === '{}') {
+                    console.log(responseData.results)
+                    if (responseData.results.length!=0) {
+                        console.log("return actual photo")
+                            this.setState(prevState => ({
+                                pendingPhotos: [...prevState.currentPhotos, responseData.results[0]]
+                            }))
+                    
+                    }
+                    else {
+                        console.log("Reutnr defualt")
+                        this.setState(prevState => ({
+                            pendingPhotos: [...prevState.currentPhotos, "mail-order-wife.png"]
+                        }))
+                    }
+
+                }
+                else {
+                    console.log(responseData.error)
+                    this.setState(prevState => ({
+                        pendingPhotos: [...prevState.currentPhotos, "mail-order-wife.png"]
+                    }))
+                }
+
+            })
+
+    }
+
+    getPhotoForCurrentUser(id) {
+        console.log("get photo for user " + id)
+        let url = baseDomain + '/photo/all'
+        let newRequest = {
+            "userId": id,
+        }
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newRequest)
+
+        })
+        .then(res => res.json())
+        .then(responseData => {
+            console.log(JSON.stringify(responseData))
+                // TODO: handle case where login is invalid
+                if (JSON.stringify(responseData.error) === '{}') {
+                    console.log(responseData.results)
+                    if (responseData.results.length!=0) {
+                        console.log("return actual photo")
+                            this.setState(prevState => ({
+                                currentPhotos: [...prevState.currentPhotos, responseData.results[0]]
+                            }))
+                    
+                    }
+                    else {
+                        console.log("Reutnr defualt")
+                        this.setState(prevState => ({
+                            currentPhotos: [...prevState.currentPhotos, "mail-order-wife.png"]
+                        }))
+                    }
+
+                }
+                else {
+                    console.log(responseData.error)
+                    this.setState(prevState => ({
+                        currentPhotos: [...prevState.currentPhotos, "mail-order-wife.png"]
+                    }))
+                }
+
+            })
+
+    }
+
+    getCurrentPhotos() {
+        let tempCurrent = []
+        for (let i=0; i < this.state.currentMatches.length; ++i) {
+           this.getPhotoForCurrentUser(this.state.currentMatches[i].userId);
+          
+        }
+        // console.log("temp current")
+        // console.log(tempCurrent)
+        // this.setState({
+        //     currentPhotos:tempCurrent
+        // })
+    }
+    getPendingPhotos() {
+        for (let i=0; i < this.state.pendingMatches.length; ++i) {
+            let newelement = this.getPhotoForPendingUser(this.state.pendingMatches[i].userId);
+           
+        }
+        // for (let i=0; i < this.state.wingmanMatches.length; ++i) {
+        //     let newelement = this.getPhotoForUser(this.state.wingmanMatches[i].userId);
+        //     tempWingman.push(newelement);
+        // }
+        // this.setState({
+        //     wingmanPhotos:tempWingman
+        // })
+
+    }
 
 
     rejectMatch(id) {
@@ -100,6 +227,53 @@ class ViewPastMatches extends React.Component {
 
 
     }
+
+    rejectWingmanMatch() {
+        let url = baseDomain + '/wingman/reject'
+        let newRequest = {
+            userId: UserToken.getUserId()
+        }
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newRequest)
+        })
+            .then(res => res.json())
+            .then(responseData => {
+                console.log(responseData)
+                if (JSON.stringify(responseData.error) === '{}') {
+                    this.setState({
+                        wingmanMatches: responseData.results
+                    })
+                }
+            })
+
+    }
+
+    getWingmanMatches() {
+        let url = baseDomain + '/wingman/requests'
+        let newRequest = {
+            userId: UserToken.getUserId()
+        }
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newRequest)
+        })
+            .then(res => res.json())
+            .then(responseData => {
+                console.log(responseData)
+                if (JSON.stringify(responseData.error) === '{}') {
+                    this.setState({
+                        wingmanMatches: responseData.results
+                    })
+                }
+            })
+    }
     getCurrentMatches() {
         let url = baseDomain + '/match/matches'
         let newRequest = {
@@ -118,11 +292,15 @@ class ViewPastMatches extends React.Component {
                 if (JSON.stringify(responseData.error) === '{}') {
                     this.setState({
                         currentMatches: responseData.results
-                    })
+                    
+                },() => {
+                    this.getCurrentPhotos();
+                });
                 }
             })
 
     }
+
 
     getPendingMatches() {
         let url = baseDomain + '/match/requests'
@@ -143,7 +321,11 @@ class ViewPastMatches extends React.Component {
                 if (JSON.stringify(responseData.error) === '{}') {
                     this.setState({
                         pendingMatches: responseData.results
-                    })
+                    },() => {
+                        // this.getPendingPhotos();
+                    });
+                      
+               
                 }
             })
 
@@ -288,9 +470,9 @@ class ViewPastMatches extends React.Component {
                         <div className="row center-row">
                             <div className="col center-col">
                                 {
-                                    this.state.currentMatches.map((profile) =>
-                                        <div className="row center-row match-container" key={"row0" + profile.userId}>
-                                            <CompletedMatchesProfile key={profile.userId} userId={profile.userId} imgsrc="mail-order-wife.png"
+                                    this.state.currentMatches.map((profile, i) =>
+                                        <div className="row center-row match-container" key={"row0current" + profile.userId}>
+                                            <CompletedMatchesProfile key={profile.userId} userId={profile.userId} imgsrc= {this.state.currentPhotos[i]}
                                                 firstName={profile.firstName} lastName={profile.lastName} email={profile.email} age={profile.age} descrip={profile.description} genderIdentity={profile.genderIdentity} genderPreferences={profile.genderPreferences}
                                                 matched={true}></CompletedMatchesProfile>
                                         </div>
@@ -306,9 +488,9 @@ class ViewPastMatches extends React.Component {
                         <div className="row center-row">
                             <div className="col center-col">
                                 {
-                                    this.state.pendingMatches.map((profile) =>
-                                        <div className="row center-row match-container" key={"row0" + profile.userId}>
-                                            <PendingMatchesProfile key={profile.userId} userId={profile.userId} imgsrc="mail-order-wife.png"
+                                    this.state.pendingMatches.map((profile, i) =>
+                                        <div className="row center-row match-container" key={"row0pending" + profile.userId}>
+                                            <PendingMatchesProfile key={profile.userId} userId={profile.userId} imgsrc= {this.state.pendingPhotos[i]}
                                                 firstName={profile.firstName} lastName={profile.lastName} email={profile.email} age={profile.age} descrip={profile.description} genderIdentity={profile.genderIdentity} genderPreferences={profile.genderPreferences}
                                                 matched={false} approveMatch={() => this.addMatchFromButton(profile.userId)} rejectMatch={() => this.rejectMatch(profile.userId)} ></PendingMatchesProfile>
                                         </div>
@@ -317,6 +499,24 @@ class ViewPastMatches extends React.Component {
                             </div>
                         </div>
                     </Tab>
+                    {/* <Tab eventKey="wingmanMatches" title="Wingman Matches Matches">
+                        <div className="row center-row">
+                            <h2>Pending Matches</h2>
+                        </div>
+                        <div className="row center-row">
+                            <div className="col center-col">
+                                {
+                                    this.state.wingmanMatches.map((profile) =>
+                                        <div className="row center-row match-container" key={"row0wingman" + profile.userId}>
+                                            <PendingMatchesProfile key={profile.userId} userId={profile.userId} imgsrc="mail-order-wife.png"
+                                                firstName={profile.firstName} lastName={profile.lastName} email={profile.email} age={profile.age} descrip={profile.description} genderIdentity={profile.genderIdentity} genderPreferences={profile.genderPreferences}
+                                                matched={false} approveMatch={() => this.addMatchFromButton(profile.userId)} rejectMatch={() => this.rejectWingmanMatch(profile.userId)} ></PendingMatchesProfile>
+                                        </div>
+                                    )
+                                }
+                            </div>
+                        </div>
+                    </Tab> */}
                 </Tabs>
             </div >
 

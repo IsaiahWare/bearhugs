@@ -64,10 +64,71 @@ class WingmanPage extends React.Component {
             })
     }
 
+    sendWingManNotificationToFriend(friend) {
+        console.log("sending notificaiton")
+        let url = baseDomain + '/notifications/sendthreeuser'
+        let newRequest = {
+            userId1: friend.userId,
+            userId2: this.state.wingmanee.userId,
+            userId3: UserToken.getUserId(),
+            message: UserToken.getUserName() + " thinks you and " + this.state.wingmanee.firstName + " " + this.state.wingmanee.lastName + " would be cute together!"
+        }
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newRequest)
+        })
+        .then(res => res.json())
+        .then(responseData => {
+            if (JSON.stringify(responseData.error) === '{}') {
+                console.log(responseData)
+
+            }
+            else {
+                console.log(responseData)
+            }
+       })
+    
+
+
+    }
+    
+
+    sendWingManNotificationToWingmanee(friend) {
+        let url = baseDomain + '/notifications/sendthreeuser'
+        let newRequest = {
+            userId1: this.state.wingmanee.userId,
+            userId2: friend.userId,
+            userId3: UserToken.getUserId(),
+            message: UserToken.getUserName() + " thinks you and " + friend.firstName + " " + friend.lastName + " would be cute together!"
+        }
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newRequest)
+        })
+        .then(res => res.json())
+        .then(responseData => {
+            if (JSON.stringify(responseData.error) === '{}') {
+                console.log(responseData)
+
+            }
+            else {
+                console.log(responseData)
+            }
+       })
+    
+
+
+    }
 
 
     sendWingMan(friend){
-        alert("Wingman match suggestion sent to "+ this.state.wingmanee.firstName + " and "+ friend.firstName );
+
         let url = baseDomain + '/wingman/send'
         let newRequest = {
             wingmanId: UserToken.getUserId(),
@@ -83,8 +144,11 @@ class WingmanPage extends React.Component {
         })
             .then(res => res.json())
             .then(responseData => {
-		    console.log(responseData)
-                
+            if (JSON.stringify(responseData.error) === '{}') {
+            alert("Wingman match suggestion sent to "+ this.state.wingmanee.firstName + " and "+ friend.firstName );
+            this.sendWingManNotificationToFriend(friend)
+            this.sendWingManNotificationToWingmanee(friend)
+            }   
             })
     }
 
