@@ -160,7 +160,7 @@ class ViewProfilePage extends React.Component {
                 console.log(obj)
                 return obj.userId != userId
                 })
-                this.notifyRequesteeofMatch(requesteeId)
+                this.notifyRequesteeofMatch(userId)
                 this.setState({
                     profiles: tempResult,
                     numProfiles:tempProfiles
