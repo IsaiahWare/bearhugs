@@ -175,7 +175,6 @@ class ViewProfilePage extends React.Component {
             requesterId: UserToken.getUserId(),
             requesteeId: userId
         }
-        alert("matched " + UserToken.getUserId());
         fetch(url, {
             method: 'POST',
             headers: {

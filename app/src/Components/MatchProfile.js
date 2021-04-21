@@ -30,7 +30,6 @@ class MatchProfile extends React.Component {
         if (swipeDirection === direction.LEFT) {
             this.props.rejectMatch()
           // handle left swipe
-          alert("swipe left on user "+this.props.userId+" :(");
           return;
         }
     }
