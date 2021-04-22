@@ -464,7 +464,6 @@ Response {
 ```
 
 ## WINGMAN
-### `POST /wingman/send`
 
 ### IMPORTANT:
 wingmanId => Person who is suggesting the match
