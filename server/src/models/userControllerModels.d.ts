@@ -35,6 +35,16 @@ export interface UserRandomRequest {
    count: number; 
 }
 
+export interface UserUpdateRequest {
+    email: string;
+    firstName: string;
+    lastName: string;
+    description: string;
+    genderIdentity: string;
+    genderPreferences: string;
+    userId: number;
+}
+
 export interface FindByEmailResponse {
     error: MysqlError | Error | object;
     results: User[]

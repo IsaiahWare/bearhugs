@@ -1,10 +1,14 @@
 import db from "../db";
 import express, { Response , Request } from "express";
 import { MysqlError } from "mysql";
-import {
-} from "../models/userControllerModels";
-import {
-} from "../checkers/userControllerModelsChecker";
+import { 
+    isWingmanSendRequest,
+    isWingmanRequestsRequest,
+    isWingmanMatchesRequest,
+    isWingmanUnmatchRequest,
+    isWingmanRejectRequest,
+    isWingmanRejectedMatchesRequest
+} from "../checkers/wingmanControllerModelsChecker";
 
 const router = express.Router();
 
@@ -13,6 +17,14 @@ router.post("/send", (req: Request, res: Response) => {
         "error": {},
         "results": []
     };
+
+    if(!isWingmanSendRequest) {
+        wingmanResponse.error = {
+            "message": "Invalid request parameters"
+        };
+        res.json(wingmanResponse);
+        return;
+    }
 
     const queryStatement: string = "SELECT requesterId FROM pendingWingman WHERE wingmanId = ? AND requesteeId = ? AND requesterId = ?";
     const queryArgs = [req.body.wingmanId, req.body.requesteeId, req.body.requesterId];
@@ -102,29 +114,20 @@ router.post("/send", (req: Request, res: Response) => {
     }); 
 });
 
-router.post("/matches", (req: Request, res: Response) => {
-    const wingmanResponse: any = {
-        "error": {},
-        "results": []
-    };
-    const queryStatement = "SELECT completedWingman.wingmanId, users.userId, users.email, users.firstName, users.lastName, users.age, users.description, users.genderIdentity, users.genderPreferences FROM users INNER JOIN completedWingman ON completedWingman.requesteeId = users.userId WHERE completedWingman.requesterId = ?"; 
-    db.query(queryStatement, req.body.userId, (queryError: MysqlError | null, queryResults: any ) => {
-        if (queryError) {
-            wingmanResponse.error =  {
-                "message": queryError.sqlMessage
-            };
-        } else {
-            wingmanResponse.results = queryResults
-        }
-        res.json(wingmanResponse);
-    });
-});
-
 router.post("/requests", (req: Request, res: Response) => {
     const wingmanResponse: any = {
         "error": {},
         "results": []
     };
+
+    if(!isWingmanRequestsRequest) {
+        wingmanResponse.error = {
+            "message": "Invalid request parameters"
+        };
+        res.json(wingmanResponse);
+        return;
+    }
+
     const queryStatement = "SELECT pendingWingman.wingmanId, users.userId, users.email, users.firstName, users.lastName, users.age, users.description, users.genderIdentity, users.genderPreferences FROM users INNER JOIN pendingWingman ON pendingWingman.requesterId = users.userId WHERE pendingWingman.requesteeId = ?"; 
     db.query(queryStatement, req.body.userId, (queryError: MysqlError | null, queryResults: any ) => {
         if (queryError) {
@@ -138,11 +141,47 @@ router.post("/requests", (req: Request, res: Response) => {
     });
 });
 
+router.post("/matches", (req: Request, res: Response) => {
+    const wingmanResponse: any = {
+        "error": {},
+        "results": []
+    };
+
+    if(!isWingmanMatchesRequest) {
+        wingmanResponse.error = {
+            "message": "Invalid request parameters"
+        };
+        res.json(wingmanResponse);
+        return;
+    }
+
+    const queryStatement = "SELECT completedWingman.wingmanId, users.userId, users.email, users.firstName, users.lastName, users.age, users.description, users.genderIdentity, users.genderPreferences FROM users INNER JOIN completedWingman ON completedWingman.requesteeId = users.userId WHERE completedWingman.requesterId = ?"; 
+    db.query(queryStatement, req.body.userId, (queryError: MysqlError | null, queryResults: any ) => {
+        if (queryError) {
+            wingmanResponse.error =  {
+                "message": queryError.sqlMessage
+            };
+        } else {
+            wingmanResponse.results = queryResults
+        }
+        res.json(wingmanResponse);
+    });
+});
+
 router.post("/unmatch", (req: Request, res: Response) => {
     const wingmanResponse: any = {
         "error": {},
         "results": []
     };
+
+    if(!isWingmanUnmatchRequest) {
+        wingmanResponse.error = {
+            "message": "Invalid request parameters"
+        };
+        res.json(wingmanResponse);
+        return;
+    }
+
     const queryStatement = "DELETE FROM completedWingman WHERE (wingmanId = ? AND requesterId = ? AND requesteeId = ?) or (wingmanId = ? AND requesterId = ? AND requesteeId = ?)";
     const queryArgs = [req.body.wingmanId, req.body.requesterId, req.body.requesteeId, req.body.wingmanId, req.body.requesteeId, req.body.requesterId];
     db.query(queryStatement, queryArgs, (queryError: MysqlError | null, queryResults: any ) => {
@@ -165,6 +204,15 @@ router.post("/reject", (req: Request, res: Response) => {
         "error": {},
         "results": []
     };
+
+    if(!isWingmanRejectRequest) {
+        wingmanResponse.error = {
+            "message": "Invalid request parameters"
+        };
+        res.json(wingmanResponse);
+        return;
+    }
+
     const queryStatement = "DELETE FROM pendingWingman WHERE wingmanId = ? AND requesterId = ? AND requesteeId = ?";
     const queryArgs = [req.body.wingmanId, req.body.requesterId, req.body.requesteeId];
     db.query(queryStatement, queryArgs, (queryError: MysqlError | null, queryResults: any ) => {
@@ -197,6 +245,15 @@ router.post("/rejectedMatches", (req: Request, res: Response) => {
         "error": {},
         "results": []
     };
+
+    if(!isWingmanRejectedMatchesRequest) {
+        wingmanResponse.error = {
+            "message": "Invalid request parameters"
+        };
+        res.json(wingmanResponse);
+        return;
+    }
+
     const queryStatement = `SELECT users.userId, users.email, users.firstName, users.lastName, users.age, users.description, users.genderIdentity, users.genderPreferences,
     users.phoneNumber FROM users INNER JOIN rejectedWingman ON rejectedWingman.requesterId = users.userId WHERE rejectedWingman.requesteeId = ? OR rejectedWingman.requesterId = ?`;
     const queryArgs = [req.body.userId, req.body.userId];

@@ -1,11 +1,14 @@
-import bcrypt from "bcrypt";
 import db from "./../db";
 import express, { Response , Request } from "express";
 import { MysqlError } from "mysql";
 import {
-} from "./../models/userControllerModels";
-import {
-} from "./../checkers/userControllerModelsChecker";
+    isMatchSendRequest,
+    isMatchRequestsRequest,
+    isMatchMatchesRequest,
+    isMatchUnmatchRequest,
+    isMatchRejectRequest,
+    isMatchRejectedMatchesRequest
+} from "./../checkers/matchControllerModelsChecker";
 
 const router = express.Router();
 
@@ -14,6 +17,14 @@ router.post("/send", (req: Request, res: Response) => {
         "error": {},
         "results": []
     };
+
+    if (!isMatchSendRequest) {
+        matchResponse.error = {
+            "message": "Invalid request parameters"
+        };
+        res.json(matchResponse);
+        return;
+    }
 
     const queryStatement: string = "SELECT requesterId FROM pendingMatches WHERE requesteeId = ? AND requesterId = ?";
     const queryArgs = [req.body.requesterId, req.body.requesteeId];
@@ -79,29 +90,20 @@ router.post("/send", (req: Request, res: Response) => {
     }); 
 });
 
-router.post("/matches", (req: Request, res: Response) => {
-    const matchResponse: any = {
-        "error": {},
-        "results": []
-    };
-    const queryStatement = "SELECT users.userId, users.email, users.firstName, users.lastName, users.age, users.description, users.genderIdentity, users.genderPreferences FROM users INNER JOIN completedMatches ON completedMatches.userId2 = users.userId WHERE completedMatches.userId1 = ?"; 
-    db.query(queryStatement, req.body.userId, (queryError: MysqlError | null, queryResults: any ) => {
-        if (queryError) {
-            matchResponse.error =  {
-                "message": queryError.sqlMessage
-            };
-        } else {
-            matchResponse.results = queryResults
-        }
-        res.json(matchResponse);
-    });
-});
-
 router.post("/requests", (req: Request, res: Response) => {
     const matchResponse: any = {
         "error": {},
         "results": []
     };
+
+    if (!isMatchRequestsRequest) {
+        matchResponse.error = {
+            "message": "Invalid request parameters"
+        };
+        res.json(matchResponse);
+        return;
+    }
+
     const queryStatement = "SELECT users.userId, users.email, users.firstName, users.lastName, users.age, users.description, users.genderIdentity, users.genderPreferences FROM users INNER JOIN pendingMatches ON pendingMatches.requesterId = users.userId WHERE pendingMatches.requesteeId = ?"; 
     db.query(queryStatement, req.body.userId, (queryError: MysqlError | null, queryResults: any ) => {
         if (queryError) {
@@ -115,11 +117,47 @@ router.post("/requests", (req: Request, res: Response) => {
     });
 });
 
+router.post("/matches", (req: Request, res: Response) => {
+    const matchResponse: any = {
+        "error": {},
+        "results": []
+    };
+
+    if (!isMatchMatchesRequest) {
+        matchResponse.error = {
+            "message": "Invalid request parameters"
+        };
+        res.json(matchResponse);
+        return;
+    }
+
+    const queryStatement = "SELECT users.userId, users.email, users.firstName, users.lastName, users.age, users.description, users.genderIdentity, users.genderPreferences FROM users INNER JOIN completedMatches ON completedMatches.userId2 = users.userId WHERE completedMatches.userId1 = ?"; 
+    db.query(queryStatement, req.body.userId, (queryError: MysqlError | null, queryResults: any ) => {
+        if (queryError) {
+            matchResponse.error =  {
+                "message": queryError.sqlMessage
+            };
+        } else {
+            matchResponse.results = queryResults
+        }
+        res.json(matchResponse);
+    });
+});
+
 router.post("/unmatch", (req: Request, res: Response) => {
     const matchResponse: any = {
         "error": {},
         "results": []
     };
+
+    if (!isMatchUnmatchRequest) {
+        matchResponse.error = {
+            "message": "Invalid request parameters"
+        };
+        res.json(matchResponse);
+        return;
+    }
+
     const queryStatement = "DELETE FROM completedMatches WHERE (userId1 = ? AND userId2 = ?) OR (userId1 = ? AND userId2 = ?)";
     const queryArgs = [req.body.userId1, req.body.userId2, req.body.userId2, req.body.userId1];
     db.query(queryStatement, queryArgs, (queryError: MysqlError | null, queryResults: any ) => {
@@ -141,6 +179,15 @@ router.post("/reject", (req: Request, res: Response) => {
         "error": {},
         "results": []
     };
+
+    if (!isMatchRejectRequest) {
+        matchResponse.error = {
+            "message": "Invalid request parameters"
+        };
+        res.json(matchResponse);
+        return;
+    }
+
     const queryStatement = "DELETE FROM pendingMatches WHERE requesterId = ? AND requesteeId = ?";
     const queryArgs = [req.body.requesterId, req.body.requesteeId];
     db.query(queryStatement, queryArgs, (queryError: MysqlError | null, queryResults: any ) => {
@@ -176,6 +223,15 @@ router.post("/rejectedMatches", (req: Request, res: Response) => {
         "error": {},
         "results": []
     };
+
+    if (!isMatchRejectedMatchesRequest) {
+        matchResponse.error = {
+            "message": "Invalid request parameters"
+        };
+        res.json(matchResponse);
+        return;
+    }
+
     const queryStatement = `SELECT users.userId, users.email, users.firstName, users.lastName, users.age, users.description, users.genderIdentity, users.genderPreferences,
     users.phoneNumber FROM users INNER JOIN rejectedMatches ON rejectedMatches.requesterId = users.userId WHERE rejectedMatches.requesteeId = ? OR rejectedMatches.requesterId = ?`;
     const queryArgs = [req.body.userId, req.body.userId];

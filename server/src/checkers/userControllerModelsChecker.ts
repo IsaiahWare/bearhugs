@@ -1,4 +1,4 @@
-import { UserRegisterRequest, UserLoginRequest, UserFindRequest, FindByEmailRequest, UserRandomRequest } from "../models/userControllerModels";
+import { UserRegisterRequest, UserLoginRequest, UserFindRequest, FindByEmailRequest, UserRandomRequest, UserUpdateRequest  } from "../models/userControllerModels";
 
 export function isUserRegisterRequest(obj: any): obj is UserRegisterRequest {
   return obj.email !== undefined &&
@@ -26,4 +26,10 @@ export function isUserFindByEmailRequest(obj: any): obj is FindByEmailRequest {
 
 export function isUserRandomRequest(obj: any): obj is UserRandomRequest {
   return obj.count !== undefined && Object.keys(obj).length === 1;
+}
+
+export function isUserUpdateRequest(obj: any): obj is UserUpdateRequest {
+  return obj.email !== undefined && obj.firstName !== undefined && obj.lastName !== undefined &&
+  obj.description !== undefined && obj.genderIdentity !== undefined && obj.genderPreferences !== undefined 
+  && obj.userId !== undefined && Object.keys(obj).length === 7;
 }

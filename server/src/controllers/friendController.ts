@@ -2,9 +2,15 @@ import db from "./../db";
 import express, { Response , Request } from "express";
 import { MysqlError } from "mysql";
 import {
-} from "./../models/userControllerModels";
-import {
-} from "./../checkers/userControllerModelsChecker";
+} from "./../models/friendControllerModels";
+import { 
+    isFriendSendRequest,
+    isFriendRequestsRequest,
+    isFriendFriendsRequest,
+    isFriendUnfriendRequest,
+    isFriendRejectRequest,
+    isFriendRejectedFriendsRequest
+} from "./../checkers/friendControllerModelsChecker";
 
 const router = express.Router();
 
@@ -13,6 +19,14 @@ router.post("/send", (req: Request, res: Response) => {
         "error": {},
         "results": []
     };
+
+    if (!isFriendSendRequest(req.body)) {
+        friendResponse.error = {
+            "message": "Invalid request parameters!"
+        }
+        res.json(friendResponse);
+        return;
+    }
 
     const queryStatement: string = "SELECT requesterId FROM pendingFriends WHERE requesteeId = ? AND requesterId = ?";
     const queryArgs = [req.body.requesterId, req.body.requesteeId];
@@ -83,6 +97,15 @@ router.post("/friends", (req: Request, res: Response) => {
         "error": {},
         "results": []
     };
+
+    if (!isFriendFriendsRequest(req.body)) {
+        friendResponse.error = {
+            "message": "Invalid request parameters!"
+        }
+        res.json(friendResponse);
+        return;
+    }
+
     const queryStatement = "SELECT users.userId, users.email, users.firstName, users.lastName, users.age, users.description, users.genderIdentity, users.genderPreferences FROM users INNER JOIN completedFriends ON completedFriends.userId2 = users.userId WHERE completedFriends.userId1 = ?"; 
     db.query(queryStatement, req.body.userId, (queryError: MysqlError | null, queryResults: any ) => {
         if (queryError) {
@@ -119,6 +142,15 @@ router.post("/unfriend", (req: Request, res: Response) => {
         "error": {},
         "results": []
     };
+
+    if (!isFriendUnfriendRequest(req.body)) {
+        friendResponse.error = {
+            "message": "Invalid request parameters!"
+        }
+        res.json(friendResponse);
+        return;
+    }
+
     const queryStatement = "DELETE FROM completedFriends WHERE (userId1 = ? AND userId2 = ?) OR (userId1 = ? AND userId2 = ?)";
     const queryArgs = [req.body.userId1, req.body.userId2, req.body.userId2, req.body.userId1];
     db.query(queryStatement, queryArgs, (queryError: MysqlError | null, queryResults: any ) => {
@@ -140,6 +172,15 @@ router.post("/reject", (req: Request, res: Response) => {
         "error": {},
         "results": []
     };
+
+    if (!isFriendRejectRequest(req.body)) {
+        friendResponse.error = {
+            "message": "Invalid request parameters!"
+        }
+        res.json(friendResponse);
+        return;
+    }
+
     const queryStatement = "DELETE FROM pendingFriends WHERE (requesterId = ? AND requesteeId = ?)";
     const queryArgs = [req.body.requesterId, req.body.requesteeId];
     db.query(queryStatement, queryArgs, (queryError: MysqlError | null, queryResults: any ) => {
@@ -175,6 +216,15 @@ router.post("/rejectedFriends", (req: Request, res: Response) => {
         "error": {},
         "results": []
     };
+
+    if (!isFriendRejectedFriendsRequest(req.body)) {
+        friendResponse.error = {
+            "message": "Invalid request parameters!"
+        }
+        res.json(friendResponse);
+        return;
+    }
+
     const queryStatement = `SELECT users.userId, users.email, users.firstName, users.lastName, users.age, users.description, users.genderIdentity, users.genderPreferences,
     users.phoneNumber FROM users INNER JOIN rejectedFriends ON rejectedFriends.requesterId = users.userId WHERE rejectedFriends.requesteeId = ? OR rejectedFriends.requesterId = ?`;
     const queryArgs = [req.body.userId, req.body.userId];

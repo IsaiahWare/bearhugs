@@ -3,16 +3,10 @@ import db from "./../db";
 import express, { Response , Request } from "express";
 import { MysqlError } from "mysql";
 import {
-    User,
-    UserRegisterRequest,
     UserRegisterResponse,
-    UserLoginRequest,
     UserLoginResponse,
-    UserFindRequest,
     UserFindResponse,
-    UserRandomRequest,
     UserRandomResponse,
-    FindByEmailRequest,
     FindByEmailResponse
 } from "./../models/userControllerModels";
 import {
@@ -20,7 +14,8 @@ import {
     isUserRegisterRequest,
     isUserLoginRequest,
     isUserFindRequest,
-    isUserRandomRequest
+    isUserRandomRequest,
+    isUserUpdateRequest
 } from "./../checkers/userControllerModelsChecker";
 
 const saltRounds: number = 10;
@@ -226,6 +221,14 @@ router.post("/update", (req: Request, res: Response) => {
         "error": {},
         "results": []
     };
+
+    if (!isUserUpdateRequest(req.body)) {
+        updateResponse.error = {
+            "message": "Invalid request parameters!"
+        };
+        res.json(updateResponse);
+        return;
+    }    
     
     const queryStatement: string = "UPDATE users SET email = ?, firstName = ?, lastName = ?, description = ?, genderIdentity = ?, genderPreferences = ? WHERE userId = ?";
     const queryArgs = [
