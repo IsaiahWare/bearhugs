@@ -1,4 +1,6 @@
 <?php    
+    echo "photoUploader works"
+    exit;
     // Get the filename and make sure it is valid
     $filename = (string) basename($_FILES['filename']['name']);
     
