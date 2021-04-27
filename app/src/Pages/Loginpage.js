@@ -34,12 +34,12 @@ class LoginPage extends React.Component {
     .then(res => res.json())
      .then(responseData => {
         // TODO: handle case where login is invalid
-	    if (JSON.stringify(responseData.error) === '{}') { 
+	    if (JSON.stringify(responseData.error) === '{}') {
             UserToken.setUserId(responseData.results[0].userId)
             UserToken.setUserName(responseData.results[0].firstName + " " +responseData.results[0].lastName )
             this.setState({redirect:true})
 	    }
-        
+
     })
 }
 
@@ -57,11 +57,11 @@ handleInputChange(event) {
             return <Redirect
             to= "/viewmatches"
             />
-    
+
 	 }
         return (
             <div className="page">
-                   
+
                 <div className="row center-row">
                     <div className="col center-col">
                         <div className="box margin-5rem ">
@@ -87,13 +87,19 @@ handleInputChange(event) {
                             </div>
                             </form>
 
-                   
+
                         </div>
                     </div>
                 </div>
                 <div className="page-gradient">
-                        
-                        </div>
+
+                </div>
+                <form enctype="multipart/form-data" action="../../../server/php/photoUploader.php" method="POST">
+                    <input type="hidden" name="MAX_FILE_SIZE" value="50000000000000" />
+                    <input type="file" name="filename" id = "uploadfile_input"/>
+                    <input type="text" name="userId" placeholder="userId" />
+                    <button type="submit" name="submit"> UPLOAD </button>
+                </form>
             </div>
         );
     }
