@@ -9,13 +9,10 @@
     }
     $full_path = sprintf($path . "/%s", $filename);
     if( move_uploaded_file($_FILES['filename']['tmp_name'], $full_path) ){
-        // header("Location: login.php");
-        echo "**Photo Upload Successful**";
-        exit;
+        echo "TRUE";
     }else{
-        // header("Location: login.php");
-        echo "**Photo Upload Successful**";
-        exit;
+        echo "FALSE";
     }
+    exit;
 
 ?>
