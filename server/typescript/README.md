@@ -602,37 +602,47 @@ Response {
 }
 ```
 
-## PHOTO
+## PHOTO 
 
-### `POST /photo/upload`
+`UPLOADING`
+
 ```
+<form enctype="multipart/form-data" action="../../../server/php/photoUploader.php" method="POST">
+    <input type="hidden" name="MAX_FILE_SIZE" value="50000000000000" />
+    <input type="file" name="filename" id = "uploadfile_input"/>
+    <input type="hidden" name="userId" value={this.state.userId} />
+    <button type="submit" name="submit"> UPLOAD </button>
+</form>
+```
+
+`RETRIEVING`
+
+### `POST /photo/`
+```
+
+fetch('../../../server/php/photoUploader.php`, {
+  method: 'POST',
+  headers: {'Content-Type': 'application/json'},
+  body: JSON.stringify({
+    "userId": this.state.userId
+  })
+})
+.then(res => res.json())
+.then(res => {
+  
+})
+.catch(console.error);
+
 Request {
-  userId: number,
-  photoUrl: longtext
+  userId: number
 }
 
 Response {
-  error: {}
   results: [
-    {
-      success: boolean
-    }
-  ]
-}
-```
-
-### `POST /photo/all`
-```
-Request {
-  userId: number,
-}
-
-Response {
-  error: {}
-  results: [
-    {
-      photoUrl: string
-    }
+    'photoUrl',
+    'photoUrl',
+    'photoUrl',
+    ...
   ]
 }
 ```
