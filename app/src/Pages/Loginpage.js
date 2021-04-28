@@ -10,8 +10,8 @@ class LoginPage extends React.Component {
         this.state = {
             email:"",
             password:"",
-	    redirect: false,
-        photos: []
+	        redirect: false,
+            photos: []
         }
         this.logIn= this.logIn.bind(this)
         this.handleInputChange = this.handleInputChange.bind(this)
@@ -55,9 +55,10 @@ getPhotos() {
       })
       .then(photos => photos.json())
       .then(photos => {
-        this.setState({
-          "photos": photos
-        })
+        // this.setState({
+        //   "photos": photos
+        // })
+        console.log(photos);
       })
       .catch(console.error);
 }
