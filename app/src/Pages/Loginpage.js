@@ -46,7 +46,7 @@ class LoginPage extends React.Component {
 }
 
 getPhotos() {
-    fetch('../../../server/php/photoUploader.php', {
+    fetch('../../../server/php/photoGetter.php', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
@@ -55,10 +55,9 @@ getPhotos() {
       })
       .then(photos => photos.json())
       .then(photos => {
-        // this.setState({
-        //   "photos": photos
-        // })
-        console.log(photos);
+        this.setState({
+          "photos": photos
+        })
       })
       .catch(console.error);
 }
