@@ -7,7 +7,7 @@
 		$filing = array_diff(scandir($path), array('..','.'));
 		$pp = array();
 		foreach($filing as $i => $filename) {
-			array_push($pp, $filename);
+			array_push($pp, "../../../server/php/photos/user$userId/$filename");
 		}	
         echo json_encode($pp);
 	?>
