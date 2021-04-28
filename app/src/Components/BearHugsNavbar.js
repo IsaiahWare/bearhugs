@@ -8,6 +8,8 @@ import Modal from '../Pages/NotificationsPage.js';
 import NotificationsModal from '../Pages/NotificationsPage.js';
 import {Col} from "react-bootstrap"
 import {Row} from "react-bootstrap"
+import UserToken from "./UserToken"
+
 
 
 class BearHugsNavbar extends React.Component {
@@ -29,7 +31,7 @@ class BearHugsNavbar extends React.Component {
   render() {
     return (
       <div>
-        <Navbar bg="light" expand="lg">
+        <Navbar bg="light" expand="lg" className="fixed-top">
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="container-fluid">
@@ -43,13 +45,14 @@ class BearHugsNavbar extends React.Component {
               <Row>
                 
               <Nav.Item className="margin-left-right-1"> <Link to="/editsettings" className="navbarItem"><FontAwesomeIcon icon={faUserEdit} /></Link></Nav.Item>
-                <Nav.Item className="margin-left-right-1"> <Link to="/" className="navbarItem"><FontAwesomeIcon icon={faSignOutAlt} /></Link></Nav.Item>
+                <Nav.Item className="margin-left-right-1" onClick={UserToken.logout}> <Link to="/" className="navbarItem"><FontAwesomeIcon icon={faSignOutAlt} /></Link></Nav.Item>
               </Row>
         
     
             </Nav>
           </Navbar.Collapse>
         </Navbar>
+        <div className="navbar-padding-top"></div>
       </div>
     );
   }
