@@ -9,9 +9,9 @@
     }
     $full_path = sprintf($path . "/%s", $filename);
     if( move_uploaded_file($_FILES['filename']['tmp_name'], $full_path) ){
-        echo "TRUE";
+        echo json_encode(array("results" => "true", "error" => array()));
     }else{
-        echo "FALSE";
+        echo json_encode(array("results" => array(), "error" => array("message" => "photo upload failure")));
     }
     exit;
 
