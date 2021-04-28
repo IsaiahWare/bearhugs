@@ -15,6 +15,7 @@ class LoginPage extends React.Component {
         }
         this.logIn= this.logIn.bind(this)
         this.handleInputChange = this.handleInputChange.bind(this)
+        this.getPhotos = this.getPhotos.bind(this)
     }
 
     logIn(event) {
@@ -44,7 +45,7 @@ class LoginPage extends React.Component {
     })
 }
 
-componentDidMount() {
+getPhotos() {
     fetch('../../../server/php/photoUploader.php', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
@@ -110,6 +111,7 @@ handleInputChange(event) {
                     </div>
                 </div>
                 <div className="page-gradient">
+                <button onClick={this.getPhotos}>Get photos</button>
                 {
                     this.state.photos.map((photoLink, idx) => (
                         <img src={photoLink} key={idx} />
