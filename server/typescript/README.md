@@ -646,3 +646,17 @@ Response {
   ]
 }
 ```
+
+`USAGE`
+
+```
+render() {
+  return (
+    {
+      this.state.photos.map((photoLink, idx) =>  (
+        <img src={photoLink} key={idx} />
+      ))
+    }
+  );
+}
+```
