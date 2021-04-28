@@ -10,7 +10,8 @@ class LoginPage extends React.Component {
         this.state = {
             email:"",
             password:"",
-	    redirect: false
+	    redirect: false,
+        photos: []
         }
         this.logIn= this.logIn.bind(this)
         this.handleInputChange = this.handleInputChange.bind(this)
@@ -41,6 +42,23 @@ class LoginPage extends React.Component {
 	    }
 
     })
+}
+
+componentDidMount() {
+    fetch('../../../server/php/photoUploader.php', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          "userId": 74
+        })
+      })
+      .then(photos => photos.json())
+      .then(photos => {
+        this.setState({
+          "photos": photos
+        })
+      })
+      .catch(console.error);
 }
 
 handleInputChange(event) {
@@ -92,14 +110,12 @@ handleInputChange(event) {
                     </div>
                 </div>
                 <div className="page-gradient">
-
+                {
+                    this.state.photos.map((photoLink, idx) => (
+                        <img src={photoLink} key={idx} />
+                    ))
+                }
                 </div>
-                <form enctype="multipart/form-data" action="../../../server/php/photoUploader.php" method="POST">
-                    <input type="hidden" name="MAX_FILE_SIZE" value="50000000000000" />
-                    <input type="file" name="filename" id = "uploadfile_input"/>
-                    <input type="text" name="userId" placeholder="userId" />
-                    <button type="submit" name="submit"> UPLOAD </button>
-                </form>
             </div>
         );
     }
