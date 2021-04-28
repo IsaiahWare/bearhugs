@@ -28,13 +28,19 @@ router.post("/getPhotos", (req: Request, res: Response) => {
         "results": []
     };
 
-    const photos = ls(req.body.userId).catch(console.error);
-
-    photoResponse.results = {
-        "photos": photos
-    }
-        
-    res.json(photoResponse);
+    ls(req.body.userId)
+    .then((photos) => {
+        photoResponse.results = {
+            "photos": photos
+        }
+        res.json(photoResponse);
+    })
+    .catch((e) => {
+        photoResponse.error = {
+            "message": e
+        }
+        res.json(photoResponse);
+    });
 });  
 
 export default router;
