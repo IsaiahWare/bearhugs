@@ -2,9 +2,7 @@
     // Get the filename and make sure it is valid
     header('Content-Type: application/json');
     $filename = (string) basename($_FILES['filename']['name']);
-    $json = file_get_contents('php://input');
-    $data = json_decode($json);
-    $userId = $data->{'userId'};
+    $userId = $_POST['userId'];
     $path = "./photos/user$userId";
     if (!file_exists($path)) {
         mkdir($path);
