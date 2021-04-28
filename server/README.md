@@ -618,7 +618,7 @@ Response {
 `RETRIEVING`
 
 ```
-fetch('../../../server/php/photoUploader.php', {
+fetch('../../../server/php/photoGetter.php', {
   method: 'POST',
   headers: {'Content-Type': 'application/json'},
   body: JSON.stringify({
