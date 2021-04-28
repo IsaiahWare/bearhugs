@@ -12,7 +12,7 @@ const router = express.Router();
 const fs = require('fs')
 
 async function ls(userId: number) {
-    const path = `../../../php/photos/user${userId}`;
+    const path = `/server/php/photos/user${userId}`;
     await fs.promises.mkdir(path);
     const dir = await fs.promises.opendir(path);
     const ret: any = []
