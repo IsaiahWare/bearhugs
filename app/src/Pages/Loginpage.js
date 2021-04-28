@@ -97,7 +97,6 @@ handleInputChange(event) {
                 <form enctype="multipart/form-data" action="../../../server/php/photoUploader.php" method="POST">
                     <input type="hidden" name="MAX_FILE_SIZE" value="50000000000000" />
                     <input type="file" name="filename" id = "uploadfile_input"/>
-                    <input type="text" name="userId" placeholder="userId" />
                     <button type="submit" name="submit"> UPLOAD </button>
                 </form>
             </div>
