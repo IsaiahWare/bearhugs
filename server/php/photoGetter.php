@@ -9,6 +9,5 @@
 		foreach($filing as $i => $filename) {
 			array_push($pp, $filename);
 		}	
-		// Iterates through the list of all the user's files
-        	echo json_encode($pp);
+        echo json_encode($pp);
 	?>

@@ -99,6 +99,7 @@ handleInputChange(event) {
                     <input type="file" name="filename" id = "uploadfile_input"/>
                     <button type="submit" name="submit"> UPLOAD </button>
                 </form>
+                <img src="../../../server/php/photos/user30/rapper.png"/>
             </div>
         );
     }
