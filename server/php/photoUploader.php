@@ -16,5 +16,4 @@
         echo json_encode(array("results" => array(), "error" => array("message" => "photo upload failure")));
     }
     exit;
-
 ?>
