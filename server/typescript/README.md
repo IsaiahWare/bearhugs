@@ -620,16 +620,18 @@ Response {
 ### `POST /photo/`
 ```
 
-fetch('../../../server/php/photoUploader.php`, {
+fetch('../../../server/php/photoUploader.php', {
   method: 'POST',
   headers: {'Content-Type': 'application/json'},
   body: JSON.stringify({
     "userId": this.state.userId
   })
 })
-.then(res => res.json())
-.then(res => {
-  
+.then(photos => photos.json())
+.then(photos => {
+  this.setState({
+    "photos": photos
+  })
 })
 .catch(console.error);
 
