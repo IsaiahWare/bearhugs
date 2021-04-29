@@ -45,6 +45,10 @@ export interface UserUpdateRequest {
     userId: number;
 }
 
+export interface UserPhoneRequest {
+    phoneNumber: string; 
+ }
+
 export interface FindByEmailResponse {
     error: MysqlError | Error | object;
     results: User[]

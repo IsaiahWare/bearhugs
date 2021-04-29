@@ -15,7 +15,8 @@ import {
     isUserLoginRequest,
     isUserFindRequest,
     isUserRandomRequest,
-    isUserUpdateRequest
+    isUserUpdateRequest,
+    isUserPhoneRequest
 } from "./../checkers/userControllerModelsChecker";
 
 const saltRounds: number = 10;
@@ -266,6 +267,35 @@ router.post("/update", (req: Request, res: Response) => {
         res.json(updateResponse);
     });
 });
+
+router.post("/phone", (req: Request, res: Response) => {    
+    const phoneResponse: any = {
+        "error": {},
+        "results": []
+    };
+
+    if (!isUserPhoneRequest(req.body)) {
+        phoneResponse.error = {
+            "message": "Invalid request parameters!"
+        };
+        res.json(phoneResponse);
+        return;
+    }
+
+    const queryStatement: string = "SELECT userId, email, firstName, lastName, age, description, genderIdentity, genderPreferences FROM users WHERE phoneNumber = ?";
+    db.query(queryStatement, req.body.phoneNumber, (queryError: MysqlError | null, queryResults: any ) => {
+        if (queryError) {
+            phoneResponse.error =  {
+                "message": queryError.sqlMessage
+            };
+        } else {
+            shuffleArray(queryResults);
+            phoneResponse.results = queryResults
+        }
+        res.json(phoneResponse);
+    }); 
+});
+
 
 export default router;
 
