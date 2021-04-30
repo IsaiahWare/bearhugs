@@ -19,7 +19,7 @@ class ViewProfilePage extends React.Component {
             unsuitableMatches:[],
             currentPhotos:[],
             doneLoading: 0,
-            profileNumber:0
+            profileNumber:-1
         }
         this.checkUserLogIn = this.checkUserLogIn.bind(this)
         this.getProfiles = this.getProfiles.bind(this)
@@ -317,6 +317,7 @@ class ViewProfilePage extends React.Component {
             />
         }
         if (this.state.doneLoading==this.state.numProfiles) {
+            console.log("In render with done loading "+ this.state.doneLoading+ " and num profiles" + this.state.numProfiles)
             return (
                 <div className="page">
                     <BearHugsNavbar></BearHugsNavbar>
