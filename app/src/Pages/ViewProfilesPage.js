@@ -271,6 +271,7 @@ class ViewProfilePage extends React.Component {
                     }
 
             }).catch((error)=>{
+                let tempPhotoNumber=this.state.doneLoading+1;
                 console.error(error)
                 console.log("Reutnr defualt")
                 this.setState(prevState => ({
