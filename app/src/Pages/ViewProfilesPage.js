@@ -212,7 +212,7 @@ class ViewProfilePage extends React.Component {
         let newRequest = {
             userId1: userId,
             userId2: UserToken.getUserId(),
-            message: UserToken.getUserName() + "has swiped on you! Check pending matches to see more."
+            message: UserToken.getUserName() + " has swiped on you! Check pending matches to see more."
         }
         fetch(url, {
             method: 'POST',
@@ -264,7 +264,13 @@ class ViewProfilePage extends React.Component {
                         }))
                     }
 
-            }).catch(console.error)
+            }).catch((error)=>{
+                console.error(error)
+                console.log("Reutnr defualt")
+                this.setState(prevState => ({
+                    currentPhotos: [...prevState.currentPhotos, {id: id, imgsrc:"mail-order-wife.png"}]
+                }))
+            })
 
     }
 
@@ -310,7 +316,7 @@ class ViewProfilePage extends React.Component {
                         {
                             this.state.profiles.map((profile,i) =>
                             <div className="row center-row match-container" key = {"row0" + profile.userId}>
-                                <MatchProfile key={profile.userId} userId={profile.userId} imgsrc="mail-order-wife.png"
+                                <MatchProfile key={profile.userId} userId={profile.userId} imgsrc= {this.state.currentPhotos[i].imgsrc}
                                 firstName={profile.firstName} lastName={profile.lastName} age={profile.age} descrip={profile.description}
                                  matched={false}
                                  approveMatch={() => this.onClickAccept(profile.userId)} rejectMatch={() => this.onClickReject(profile.userId)}
