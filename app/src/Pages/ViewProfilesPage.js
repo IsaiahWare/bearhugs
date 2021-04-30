@@ -14,12 +14,11 @@ class ViewProfilePage extends React.Component {
         super(props);
         this.state = {
             profiles: [],
-            numProfiles:0,
+            numProfiles:-1,
             redirect:false,
             unsuitableMatches:[],
             currentPhotos:[],
             doneLoading: 0,
-            profileNumber:-1
         }
         this.checkUserLogIn = this.checkUserLogIn.bind(this)
         this.getProfiles = this.getProfiles.bind(this)
@@ -152,7 +151,7 @@ class ViewProfilePage extends React.Component {
                 })
                 this.setState({
                     profiles: tempProfiles,
-                    profileNumber:tempProfiles.length
+                    numProfiles:tempProfiles.length
                 })
                   
            }
@@ -201,7 +200,7 @@ class ViewProfilePage extends React.Component {
                 this.notifyRequesteeofMatch(userId)
                 this.setState({
                     profiles: tempResult,
-                    numProfiles:tempProfiles
+                    numProfiles: tempProfiles
         
                 })
                console.log("was match successful? " + responseData.matched);
@@ -298,11 +297,9 @@ class ViewProfilePage extends React.Component {
 		console.log(obj)
 		console.log(userId)
         if (obj.userId === userId) {
-            console.log("remove " + JSON.stringify(obj))
         }
             return obj.userId !== userId
         })
-	    console.log("tempresult"+ JSON.stringify(tempResult))
         this.setState({
             profiles: tempResult,
             numProfiles:tempProfiles
@@ -316,6 +313,8 @@ class ViewProfilePage extends React.Component {
             to= "/"
             />
         }
+        console.log("done loading :" + this.state.doneLoading)
+        console.log("num profiles " + this.state.numProfiles)
         if (this.state.doneLoading==this.state.numProfiles) {
             console.log("In render with done loading "+ this.state.doneLoading+ " and num profiles" + this.state.numProfiles)
             return (
