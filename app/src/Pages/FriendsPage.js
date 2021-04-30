@@ -114,10 +114,7 @@ class FriendsPage extends React.Component {
 
 
     getCurrentPhotos() {
-        for (let i=0; i < this.state.currentFriends.length; ++i) {
-           this.getPhotoForCurrentUser(this.state.currentFriends[i].userId);
-          
-        }
+    
         // console.log("temp current")
         // console.log(tempCurrent)
         // this.setState({
@@ -125,10 +122,7 @@ class FriendsPage extends React.Component {
         // })
     }
     getPendingPhotos() {
-        for (let i=0; i < this.state.pendingFriendsRequest.length; ++i) {
-            this.getPhotoForPendingUser(this.state.pendingFriendsRequest[i].userId);
-           
-        }
+       
         // for (let i=0; i < this.state.wingmanMatches.length; ++i) {
         //     let newelement = this.getPhotoForUser(this.state.wingmanMatches[i].userId);
         //     tempWingman.push(newelement);
@@ -255,7 +249,9 @@ class FriendsPage extends React.Component {
                        currentPhotos: []
                     },() => {
                         if (responseData.results.length > 0) {
-                            this.getCurrentPhotos(); 
+                            for (let i=0; i < this.state.currentFriends.length; ++i) {
+                                this.getPhotoForCurrentUser(this.state.currentFriends[i].userId);
+                             }
                         }
                     });
                 }
@@ -284,7 +280,9 @@ class FriendsPage extends React.Component {
                         pendingPhotos: []
                     },() => {
                         if (responseData.results.length > 0) {
-                            this.getPendingPhotos(); 
+                            for (let i=0; i < this.state.pendingFriendsRequest.length; ++i) {
+                                this.getPhotoForPendingUser(this.state.pendingFriendsRequest[i].userId);
+                            }
                         }
                     
                     });
@@ -549,7 +547,7 @@ class FriendsPage extends React.Component {
                                         this.state.currentFriends.map((friend, i) =>
                                             <ListedUser id={friend.userId} key={friend.userId} firstName={friend.firstName}
                                              lastName={friend.lastName} removeFriend={() => this.removeFriend(friend.userId)}
-                                            removeTrue = {true} profPicSrc="mail-order-wife.png" age={friend.age}></ListedUser>
+                                            removeTrue = {true} profPicSrc={this.state.currentPhotos[i]} age={friend.age}></ListedUser>
                                         )
                                     }
 
