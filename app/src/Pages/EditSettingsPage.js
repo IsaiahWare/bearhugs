@@ -30,7 +30,8 @@ class EditSettingsPage extends React.Component {
             genderPreferences: "STRAIGHT",
             firstName: "",
             lastName: "",
-            age: -1
+            age: -1,
+            photos: []
 
         }
         this.handleInputChange = this.handleInputChange.bind(this)
@@ -59,6 +60,7 @@ class EditSettingsPage extends React.Component {
     }
 
     getCurrentUserInfo() {
+        this.getPhotos_new();
         let uid = UserToken.getUserId();
         console.log("user id in edit settings: " + uid)
         let url = baseDomain + '/user/find'
@@ -108,6 +110,25 @@ class EditSettingsPage extends React.Component {
             })
 
 
+    }
+
+    getPhotos_new(){
+        console.log("fetching photos...")
+        let url = baseDomain + "/server/php/photoGetter.php"
+        fetch('../../../server/php/photoGetter.php', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+              "userId": this.state.userId
+            })
+          })
+          .then(photos => photos.json())
+          .then(photos => {
+            this.setState({
+              photos: photos
+            })
+          })
+          .catch(console.error);
     }
 
     getPhotoInfo() {
@@ -256,7 +277,14 @@ class EditSettingsPage extends React.Component {
                     <h3>{this.state.feedback}</h3>
                 </div>
                     <div className="row center-row">
-                            <Image src={this.state.photo} className="img-parent" />
+                            {/*<Image src={this.state.photo} className="img-parent" />*/}
+                            {this.state.photos.map((photoLink, idx) =>  (
+                                <img src={photoLink} key={idx} className="img-parent"/>
+                                
+                            ))}
+                            <img key="smurf1" className="img-parent" src="https://weneedfun.com/wp-content/uploads/2016/07/Cute-Girl-Profile-pictures-For-Facebook-14.jpg"/>
+                            <img key="smurf2" className="img-parent" src = "https://weneedfun.com/wp-content/uploads/2016/07/Cute-Girl-Profile-pictures-For-Facebook-14.jpg"/>
+                            <img key="smurf3" className="img-parent" src = "https://weneedfun.com/wp-content/uploads/2016/07/Cute-Girl-Profile-pictures-For-Facebook-14.jpg"/>
 
                     </div>
                 <div className="col">
@@ -275,8 +303,13 @@ class EditSettingsPage extends React.Component {
                             </Form.Group>
                         </Form.Row> */}
                         <Form.Group>
-                            <Form.Label>Profile image URL</Form.Label>
-                            <Form.Control type="text" name="photo" value={this.state.photo} onChange={this.handleInputChange} placeholder="Place image URL from Internet" />
+                            <Form.Label>Upload a profile image</Form.Label>
+                            <Form.File enctype="multipart/form-data" action={baseDomain + "/server/php/photoUploader.php"} method="POST" label="Example file input" id="photo_uploader">
+                                <input type="hidden" name="MAX_FILE_SIZE" value="50000000000000" />
+                                <input type="file" name="filename" id = "uploadfile_input"/>
+                                <input type="hidden" name="userId" value={this.state.userId} />
+                                <button type="submit" name="submit"> UPLOAD </button>
+                            </Form.File>
                         </Form.Group>
                         <Form.Group controlId="editForm.email">
                             <Form.Label>Email</Form.Label>
