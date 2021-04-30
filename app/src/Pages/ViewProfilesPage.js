@@ -154,8 +154,11 @@ class ViewProfilePage extends React.Component {
                   
            }
        }).then(()=>{
-        console.log("call get photos")
-        this.getCurrentPhotos();
+        console.log("get current photos")
+        for (let i=0; i < this.state.profiles.length; ++i) {
+            console.log(this.state.profiles[i])
+           this.getPhotoForCurrentUser(this.state.profiles[i].userId) 
+        }
        })
 
     }
@@ -230,7 +233,7 @@ class ViewProfilePage extends React.Component {
 
     getPhotoForCurrentUser(id) {
         console.log("get photo for user " + id)
-        let url = baseDomain + '/photo/all'
+        let url = '../../../server/php/photoGetter.php'
         let newRequest = {
             "userId": id,
         }
@@ -242,18 +245,15 @@ class ViewProfilePage extends React.Component {
             body: JSON.stringify(newRequest)
 
         })
-        .then(res => res.json())
-        .then(responseData => {
+        .then(photos => photos.json())
+        .then(photos=> {
             console.log("current photo response : ")
-            console.log(responseData)
-            console.log(JSON.stringify(responseData))
+            console.log(photos)
                 // TODO: handle case where login is invalid
-                if (JSON.stringify(responseData.error) === '{}') {
-                    console.log(responseData.results)
-                    if (responseData.results.length!=0) {
+                    if (photos.length!=0) {
                         console.log("return actual photo")
                             this.setState(prevState => ({
-                                currentPhotos: [...prevState.currentPhotos, {id: id, imgsrc: responseData.results[0].photoUrl}]
+                                currentPhotos: [...prevState.currentPhotos, {id: id, imgsrc: photos[0]}]
                             }))
                     
                     }
@@ -264,26 +264,13 @@ class ViewProfilePage extends React.Component {
                         }))
                     }
 
-                }
-                else {
-                    console.log(responseData.error)
-                    this.setState(prevState => ({
-                        currentPhotos: [...prevState.currentPhotos, {id: id, imgsrc:"mail-order-wife.png"}]
-                    }))
-                }
-
-            })
+            }).catch(console.error)
 
     }
 
 
     getCurrentPhotos() {
-        console.log("get current photos")
-        for (let i=0; i < this.state.profiles.length; ++i) {
-            console.log(this.state.profiles[i])
-           this.getPhotoForCurrentUser(this.state.profiles[i].userId);
-          
-        }
+   
         // console.log("temp current")
         // console.log(tempCurrent)
         // this.setState({
