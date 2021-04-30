@@ -17,7 +17,9 @@ class ViewProfilePage extends React.Component {
             numProfiles:0,
             redirect:false,
             unsuitableMatches:[],
-            currentPhotos:[]
+            currentPhotos:[],
+            doneLoading: 0,
+            profileNumber:0
         }
         this.checkUserLogIn = this.checkUserLogIn.bind(this)
         this.getProfiles = this.getProfiles.bind(this)
@@ -149,7 +151,8 @@ class ViewProfilePage extends React.Component {
                 return obj.userId !== userToken
                 })
                 this.setState({
-                    profiles: tempProfiles
+                    profiles: tempProfiles,
+                    profileNumber:tempProfiles.length
                 })
                   
            }
@@ -233,7 +236,7 @@ class ViewProfilePage extends React.Component {
 
     getPhotoForCurrentUser(id) {
         console.log("get photo for user " + id)
-        let url = '../../../server/php/photoGetter.php'
+        let url = baseDomain+'/server/php/photoGetter.php'
         let newRequest = {
             "userId": id,
         }
@@ -249,18 +252,21 @@ class ViewProfilePage extends React.Component {
         .then(photos=> {
             console.log("current photo response : ")
             console.log(photos)
+           let tempPhotoNumber=this.state.doneLoading+1;
                 // TODO: handle case where login is invalid
                     if (photos.length!=0) {
                         console.log("return actual photo")
                             this.setState(prevState => ({
-                                currentPhotos: [...prevState.currentPhotos, {id: id, imgsrc: photos[0]}]
+                                currentPhotos: [...prevState.currentPhotos, {id: id, imgsrc: photos[0]}],
+                                doneLoading: tempPhotoNumber
                             }))
                     
                     }
                     else {
                         console.log("Reutnr defualt")
                         this.setState(prevState => ({
-                            currentPhotos: [...prevState.currentPhotos, {id: id, imgsrc:"mail-order-wife.png"}]
+                            currentPhotos: [...prevState.currentPhotos, {id: id, imgsrc:"mail-order-wife.png"}],
+                            doneLoading: tempPhotoNumber
                         }))
                     }
 
@@ -268,7 +274,8 @@ class ViewProfilePage extends React.Component {
                 console.error(error)
                 console.log("Reutnr defualt")
                 this.setState(prevState => ({
-                    currentPhotos: [...prevState.currentPhotos, {id: id, imgsrc:"mail-order-wife.png"}]
+                    currentPhotos: [...prevState.currentPhotos, {id: id, imgsrc:"mail-order-wife.png"}],
+                    doneLoading: tempPhotoNumber
                 }))
             })
 
@@ -308,31 +315,38 @@ class ViewProfilePage extends React.Component {
             to= "/"
             />
         }
-        return (
-            <div className="page">
-                <BearHugsNavbar></BearHugsNavbar>
-                <div className="row center-row">
-                    <div className="col center-col">
-                        {
-                            this.state.profiles.map((profile,i) =>
-                            <div className="row center-row match-container" key = {"row0" + profile.userId}>
-                                <MatchProfile key={profile.userId} userId={profile.userId} imgsrc= {this.state.currentPhotos[i].imgsrc}
-                                firstName={profile.firstName} lastName={profile.lastName} age={profile.age} descrip={profile.description}
-                                 matched={false}
-                                 approveMatch={() => this.onClickAccept(profile.userId)} rejectMatch={() => this.onClickReject(profile.userId)}
-                                 ></MatchProfile>
-                                 
-                            </div>
-                            )
-                        }
-
-                        {/* for frontend testing */}
-
-
+        if (this.state.doneLoading==this.state.numProfiles) {
+            return (
+                <div className="page">
+                    <BearHugsNavbar></BearHugsNavbar>
+                    <div className="row center-row">
+                        <div className="col center-col">
+                            {
+                                this.state.profiles.map((profile,i) =>
+                                <div className="row center-row match-container" key = {"row0" + profile.userId}>
+                                    <MatchProfile key={profile.userId} userId={profile.userId} imgsrc= {this.state.currentPhotos[i].imgsrc}
+                                    firstName={profile.firstName} lastName={profile.lastName} age={profile.age} descrip={profile.description}
+                                     matched={false}
+                                     approveMatch={() => this.onClickAccept(profile.userId)} rejectMatch={() => this.onClickReject(profile.userId)}
+                                     ></MatchProfile>
+                                     
+                                </div>
+                                )
+                            }
+    
+                            {/* for frontend testing */}
+    
+    
+                        </div>
                     </div>
                 </div>
-            </div>
-        );
+            );
+
+        }
+        else {
+            return null;
+        }
+ 
     }
 }
 
