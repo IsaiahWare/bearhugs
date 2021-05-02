@@ -28,7 +28,6 @@ class ViewProfilePage extends React.Component {
 
    checkUserLogIn() {
         let token =  UserToken.getUserId()
-        console.log("token in edit settings " + token)
         if(token==null || token==undefined || token=="") {
             this.setState({
                 redirect:true
@@ -50,7 +49,6 @@ class ViewProfilePage extends React.Component {
         })
             .then(res => res.json())
             .then(responseData => {
-                console.log(responseData)
                 if (JSON.stringify(responseData.error) === '{}') {
                     this.setState({
                         unsuitableMatches: this.state.unsuitableMatches.concat(responseData.results)
@@ -79,7 +77,6 @@ class ViewProfilePage extends React.Component {
                     this.setState({
                         unsuitableMatches: this.state.unsuitableMatches.concat(responseData.results)
                     })
-                    console.log(this.state.unsuitableMatches)
                 }
             })
 
@@ -99,14 +96,10 @@ class ViewProfilePage extends React.Component {
         })
             .then(res => res.json())
             .then(responseData => {
-                console.log("pending friends resposne data")
-                console.log(responseData)
                 if (JSON.stringify(responseData.error) === '{}') {
                     this.setState({
                         unsuitableMatches: this.state.unsuitableMatches.concat(responseData.results)
                     })
-                    console.log("unsitable matches")
-                    console.log(this.state.unsuitableMatches)
                 }
             })
 
@@ -152,9 +145,7 @@ class ViewProfilePage extends React.Component {
                   
            }
        }).then(()=>{
-        console.log("get current photos")
         for (let i=0; i < this.state.profiles.length; ++i) {
-            console.log(this.state.profiles[i])
            this.getPhotoForCurrentUser(this.state.profiles[i].userId) 
         }
        })
@@ -186,17 +177,14 @@ class ViewProfilePage extends React.Component {
         .then(res => res.json())
         .then(responseData => {
               if (JSON.stringify(responseData.error) === '{}') {
-                  console.log(responseData)
                 let temp = this.state.profiles
                 let photoArray=this.state.currentPhotos
                 let tempProfiles = this.state.numProfiles-1
                 let doneLoadingTemp = this.state.doneLoading-1
                 let tempResult = temp.filter((obj) => {
-                console.log(obj)
                 return obj.userId != userId
                 })
                 let tempPhotos = photoArray.filter((obj) => {
-                    console.log(obj)
                     return obj.id != userId
                     })
                 this.notifyRequesteeofMatch(userId)
@@ -207,7 +195,6 @@ class ViewProfilePage extends React.Component {
                     doneLoading: doneLoadingTemp
         
                 })
-               console.log("was match successful? " + responseData.matched);
            }
        })
                   
@@ -253,12 +240,9 @@ class ViewProfilePage extends React.Component {
         })
         .then(photos => photos.json())
         .then(photos=> {
-            console.log("current photo response : ")
-            console.log(photos)
            let tempPhotoNumber=this.state.doneLoading+1;
                 // TODO: handle case where login is invalid
                     if (photos.results.length!=0) {
-                        console.log("return actual photo")
                             this.setState(prevState => ({
                                 currentPhotos: [...prevState.currentPhotos, {id: id, imgsrc: photos.results[0]}],
                                 doneLoading: tempPhotoNumber
@@ -266,7 +250,6 @@ class ViewProfilePage extends React.Component {
                     
                     }
                     else {
-                        console.log("Reutnr defualt")
                         this.setState(prevState => ({
                             currentPhotos: [...prevState.currentPhotos, {id: id, imgsrc:"mail-order-wife.png"}],
                             doneLoading: tempPhotoNumber
@@ -275,8 +258,6 @@ class ViewProfilePage extends React.Component {
 
             }).catch((error)=>{
                 let tempPhotoNumber=this.state.doneLoading+1;
-                console.error(error)
-                console.log("Reutnr defualt")
                 this.setState(prevState => ({
                     currentPhotos: [...prevState.currentPhotos, {id: id, imgsrc:"mail-order-wife.png"}],
                     doneLoading: tempPhotoNumber
@@ -301,17 +282,14 @@ class ViewProfilePage extends React.Component {
         .then(res => res.json())
         .then(responseData => {
               if (JSON.stringify(responseData.error) === '{}') {
-                  console.log(responseData)
                 let temp = this.state.profiles
                 let photoArray=this.state.currentPhotos
                 let tempProfiles = this.state.numProfiles-1
                 let tempDoneLoading = this.state.doneLoading-1
                 let tempResult = temp.filter((obj) => {
-                console.log(obj)
                 return obj.userId != userId
                 })
                 let tempPhotos = photoArray.filter((obj) => {
-                    console.log(obj)
                     return obj.id != userId
                     })
                 this.setState({

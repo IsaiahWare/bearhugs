@@ -48,6 +48,7 @@ class RegisterPage extends React.Component {
             // TODO: handle case where login is invalid
             if (JSON.stringify(responseData.error) === '{}') { 
                 UserToken.setUserId(responseData.results[0].userId)
+                UserToken.setUserName(responseData.results[0].firstName + " " + responseData.results[0].lastName)
                 this.setState({redirect:true})
             }
         })
