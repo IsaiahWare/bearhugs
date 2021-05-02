@@ -31,7 +31,10 @@ class ListedUser extends React.Component {
                     <p id="listedUser-name">{this.props.firstName} {this.props.lastName}</p>
                     <p id="listedUser-age">{this.props.age}</p>
                 </div>
+                <div className="col">
                 {removeButton}
+                </div>
+               
 
 
             </div>

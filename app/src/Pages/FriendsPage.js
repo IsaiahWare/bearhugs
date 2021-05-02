@@ -170,6 +170,8 @@ class FriendsPage extends React.Component {
 
     removeFriend(id) {
         let url = baseDomain + '/friend/unfriend'
+        console.log("Remove friend--self-id :" +UserToken.getUserId())
+        console.log("Remove friend--otherf-id :" + id)
         let newRequest = {
             userId1: UserToken.getUserId(),
             userId2: id
