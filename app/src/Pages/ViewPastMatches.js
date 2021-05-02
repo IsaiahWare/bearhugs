@@ -211,6 +211,8 @@ class ViewPastMatches extends React.Component {
                 if (JSON.stringify(responseData.error) === '{}') {
                     let temp = this.state.pendingMatches
                     let photoArray = this.state.pendingPhotos
+                    let tempDoneLoading = this.state.doneLoadingPending-1
+                    let numProfilesPending = this.state.numPending-1
                     let tempResult = temp.filter((obj) => {
                         if (obj.userId === id) {
                             console.log("remove " + JSON.stringify(obj))
@@ -226,6 +228,8 @@ class ViewPastMatches extends React.Component {
                     this.setState({
                         pendingMatches: tempResult,
                         pendingPhotos: tempPhotoResult,
+                        doneLoadingPending: tempDoneLoading,
+                        numPending: numProfilesPending,
                         feedback: "Match removed!"
                     })
 
@@ -347,6 +351,8 @@ class ViewPastMatches extends React.Component {
     filterPendingAfterAdd(id) {
         let temp = this.state.pendingMatches
         let photoArray = this.state.pendingPhotos
+        let tempPendingDone = this.state.doneLoadingPending -1
+        let pendingNum = this.state.numPending-1
         let tempResult = temp.filter((obj) => {
             if (obj.userId === id) {
                 console.log("remove " + JSON.stringify(obj))
@@ -361,7 +367,9 @@ class ViewPastMatches extends React.Component {
         })
         this.setState({
             pendingMatches: tempResult,
-            pendingPhotos: tempPhotoResult
+            pendingPhotos: tempPhotoResult,
+            doneLoadingPending: tempPendingDone,
+            numPending: pendingNum
         })
     }
 

@@ -190,6 +190,7 @@ class ViewProfilePage extends React.Component {
                 let temp = this.state.profiles
                 let photoArray=this.state.currentPhotos
                 let tempProfiles = this.state.numProfiles-1
+                let doneLoadingTemp = this.state.doneLoading-1
                 let tempResult = temp.filter((obj) => {
                 console.log(obj)
                 return obj.userId != userId
@@ -202,7 +203,8 @@ class ViewProfilePage extends React.Component {
                 this.setState({
                     profiles: tempResult,
                     numProfiles: tempProfiles,
-                    currentPhotos: tempPhotos
+                    currentPhotos: tempPhotos,
+                    doneLoading: doneLoadingTemp
         
                 })
                console.log("was match successful? " + responseData.matched);
@@ -303,6 +305,7 @@ class ViewProfilePage extends React.Component {
                 let temp = this.state.profiles
                 let photoArray=this.state.currentPhotos
                 let tempProfiles = this.state.numProfiles-1
+                let tempDoneLoading = this.state.doneLoading-1
                 let tempResult = temp.filter((obj) => {
                 console.log(obj)
                 return obj.userId != userId
@@ -314,7 +317,8 @@ class ViewProfilePage extends React.Component {
                 this.setState({
                     profiles: tempResult,
                     numProfiles: tempProfiles,
-                    currentPhotos: tempPhotos
+                    currentPhotos: tempPhotos,
+                    doneLoading: tempDoneLoading
         
                 })
            }
