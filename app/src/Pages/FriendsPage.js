@@ -461,6 +461,11 @@ class FriendsPage extends React.Component {
                     let tempPhotos = this.state.pendingPhotos
                     let tempNum = this.state.numPending - 1
                     let tempDone = this.state.doneLoadingPending - 1
+                    this.setState({
+                        numPending: tempNum,
+                        doneLoadingPending: tempDone,
+                    }, 
+                    function() {
                     let tempResult = temp.filter((obj) => {
                         return obj.userId !== id
                     })
@@ -470,11 +475,11 @@ class FriendsPage extends React.Component {
                     this.setState({
                         pendingFriends: tempResult,
                         pendingPhotos: tempPhotosResult,
-                        numPending: tempNum,
-                        doneLoadingPending: tempDone,
                         feedback: "Friend request rejected"
                     })
-                }
+                })
+            }
+            
                 else {
                     this.setState({
                         feedback: "Friend request could not be rejected"
