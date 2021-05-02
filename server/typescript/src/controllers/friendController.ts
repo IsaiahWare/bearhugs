@@ -143,13 +143,13 @@ router.post("/unfriend", (req: Request, res: Response) => {
         "results": []
     };
 
-    // if (!isFriendUnfriendRequest(req.body)) {
-    //     friendResponse.error = {
-    //         "message": "Invalid request parameters!"
-    //     }
-    //     res.json(friendResponse);
-    //     return;
-    // }
+    if (!isFriendUnfriendRequest(req.body)) {
+        friendResponse.error = {
+            "message": "Invalid request parameters!"
+        }
+        res.json(friendResponse);
+        return;
+    }
 
     const queryStatement = "DELETE FROM completedFriends WHERE (userId1 = ? AND userId2 = ?) OR (userId1 = ? AND userId2 = ?)";
     const queryArgs = [req.body.userId1, req.body.userId2, req.body.userId2, req.body.userId1];
