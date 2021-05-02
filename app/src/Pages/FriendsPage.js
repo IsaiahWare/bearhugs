@@ -320,7 +320,6 @@ class FriendsPage extends React.Component {
                         feedback: "Friend request sent!",
                         pendingFriends: this.state.pendingFriends.concat(newFriendInfo)
                     })
-                    this.getPendingPhotos()
                     this.createAddFriendNotification(id)
                 }
                 else {
