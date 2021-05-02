@@ -493,37 +493,6 @@ class ViewPastMatches extends React.Component {
 
     }
 
-    // checkUserEmail() {
-    //     let url = baseDomain + '/user/findbyemail'
-    //     let newRequest = {
-    //         email: this.state.addFriendUser
-    //     }
-    //     console.log(newRequest)
-    //     fetch(url, {
-    //         method: 'POST',
-    //         headers: {
-    //             'Content-Type': 'application/json'
-    //         },
-    //         body: JSON.stringify(newRequest)
-    //     })
-    //         .then(res => res.json())
-    //         .then(responseData => {
-    //             if (JSON.stringify(responseData.error) === '{}') {
-    //                 console.log(responseData)
-    //                 this.setState({
-    //                     feedback: "Friend found!"
-    //                 })
-    //                 this.addFriendByEmail(responseData.results[0].userId, responseData.results[0])
-    //             }
-    //             else {
-    //                 console.log(responseData)
-    //                 this.setState({
-    //                     feedback: "Friend could not be found :(. Please try a different email"
-    //                 })
-    //             }
-    //         })
-
-    // }
 
     /*
     Some users in table:
@@ -596,7 +565,7 @@ class ViewPastMatches extends React.Component {
                                 </div>
                             </div>
                         </Tab>
-                        <Tab eventKey="wingmanMatches" title="Wingman Matches Matches">
+                        <Tab eventKey="wingmanMatches" title="Wingman Matches">
                         <div className="row center-row">
                             <h2>Wingman Matches</h2>
                         </div>
