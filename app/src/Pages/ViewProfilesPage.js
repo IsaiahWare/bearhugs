@@ -217,11 +217,8 @@ class ViewProfilePage extends React.Component {
         .then(res => res.json())
         .then(responseData => {
               if (JSON.stringify(responseData.error) === '{}') {
-    
            }
        })
-
-
     }
 
     getPhotoForCurrentUser(id) {
@@ -240,7 +237,7 @@ class ViewProfilePage extends React.Component {
         })
         .then(photos => photos.json())
         .then(photos=> {
-        console.log(JSON.stringify(photos))
+            console.log(JSON.stringify(photos))
            let tempPhotoNumber=this.state.doneLoading+1;
                 // TODO: handle case where login is invalid
                     if (photos.results.length!=0) {
@@ -248,8 +245,7 @@ class ViewProfilePage extends React.Component {
                                 currentPhotos: [...prevState.currentPhotos, {id: id, imgsrc: photos.results[0]}],
                                 doneLoading: tempPhotoNumber
                             }))
-                    
-                    }
+                        }
                     else {
                         this.setState(prevState => ({
                             currentPhotos: [...prevState.currentPhotos, {id: id, imgsrc:"mail-order-wife.png"}],
