@@ -23,7 +23,7 @@ class PendingMatchesProfile extends React.Component {
         if (swipeDirection === direction.RIGHT) {
           // handle right swipe
           this.props.approveMatch();
-          this.props.notifyRequesteeofMatch(id)
+          this.props.notifyRequesteeofMatch(this.props.userId);
           this.setState({matched: true});
           //this.matchProfile();
           return;
