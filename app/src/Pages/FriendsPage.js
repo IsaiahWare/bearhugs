@@ -170,7 +170,7 @@ class FriendsPage extends React.Component {
 
     removeFriend(id) {
         let url = baseDomain + '/friend/unfriend'
-        console.log("Remove friend--self-id :" +UserToken.getUserId())
+        console.log("Remove friend--self-id :" + UserToken.getUserId())
         console.log("Remove friend--otherf-id :" + id)
         let newRequest = {
             userId1: UserToken.getUserId(),
@@ -267,7 +267,7 @@ class FriendsPage extends React.Component {
                 if (JSON.stringify(responseData.error) === '{}') {
                     this.setState({
                         pendingFriendsRequest: responseData.results,
-                        doneLoadingPending:0,
+                        doneLoadingPending: 0,
                         pendingPhotos: [],
                         numPending: responseData.results.length
                     }, () => {
@@ -524,13 +524,15 @@ class FriendsPage extends React.Component {
                     <Tabs
                         id="friend-tabs"
                         activeKey={this.state.key}
-                        onSelect={(key  => {
-                        this.setState({ key })
+                        onSelect={(key => {
+                            this.setState({ key })
                         })}
                     >
                         <Tab eventKey="currentFriends" title="Current Friends">
                             <div className="friendsContainer">
-                                <div className="row center-row"><h1 className="pageTitle">Friends</h1></div>
+                                <div className="row center-row">
+                                    <h1 className="pageTitle">Friends</h1>
+                                </div>
                                 <div>{this.state.feedback}</div>
                                 <div className="input-row center-row">
                                     <Form onSubmit={this.handleSubmit} className="input">
@@ -557,7 +559,7 @@ class FriendsPage extends React.Component {
                         <Tab eventKey="pendingFriends" title="Pending Friends">
                             <div className="friendsContainer">
                                 <div className="row center-row">
-                                    <h2 className="pageTitle">Pending Friend Requests</h2>
+                                    <h1 className="pageTitle">Pending Friend Requests</h1>
                                 </div>
                                 <div>{this.state.feedback}</div>
                                 <div>

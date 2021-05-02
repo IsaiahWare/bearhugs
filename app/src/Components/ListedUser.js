@@ -24,18 +24,15 @@ class ListedUser extends React.Component {
 
         return(
             <div className="listedUser">
-                <img className="listedUser-pic" src={this.props.profPicSrc}></img>
-                <div className="listedUser-text">
-                    <p id="listedUser-name">{this.props.firstName} {this.props.lastName}</p>
-                    <p id="listedUser-age">{this.props.age}</p>
-                </div>
-                <div className="remove">
-                {removeButton}
-                </div>
-           
-            
-
+            <img className="listedUser-pic" src={this.props.profPicSrc}></img>
+            <div className="listedUser-text">
+                <p id="listedUser-name">{this.props.firstName} {this.props.lastName}</p>
+                <p id="listedUser-age">{this.props.age}</p>
             </div>
+            <div className="remove">
+                {removeButton}
+            </div>
+        </div>
         );
     }
 }
