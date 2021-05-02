@@ -263,6 +263,7 @@ class FriendsPage extends React.Component {
         })
             .then(res => res.json())
             .then(responseData => {
+                console.log("the boy from pending friends")
                 console.log(responseData)
                 if (JSON.stringify(responseData.error) === '{}') {
 
