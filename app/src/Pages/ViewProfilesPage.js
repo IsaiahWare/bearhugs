@@ -257,10 +257,10 @@ class ViewProfilePage extends React.Component {
             console.log(photos)
            let tempPhotoNumber=this.state.doneLoading+1;
                 // TODO: handle case where login is invalid
-                    if (photos.length!=0) {
+                    if (photos.results.length!=0) {
                         console.log("return actual photo")
                             this.setState(prevState => ({
-                                currentPhotos: [...prevState.currentPhotos, {id: id, imgsrc: photos[0]}],
+                                currentPhotos: [...prevState.currentPhotos, {id: id, imgsrc: photos.results[0]}],
                                 doneLoading: tempPhotoNumber
                             }))
                     

@@ -88,10 +88,10 @@ class ViewPastMatches extends React.Component {
                 console.log(photos)
                 let tempPhotoNumber = this.state.doneLoadingPending + 1;
                 // TODO: handle case where login is invalid
-                if (photos.length != 0) {
+                if (photos.results.length != 0) {
                     console.log("return actual photo")
                     this.setState(prevState => ({
-                        pendingPhotos: [...prevState.pendingPhotos, { id: id, imgsrc: photos[0] }],
+                        pendingPhotos: [...prevState.pendingPhotos, { id: id, imgsrc: photos.results[0] }],
                         doneLoadingPending: tempPhotoNumber
                     }))
 
@@ -135,10 +135,10 @@ class ViewPastMatches extends React.Component {
                 console.log(photos)
                 let tempPhotoNumber = this.state.doneLoadingCurrent + 1;
                 // TODO: handle case where login is invalid
-                if (photos.length != 0) {
+                if (photos.results.length != 0) {
                     console.log("return actual photo")
                     this.setState(prevState => ({
-                        currentPhotos: [...prevState.currentPhotos, { id: id, imgsrc: photos[0] }],
+                        currentPhotos: [...prevState.currentPhotos, { id: id, imgsrc: photos.results[0]}],
                         doneLoadingCurrent: tempPhotoNumber
                     }))
 
