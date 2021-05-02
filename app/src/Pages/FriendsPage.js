@@ -477,6 +477,8 @@ class FriendsPage extends React.Component {
                         pendingPhotos: tempPhotosResult,
                         feedback: "Friend request rejected"
                     })
+                    console.log("num pending in reject friend "+ this.numPending)
+                    console.log("num done in reject friend "+this.doneLoadingPending)
                 })
             }
             
@@ -530,6 +532,9 @@ class FriendsPage extends React.Component {
                         activeKey={this.state.key}
                         onSelect={(key => {
                             this.setState({ key })
+                            this.setState({
+                                feedback:""
+                            })
                         })}
                     >
                         <Tab eventKey="currentFriends" title="Current Friends">
