@@ -522,13 +522,6 @@ class FriendsPage extends React.Component {
                         id="friend-tabs"
                         activeKey={this.state.key}
                         onSelect={(key  => {
-                        if (key=="currentFriends") {
-                            this.getCurrentFriends();
-                        }
-                        else {
-                            this.getPendingFriends();
-                        }
-                        
                         this.setState({ key })
                         })}
                     >
