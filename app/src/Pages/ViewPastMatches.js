@@ -403,7 +403,7 @@ class ViewPastMatches extends React.Component {
                     })
                     this.filterPendingAfterAdd(id)
                     this.getCurrentMatches()
-                    this.notifyRequesteeofMatch(id)
+  
                 }
                 else {
                     console.log(responseData)
@@ -525,7 +525,7 @@ class ViewPastMatches extends React.Component {
                                             <div className="row center-row match-container" key={"row0pending" + profile.userId}>
                                                 <PendingMatchesProfile key={profile.userId} userId={profile.userId} imgsrc={this.state.pendingPhotos[i].imgsrc}
                                                     firstName={profile.firstName} lastName={profile.lastName} email={profile.email} age={profile.age} descrip={profile.description} genderIdentity={profile.genderIdentity} genderPreferences={profile.genderPreferences}
-                                                    matched={false} approveMatch={() => this.addMatchFromButton(profile.userId)} rejectMatch={() => this.rejectMatch(profile.userId)} ></PendingMatchesProfile>
+                                                    matched={false} approveMatch={() => this.addMatchFromButton(profile.userId)} rejectMatch={() => this.rejectMatch(profile.userId)} notifyRequesteeofMatch={()=>this.notifyRequesteeofMatch(profile.userId)} ></PendingMatchesProfile>
                                             </div>
                                         )
                                     }
