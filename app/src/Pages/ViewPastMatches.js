@@ -69,8 +69,8 @@ class ViewPastMatches extends React.Component {
     }
 
     getPhotoForPendingUser(id) {
-        console.log("get photo for user " + id)
         let url = '../../../server/php/photoGetter.php'
+        console.log("url " + url)
         let newRequest = {
             "userId": id,
         }
@@ -117,7 +117,6 @@ class ViewPastMatches extends React.Component {
     }
 
     getPhotoForCurrentUser(id) {
-        console.log("get photo for user " + id)
         let url = '../../../server/php/photoGetter.php'
         let newRequest = {
             "userId": id,
@@ -503,7 +502,7 @@ class ViewPastMatches extends React.Component {
                                     {
                                         this.state.currentMatches.map((profile, i) =>
                                             <div className="row center-row match-container" key={"row0current" + profile.userId}>
-                                                <CompletedMatchesProfile key={profile.userId} userId={profile.userId} imgsrc={this.state.currentPhotos[i]}
+                                                <CompletedMatchesProfile key={profile.userId} userId={profile.userId} imgsrc={this.state.currentPhotos[i].imgsrc}
                                                     firstName={profile.firstName} lastName={profile.lastName} email={profile.email} age={profile.age} descrip={profile.description} genderIdentity={profile.genderIdentity} genderPreferences={profile.genderPreferences}
                                                     matched={true}></CompletedMatchesProfile>
                                             </div>
@@ -521,7 +520,7 @@ class ViewPastMatches extends React.Component {
                                     {
                                         this.state.pendingMatches.map((profile, i) =>
                                             <div className="row center-row match-container" key={"row0pending" + profile.userId}>
-                                                <PendingMatchesProfile key={profile.userId} userId={profile.userId} imgsrc={this.state.pendingPhotos[i]}
+                                                <PendingMatchesProfile key={profile.userId} userId={profile.userId} imgsrc={this.state.pendingPhotos[i].imgsrc}
                                                     firstName={profile.firstName} lastName={profile.lastName} email={profile.email} age={profile.age} descrip={profile.description} genderIdentity={profile.genderIdentity} genderPreferences={profile.genderPreferences}
                                                     matched={false} approveMatch={() => this.addMatchFromButton(profile.userId)} rejectMatch={() => this.rejectMatch(profile.userId)} ></PendingMatchesProfile>
                                             </div>

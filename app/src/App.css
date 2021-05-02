@@ -114,8 +114,8 @@ height: 60vh;
   color: rgb(163, 163, 163);
 }
 .scroll-box {
-  overflow: auto;
   min-width: fit-content;
+  width:100%
 }
 .img-parent {
   max-width: 300px;
