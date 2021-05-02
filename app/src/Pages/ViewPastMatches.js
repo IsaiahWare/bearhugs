@@ -105,7 +105,7 @@ class ViewPastMatches extends React.Component {
                 }
 
             }).catch((error) => {
-                let tempPhotoNumber = this.state.doneLoadingCurrent + 1;
+                let tempPhotoNumber = this.state.doneLoadingPending + 1;
                 console.error(error)
                 console.log("Reutnr defualt")
                 this.setState(prevState => ({
@@ -552,7 +552,56 @@ class ViewPastMatches extends React.Component {
 
             );
         } else {
-            return null;
+            return (
+                <div className="page">
+                <BearHugsNavbar></BearHugsNavbar>
+                <Tabs
+                    id="match-tabs"
+                    activeKey={this.state.key}
+                    onSelect={key => this.setState({ key })}
+                >
+                    <Tab eventKey="currentMatches" title="Current Matches">
+                        <div className="row center-row">
+                            <h2>Completed Matches</h2>
+                        </div>
+                        <div className="row center-row">
+                            <div className="col center-col">
+                            
+                            </div>
+                        </div>
+                    </Tab>
+                    <Tab eventKey="pendingMatches" title="Pending Matches">
+                        <div className="row center-row">
+                            <h2>Pending Matches</h2>
+                        </div>
+                        <div className="row center-row">
+                            <div className="col center-col">
+                             
+                            </div>
+                        </div>
+                    </Tab>
+                    {/* <Tab eventKey="wingmanMatches" title="Wingman Matches Matches">
+                    <div className="row center-row">
+                        <h2>Pending Matches</h2>
+                    </div>
+                    <div className="row center-row">
+                        <div className="col center-col">
+                            {
+                                this.state.wingmanMatches.map((profile) =>
+                                    <div className="row center-row match-container" key={"row0wingman" + profile.userId}>
+                                        <PendingMatchesProfile key={profile.userId} userId={profile.userId} imgsrc="mail-order-wife.png"
+                                            firstName={profile.firstName} lastName={profile.lastName} email={profile.email} age={profile.age} descrip={profile.description} genderIdentity={profile.genderIdentity} genderPreferences={profile.genderPreferences}
+                                            matched={false} approveMatch={() => this.addMatchFromButton(profile.userId)} rejectMatch={() => this.rejectWingmanMatch(profile.userId)} ></PendingMatchesProfile>
+                                    </div>
+                                )
+                            }
+                        </div>
+                    </div>
+                </Tab> */}
+                </Tabs>
+                </div>
+
+            );
         }
     }
 }
