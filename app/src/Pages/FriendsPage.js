@@ -265,6 +265,7 @@ class FriendsPage extends React.Component {
             .then(responseData => {
                 console.log(responseData)
                 if (JSON.stringify(responseData.error) === '{}') {
+
                     this.setState({
                         pendingFriendsRequest: responseData.results,
                         doneLoadingPending: 0,
@@ -457,6 +458,8 @@ class FriendsPage extends React.Component {
             .then(res => res.json())
             .then(responseData => {
                 if (JSON.stringify(responseData.error) === '{}') {
+                console.log("the boy from reject friend")
+                console.log(responseData)
                 this.getPendingFriends();
            
                 //     let temp = this.state.pendingFriendsRequest
