@@ -515,16 +515,24 @@ class FriendsPage extends React.Component {
         console.log("number of matches for current and completed " + this.state.numCurrent + "loading " + this.state.doneLoadingCurrent)
         console.log("number of matches for pending " + this.state.numPending + "loading " + this.state.doneLoadingPending)
         if (this.state.numPending == this.state.doneLoadingPending && this.state.numCurrent == this.state.doneLoadingCurrent) {
-
             return (
                 <div className="page">
                     <BearHugsNavbar></BearHugsNavbar>
                     <Tabs
                         id="friend-tabs"
                         activeKey={this.state.key}
-                        onSelect={key => this.setState({ key })}
+                        onSelect={(key  => {
+                        if (key=="currentFriends") {
+                            this.getCurrentFriends();
+                        }
+                        else {
+                            this.getPendingFriends();
+                        }
+                        
+                        this.setState({ key })
+                        })}
                     >
-                        <Tab eventKey="currentFriends" title="Current Friends" onClick={this.getCurrentFriends}>
+                        <Tab eventKey="currentFriends" title="Current Friends">
                             <div className="friendsContainer">
                                 <div className="row center-row"><h1 className="pageTitle">Friends</h1></div>
                                 <div>{this.state.feedback}</div>
@@ -550,7 +558,7 @@ class FriendsPage extends React.Component {
                                 </div>
                             </div>
                         </Tab>
-                        <Tab eventKey="pendingFriends" title="Pending Friends" onClick={this.getPendingFriends}>
+                        <Tab eventKey="pendingFriends" title="Pending Friends">
                             <div className="friendsContainer">
                                 <div className="row center-row">
                                     <h2 className="pageTitle">Pending Friend Requests</h2>
