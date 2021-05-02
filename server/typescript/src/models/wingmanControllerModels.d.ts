@@ -14,13 +14,11 @@ export interface WingmanMatchesRequest {
 }
 
 export interface WingmanUnmatchRequest {
-    userId1: number;
-    userId2: number;
+   requestId:number
 }
 
 export interface WingmanRejectRequest {
-    requesterId: number;
-    requesteeId: number;
+    requestId:number
 }
 
 export interface WingmanRejectedMatchesRequest {

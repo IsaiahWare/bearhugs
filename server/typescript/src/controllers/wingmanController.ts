@@ -68,8 +68,8 @@ router.post("/send", (req: Request, res: Response) => {
                                 };
                                 res.json(wingmanResponse);
                             } else {
-                                const queryStatement6: string = "DELETE FROM pendingWingman WHERE wingmanId = ? AND requesterId = ? AND requesteeId = ?";
-                                const queryArgs6 = [req.body.wingmanId, req.body.requesterId, req.body.requesteeId];
+                                const queryStatement6: string = "DELETE FROM pendingWingman WHERE requestId = ?";
+                                const queryArgs6 = [req.body.requestId];
                                 db.query(queryStatement6, queryArgs6, (queryError6: MysqlError | null, queryResults6: any ) => {
                                     if (queryError6) {
                                         wingmanResponse.error =  {
@@ -128,7 +128,7 @@ router.post("/requests", (req: Request, res: Response) => {
         return;
     }
 
-    const queryStatement = "SELECT pendingWingman.wingmanId, users.userId, users.email, users.firstName, users.lastName, users.age, users.description, users.genderIdentity, users.genderPreferences FROM users INNER JOIN pendingWingman ON pendingWingman.requesterId = users.userId WHERE pendingWingman.requesteeId = ?"; 
+    const queryStatement = "SELECT pendingWingman.requestId, pendingWingman.wingmanId, users.userId, users.email, users.firstName, users.lastName, users.age, users.description, users.genderIdentity, users.genderPreferences FROM users INNER JOIN pendingWingman ON pendingWingman.requesterId = users.userId WHERE pendingWingman.requesteeId = ?"; 
     db.query(queryStatement, req.body.userId, (queryError: MysqlError | null, queryResults: any ) => {
         if (queryError) {
             wingmanResponse.error =  {
@@ -155,7 +155,7 @@ router.post("/matches", (req: Request, res: Response) => {
         return;
     }
 
-    const queryStatement = "SELECT completedWingman.wingmanId, users.userId, users.email, users.firstName, users.lastName, users.age, users.description, users.genderIdentity, users.genderPreferences FROM users INNER JOIN completedWingman ON completedWingman.requesteeId = users.userId WHERE completedWingman.requesterId = ?"; 
+    const queryStatement = "SELECT completedWingman.wingmanId, completedWingman.requestId, users.userId, users.email, users.firstName, users.lastName, users.age, users.description, users.genderIdentity, users.genderPreferences FROM users INNER JOIN completedWingman ON completedWingman.requesteeId = users.userId WHERE completedWingman.requesterId = ?"; 
     db.query(queryStatement, req.body.userId, (queryError: MysqlError | null, queryResults: any ) => {
         if (queryError) {
             wingmanResponse.error =  {
@@ -182,8 +182,8 @@ router.post("/unmatch", (req: Request, res: Response) => {
         return;
     }
 
-    const queryStatement = "DELETE FROM completedWingman WHERE (wingmanId = ? AND requesterId = ? AND requesteeId = ?) or (wingmanId = ? AND requesterId = ? AND requesteeId = ?)";
-    const queryArgs = [req.body.wingmanId, req.body.requesterId, req.body.requesteeId, req.body.wingmanId, req.body.requesteeId, req.body.requesterId];
+    const queryStatement = "DELETE FROM completedWingman WHERE requestId = ?)";
+    const queryArgs = [req.body.requestId];
     db.query(queryStatement, queryArgs, (queryError: MysqlError | null, queryResults: any ) => {
         if (queryError) {
             wingmanResponse.error =  {
@@ -213,8 +213,8 @@ router.post("/reject", (req: Request, res: Response) => {
         return;
     }
 
-    const queryStatement = "DELETE FROM pendingWingman WHERE wingmanId = ? AND requesterId = ? AND requesteeId = ?";
-    const queryArgs = [req.body.wingmanId, req.body.requesterId, req.body.requesteeId];
+    const queryStatement = "DELETE FROM pendingWingman WHERE requestId = ?";
+    const queryArgs = [req.body.requestId];
     db.query(queryStatement, queryArgs, (queryError: MysqlError | null, queryResults: any ) => {
         if (queryError) {
             wingmanResponse.error =  {
@@ -222,8 +222,8 @@ router.post("/reject", (req: Request, res: Response) => {
             };
             res.json(wingmanResponse);
         } else {
-            const queryStatement2 = "DELETE FROM pendingWingman WHERE wingmanId = ? AND requesterId = ? AND requesteeId = ?";
-            const queryArgs2 = [req.body.wingmanId, req.body.requesterId, req.body.requesteeId];
+            const queryStatement2 = "DELETE FROM pendingWingman WHERE requestId = ?";
+            const queryArgs2 = [req.body.requestId];
             db.query(queryStatement2, queryArgs2, (queryError2: MysqlError | null, queryResults2: any ) => {
                 if (queryError2) {
                     wingmanResponse.error =  {

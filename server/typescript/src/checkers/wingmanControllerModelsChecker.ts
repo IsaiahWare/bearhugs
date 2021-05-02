@@ -20,11 +20,11 @@ export function isWingmanMatchesRequest(obj: any): obj is WingmanMatchesRequest 
 }
 
 export function isWingmanUnmatchRequest(obj: any): obj is WingmanUnmatchRequest {
-  return obj.userId1 !== undefined && obj.userId2 !== undefined && Object.keys(obj).length == 2;
+  return obj.requestId !== undefined && Object.keys(obj).length == 1;
 }
 
 export function isWingmanRejectRequest(obj: any): obj is WingmanRejectRequest {
-  return obj.requesterId !== undefined && obj.requesteeId !== undefined && Object.keys(obj).length == 2;
+  return obj.requestId !== undefined && Object.keys(obj).length == 1;
 }
 
 export function isWingmanRejectedMatchesRequest(obj: any): obj is WingmanRejectedMatchesRequest {
