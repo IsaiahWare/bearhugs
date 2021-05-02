@@ -310,6 +310,7 @@ class ViewProfilePage extends React.Component {
         }
         console.log("done loading :" + this.state.doneLoading)
         console.log("num profiles " + this.state.numProfiles)
+
         if (this.state.doneLoading==this.state.numProfiles) {
             console.log("In render with done loading "+ this.state.doneLoading+ " and num profiles" + this.state.numProfiles)
             return (
