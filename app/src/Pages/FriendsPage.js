@@ -448,8 +448,8 @@ class FriendsPage extends React.Component {
     rejectFriend(id) {
         let url = baseDomain + '/friend/reject'
         let newRequest = {
-            requesterId: UserToken.getUserId(),
-            requesteeId: id
+            requesterId: id,
+            requesteeId: UserToken.getUserId()
         }
         fetch(url, {
             method: 'POST',
@@ -462,9 +462,8 @@ class FriendsPage extends React.Component {
             .then(responseData => {
                 if (JSON.stringify(responseData.error) === '{}') {
                 console.log("the boy from reject friend")
-                console.log(responseData)
                 this.getPendingFriends();
-           
+                // console.log(responseData)
                 //     let temp = this.state.pendingFriendsRequest
                 //     let tempPhotos = this.state.pendingPhotos
                 //     let tempNum = this.state.numPending - 1
@@ -594,7 +593,57 @@ class FriendsPage extends React.Component {
 
             );
         } else {
-            return null;
+            return (
+                <div className="page">
+                <BearHugsNavbar></BearHugsNavbar>
+                <Tabs
+                    id="friend-tabs"
+                    activeKey={this.state.key}
+                    onSelect={(key => {
+                        this.setState({ key })
+                        this.setState({
+                            feedback:""
+                        })
+                    })}
+                >
+                    <Tab eventKey="currentFriends" title="Current Friends">
+                        <div className="friendsContainer">
+                            <div className="row center-row">
+                                <h1 className="pageTitle">Friends</h1>
+                            </div>
+                            <div>{this.state.feedback}</div>
+                            <div className="input-row center-row">
+                                <Form onSubmit={this.handleSubmit} className="input">
+                                    <Form.Group>
+                                        <Form.Label>Search for User</Form.Label>
+                                        <Form.Control type="text" name="addFriendUser" value={this.state.addFriendUser} onChange={this.handleInputChange} placeholder="Add friend by WUSTL email" />
+                                    </Form.Group>
+                                    <Button type="submit" variant="danger" value="Search">Add Friend</Button>
+                                </Form>
+                            </div>
+                            <div>
+                            </div>
+                        </div>
+                    </Tab>
+                    <Tab eventKey="pendingFriends" title="Pending Friends">
+                        <div className="friendsContainer">
+                            <div className="row center-row">
+                                <h1 className="pageTitle">Pending Friend Requests</h1>
+                            </div>
+                            <div>{this.state.feedback}</div>
+                            <div>
+                            </div>
+                        </div>
+
+                    </Tab>
+                </Tabs>
+                </div>
+
+
+            );
+
+                
+            
         }
     }
 }
