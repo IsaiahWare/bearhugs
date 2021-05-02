@@ -187,7 +187,6 @@ class ViewProfilePage extends React.Component {
                 let tempPhotos = photoArray.filter((obj) => {
                     return obj.id != userId
                     })
-                this.notifyRequesteeofMatch(userId)
                 this.setState({
                     profiles: tempResult,
                     numProfiles: tempProfiles,
