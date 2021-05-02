@@ -511,6 +511,7 @@ class ViewPastMatches extends React.Component {
         }
         console.log("number of matches for current and completed " + this.state.numCurrent + "loading "+ this.state.doneLoadingCurrent)
         console.log("number of matches for pending " + this.state.numPending + "loading "+ this.state.doneLoadingPending)
+        console.log("number of matches for wignman" + this.state.numWingman + "loading "+ this.state.doneLoadingWingman)
         if (this.state.numCurrent == this.state.doneLoadingCurrent && this.state.numPending == this.state.doneLoadingPending && this.state.numWingman == this.state.doneLoadingWingman) {
             return (
                 <div className="page">
@@ -616,24 +617,15 @@ class ViewPastMatches extends React.Component {
                             </div>
                         </div>
                     </Tab>
-                    {/* <Tab eventKey="wingmanMatches" title="Wingman Matches Matches">
-                    <div className="row center-row">
-                        <h2>Pending Matches</h2>
-                    </div>
-                    <div className="row center-row">
-                        <div className="col center-col">
-                            {
-                                this.state.wingmanMatches.map((profile) =>
-                                    <div className="row center-row match-container" key={"row0wingman" + profile.userId}>
-                                        <PendingMatchesProfile key={profile.userId} userId={profile.userId} imgsrc="mail-order-wife.png"
-                                            firstName={profile.firstName} lastName={profile.lastName} email={profile.email} age={profile.age} descrip={profile.description} genderIdentity={profile.genderIdentity} genderPreferences={profile.genderPreferences}
-                                            matched={false} approveMatch={() => this.addMatchFromButton(profile.userId)} rejectMatch={() => this.rejectWingmanMatch(profile.userId)} ></PendingMatchesProfile>
-                                    </div>
-                                )
-                            }
+                    <Tab eventKey="wingmanMatches" title="Wingman Matches">
+                        <div className="row center-row">
+                            <h2>Wingman Matches</h2>
                         </div>
-                    </div>
-                </Tab> */}
+                        <div className="row center-row">
+                            <div className="col center-col">
+                            </div>
+                        </div>
+                    </Tab>
                 </Tabs>
                 </div>
 
