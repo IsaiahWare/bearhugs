@@ -51,9 +51,7 @@ class ViewPastMatches extends React.Component {
     componentDidMount() {
         this.checkUserLogIn();
         this.getCurrentMatches();
-        this.getPendingMatches()
-        console.log("Current photos")
-        console.log(this.state.currentPhotos);
+        this.getPendingMatches();
     }
 
     setKey(k) {
@@ -429,37 +427,37 @@ class ViewPastMatches extends React.Component {
 
     }
 
-    checkUserEmail() {
-        let url = baseDomain + '/user/findbyemail'
-        let newRequest = {
-            email: this.state.addFriendUser
-        }
-        console.log(newRequest)
-        fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(newRequest)
-        })
-            .then(res => res.json())
-            .then(responseData => {
-                if (JSON.stringify(responseData.error) === '{}') {
-                    console.log(responseData)
-                    this.setState({
-                        feedback: "Friend found!"
-                    })
-                    this.addFriendByEmail(responseData.results[0].userId, responseData.results[0])
-                }
-                else {
-                    console.log(responseData)
-                    this.setState({
-                        feedback: "Friend could not be found :(. Please try a different email"
-                    })
-                }
-            })
+    // checkUserEmail() {
+    //     let url = baseDomain + '/user/findbyemail'
+    //     let newRequest = {
+    //         email: this.state.addFriendUser
+    //     }
+    //     console.log(newRequest)
+    //     fetch(url, {
+    //         method: 'POST',
+    //         headers: {
+    //             'Content-Type': 'application/json'
+    //         },
+    //         body: JSON.stringify(newRequest)
+    //     })
+    //         .then(res => res.json())
+    //         .then(responseData => {
+    //             if (JSON.stringify(responseData.error) === '{}') {
+    //                 console.log(responseData)
+    //                 this.setState({
+    //                     feedback: "Friend found!"
+    //                 })
+    //                 this.addFriendByEmail(responseData.results[0].userId, responseData.results[0])
+    //             }
+    //             else {
+    //                 console.log(responseData)
+    //                 this.setState({
+    //                     feedback: "Friend could not be found :(. Please try a different email"
+    //                 })
+    //             }
+    //         })
 
-    }
+    // }
 
     /*
     Some users in table:
@@ -476,6 +474,8 @@ class ViewPastMatches extends React.Component {
                 to="/"
             />
         }
+        console.log("number of matches for current and completed " + this.state.numCurrent + "loading "+ this.state.doneLoadingCurrent)
+        console.log("number of matches for pending " + this.state.numPending + "loading "+ this.state.doneLoadingPending)
         if (this.state.numCurrent == this.state.doneLoadingCurrent && this.state.numPending == this.state.doneLoadingPending) {
             return (
                 <div className="page">
@@ -485,7 +485,7 @@ class ViewPastMatches extends React.Component {
                         activeKey={this.state.key}
                         onSelect={key => this.setState({ key })}
                     >
-                        <Tab eventKey="currentMatches" title="Current Matches" onClick={this.getCurrentMatches}>
+                        <Tab eventKey="currentMatches" title="Current Matches">
                             <div className="row center-row">
                                 <h2>Completed Matches</h2>
                             </div>
@@ -503,7 +503,7 @@ class ViewPastMatches extends React.Component {
                                 </div>
                             </div>
                         </Tab>
-                        <Tab eventKey="pendingMatches" title="Pending Matches" onClick={this.getPendingMatches}>
+                        <Tab eventKey="pendingMatches" title="Pending Matches">
                             <div className="row center-row">
                                 <h2>Pending Matches</h2>
                             </div>
