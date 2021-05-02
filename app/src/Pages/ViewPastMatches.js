@@ -53,6 +53,7 @@ class ViewPastMatches extends React.Component {
         this.checkUserLogIn();
         this.getCurrentMatches();
         this.getPendingMatches();
+        this.getWingmanMatches();
     }
 
     setKey(k) {
@@ -340,7 +341,7 @@ class ViewPastMatches extends React.Component {
                 if (JSON.stringify(responseData.error) === '{}') {
                     this.setState({
                         wingmanMatches: responseData.results,
-                        numWingman: wingmanMatches.responseData.length,
+                        numWingman: responseData.length,
                         wingmanPhotos:[],
                         doneLoadingWingman: 0
                     }, () => {
@@ -597,7 +598,7 @@ class ViewPastMatches extends React.Component {
                         </Tab>
                         <Tab eventKey="wingmanMatches" title="Wingman Matches Matches">
                         <div className="row center-row">
-                            <h2>Pending Matches</h2>
+                            <h2>Wingman Matches</h2>
                         </div>
                         <div className="row center-row">
                             <div className="col center-col">
