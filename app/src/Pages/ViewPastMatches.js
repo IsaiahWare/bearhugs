@@ -228,7 +228,7 @@ class ViewPastMatches extends React.Component {
                     })
                     this.setState({
                         pendingMatches: tempResult,
-                        pendingPhotos: photoArray,
+                        pendingPhotos: tempPhotoResult,
                         feedback: "Match removed!"
                     })
 
@@ -543,6 +543,8 @@ class ViewPastMatches extends React.Component {
                 </div >
 
             );
+        } else {
+            return null;
         }
     }
 }

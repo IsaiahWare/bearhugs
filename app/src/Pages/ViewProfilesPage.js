@@ -75,8 +75,7 @@ class ViewProfilePage extends React.Component {
         })
             .then(res => res.json())
             .then(responseData => {
-                console.log("pending friends resposne data")
-                console.log(responseData)
+
                 if (JSON.stringify(responseData.error) === '{}') {
                     this.setState({
                         unsuitableMatches: this.state.unsuitableMatches.concat(responseData.results)
@@ -118,8 +117,6 @@ class ViewProfilePage extends React.Component {
     getPendingAndCurrent() {
         this.getCurrentMatches();
         this.getPendingMatches();
-
-
 
     }
 
@@ -287,30 +284,43 @@ class ViewProfilePage extends React.Component {
 
     }
 
-
-    getCurrentPhotos() {
-   
-    }
     onClickReject(userId) {
-        let temp = this.state.profiles
-        let tempProfiles = this.state.numProfiles-1
-        let photoArray=this.state.currentPhotos
-        let tempResult = temp.filter((obj) => {
-		console.log(obj)
-		console.log(userId)
-        if (obj.userId === userId) {
+        let url = baseDomain + '/match/reject'
+        let newRequest = {
+            requesterId: UserToken.getUserId(),
+            requesteeId: userId
         }
-            return obj.userId !== userId
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newRequest)
         })
-        let tempPhotos = photoArray.filter((obj) => {
-            console.log(obj)
-            return obj.id != userId
-            })
-        this.setState({
-            profiles: tempResult,
-            numProfiles:tempProfiles,
-            currentPhotos: tempPhotos
-        })
+        .then(res => res.json())
+        .then(responseData => {
+              if (JSON.stringify(responseData.error) === '{}') {
+                  console.log(responseData)
+                let temp = this.state.profiles
+                let photoArray=this.state.currentPhotos
+                let tempProfiles = this.state.numProfiles-1
+                let tempResult = temp.filter((obj) => {
+                console.log(obj)
+                return obj.userId != userId
+                })
+                let tempPhotos = photoArray.filter((obj) => {
+                    console.log(obj)
+                    return obj.id != userId
+                    })
+                this.setState({
+                    profiles: tempResult,
+                    numProfiles: tempProfiles,
+                    currentPhotos: tempPhotos
+        
+                })
+           }
+       })
+  
     }
     
     render() {

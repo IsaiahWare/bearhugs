@@ -21,10 +21,10 @@ class PendingFriend extends React.Component {
                     <p id="listedUser-age">{this.props.age}</p>
                 </div>
                 <div className="remove">
-                    <button class="removeFriend nostyle" onClick={this.props.rejectFriend}><FontAwesomeIcon icon={faTimes}></FontAwesomeIcon></button>
+                    <button className="removeFriend nostyle" onClick={this.props.rejectFriend}><FontAwesomeIcon icon={faTimes}></FontAwesomeIcon></button>
                 </div>
                 <div className="remove">
-                    <button class="removeFriend nostyle" onClick={this.props.approveFriend}><FontAwesomeIcon icon={faCheck}></FontAwesomeIcon></button>
+                    <button className="removeFriend nostyle" onClick={this.props.approveFriend}><FontAwesomeIcon icon={faCheck}></FontAwesomeIcon></button>
                 </div>
 
 
