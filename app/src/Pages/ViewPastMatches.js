@@ -307,7 +307,8 @@ class ViewPastMatches extends React.Component {
                 console.log(responseData)
                 if (JSON.stringify(responseData.error) === '{}') {
                     this.setState({
-                        currentMatches: responseData.results
+                        currentMatches: responseData.results,
+                        numCurrent: responseData.results.length
 
                     }, () => {
                         this.getCurrentPhotos();
@@ -336,7 +337,8 @@ class ViewPastMatches extends React.Component {
                 console.log(responseData)
                 if (JSON.stringify(responseData.error) === '{}') {
                     this.setState({
-                        pendingMatches: responseData.results
+                        pendingMatches: responseData.results,
+                        numPending: responseData.results.length
                     }, () => {
                         this.getPendingPhotos();
                     });
