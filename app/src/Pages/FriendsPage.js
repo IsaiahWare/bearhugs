@@ -456,8 +456,9 @@ class FriendsPage extends React.Component {
         })
             .then(res => res.json())
             .then(responseData => {
+                if (JSON.stringify(responseData.error) === '{}') {
                 this.getPendingFriends();
-                // if (JSON.stringify(responseData.error) === '{}') {
+           
                 //     let temp = this.state.pendingFriendsRequest
                 //     let tempPhotos = this.state.pendingPhotos
                 //     let tempNum = this.state.numPending - 1
