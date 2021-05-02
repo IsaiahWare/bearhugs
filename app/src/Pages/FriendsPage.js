@@ -474,7 +474,6 @@ class FriendsPage extends React.Component {
                         doneLoadingPending: tempDone,
                         feedback: "Friend request rejected"
                     })
-                    this.getPendingPhotos()
                 }
                 else {
                     this.setState({
