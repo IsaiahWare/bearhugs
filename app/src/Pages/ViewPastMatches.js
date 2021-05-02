@@ -307,6 +307,8 @@ class ViewPastMatches extends React.Component {
                 if (JSON.stringify(responseData.error) === '{}') {
                     this.setState({
                         currentMatches: responseData.results,
+                        currentPhotos:[],
+                        doneLoadingCurrent:0,
                         numCurrent: responseData.results.length
 
                     }, () => {
@@ -337,6 +339,8 @@ class ViewPastMatches extends React.Component {
                 if (JSON.stringify(responseData.error) === '{}') {
                     this.setState({
                         pendingMatches: responseData.results,
+                        pendingPhotos: [],
+                        doneLoadingPending: 0,
                         numPending: responseData.results.length
                     }, () => {
                         this.getPendingPhotos();
@@ -397,10 +401,9 @@ class ViewPastMatches extends React.Component {
                     this.setState({
                         feedback: "Match created",
                     })
-                    this.getCurrentMatches()
                     this.filterPendingAfterAdd(id)
+                    this.getCurrentMatches()
                     this.notifyRequesteeofMatch(id)
-
                 }
                 else {
                     console.log(responseData)
