@@ -40,6 +40,12 @@ class NotificationsPage extends React.Component {
             .then(responseData => {
 		    console.log(responseData)
                 if (JSON.stringify(responseData.error) === '{}') {
+                    for (let i =0; i < responseData.results.length; ++i) {
+                        let date = responseData.results[i].notificationDate
+                        let dateObject = new Date(date)
+                        let dateString = dateObject.toDateString();
+                        responseData.results[i].notificationDate = dateString
+                    }
                     this.setState({
                        notifications: responseData.results.reverse()
                     })

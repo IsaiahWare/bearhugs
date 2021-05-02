@@ -27,10 +27,14 @@ class ViewPastMatches extends React.Component {
             feedback: "",
             pendingMatches: [],
             currentMatches: [],
-            wingmanMatches:[],
+            wingmanMatches: [],
             pendingPhotos: [],
-            currentPhotos:[],
-            wingmanPhotos:[],
+            currentPhotos: [],
+            wingmanPhotos: [],
+            doneLoadingPending: 0,
+            doneLoadingCurrent: 0,
+            numPending: -1,
+            numCurrent: -1,
             key: "currentMatches"
 
         }
@@ -69,7 +73,7 @@ class ViewPastMatches extends React.Component {
 
     getPhotoForPendingUser(id) {
         console.log("get photo for user " + id)
-        let url = baseDomain + '/photo/all'
+        let url = '../../../server/php/photoGetter.php'
         let newRequest = {
             "userId": id,
         }
@@ -81,41 +85,43 @@ class ViewPastMatches extends React.Component {
             body: JSON.stringify(newRequest)
 
         })
-        .then(res => res.json())
-        .then(responseData => {
-            console.log(JSON.stringify(responseData))
+            .then(photos => photos.json())
+            .then(photos => {
+                console.log("current photo response : ")
+                console.log(photos)
+                let tempPhotoNumber = this.state.doneLoadingPending + 1;
                 // TODO: handle case where login is invalid
-                if (JSON.stringify(responseData.error) === '{}') {
-                    console.log(responseData.results)
-                    if (responseData.results.length!=0) {
-                        console.log("return actual photo")
-                            this.setState(prevState => ({
-                                pendingPhotos: [...prevState.currentPhotos, responseData.results[0]]
-                            }))
-                    
-                    }
-                    else {
-                        console.log("Reutnr defualt")
-                        this.setState(prevState => ({
-                            pendingPhotos: [...prevState.currentPhotos, "mail-order-wife.png"]
-                        }))
-                    }
+                if (photos.length != 0) {
+                    console.log("return actual photo")
+                    this.setState(prevState => ({
+                        pendingPhotos: [...prevState.pendingPhotos, { id: id, imgsrc: photos[0] }],
+                        doneLoadingPending: tempPhotoNumber
+                    }))
 
                 }
                 else {
-                    console.log(responseData.error)
+                    console.log("Reutnr defualt")
                     this.setState(prevState => ({
-                        pendingPhotos: [...prevState.currentPhotos, "mail-order-wife.png"]
+                        pendingPhotos: [...prevState.pendingPhotos, { id: id, imgsrc: "mail-order-wife.png" }],
+                        doneLoadingPending: tempPhotoNumber
                     }))
                 }
 
+            }).catch((error) => {
+                let tempPhotoNumber = this.state.doneLoadingCurrent + 1;
+                console.error(error)
+                console.log("Reutnr defualt")
+                this.setState(prevState => ({
+                    pendingPhotos: [...prevState.pendingPhotos, { id: id, imgsrc: "mail-order-wife.png" }],
+                    doneLoadingPending: tempPhotoNumber
+                }))
             })
 
     }
 
     getPhotoForCurrentUser(id) {
         console.log("get photo for user " + id)
-        let url = baseDomain + '/photo/all'
+        let url = '../../../server/php/photoGetter.php'
         let newRequest = {
             "userId": id,
         }
@@ -127,43 +133,44 @@ class ViewPastMatches extends React.Component {
             body: JSON.stringify(newRequest)
 
         })
-        .then(res => res.json())
-        .then(responseData => {
-            console.log(JSON.stringify(responseData))
+            .then(photos => photos.json())
+            .then(photos => {
+                console.log("current photo response : ")
+                console.log(photos)
+                let tempPhotoNumber = this.state.doneLoadingCurrent + 1;
                 // TODO: handle case where login is invalid
-                if (JSON.stringify(responseData.error) === '{}') {
-                    console.log(responseData.results)
-                    if (responseData.results.length!=0) {
-                        console.log("return actual photo")
-                            this.setState(prevState => ({
-                                currentPhotos: [...prevState.currentPhotos, responseData.results[0]]
-                            }))
-                    
-                    }
-                    else {
-                        console.log("Reutnr defualt")
-                        this.setState(prevState => ({
-                            currentPhotos: [...prevState.currentPhotos, "mail-order-wife.png"]
-                        }))
-                    }
+                if (photos.length != 0) {
+                    console.log("return actual photo")
+                    this.setState(prevState => ({
+                        currentPhotos: [...prevState.currentPhotos, { id: id, imgsrc: photos[0] }],
+                        doneLoadingCurrent: tempPhotoNumber
+                    }))
 
                 }
                 else {
-                    console.log(responseData.error)
+                    console.log("Reutnr defualt")
                     this.setState(prevState => ({
-                        currentPhotos: [...prevState.currentPhotos, "mail-order-wife.png"]
+                        currentPhotos: [...prevState.currentPhotos, { id: id, imgsrc: "mail-order-wife.png" }],
+                        doneLoadingCurrent: tempPhotoNumber
                     }))
                 }
 
+            }).catch((error) => {
+                let tempPhotoNumber = this.state.doneLoadingCurrent + 1;
+                console.error(error)
+                console.log("Reutnr defualt")
+                this.setState(prevState => ({
+                    currentPhotos: [...prevState.currentPhotos, { id: id, imgsrc: "mail-order-wife.png" }],
+                    doneLoadingCurrent: tempPhotoNumber
+                }))
             })
 
     }
 
     getCurrentPhotos() {
-        let tempCurrent = []
-        for (let i=0; i < this.state.currentMatches.length; ++i) {
-           this.getPhotoForCurrentUser(this.state.currentMatches[i].userId);
-          
+        for (let i = 0; i < this.state.currentMatches.length; ++i) {
+            this.getPhotoForCurrentUser(this.state.currentMatches[i].userId);
+
         }
         // console.log("temp current")
         // console.log(tempCurrent)
@@ -172,9 +179,9 @@ class ViewPastMatches extends React.Component {
         // })
     }
     getPendingPhotos() {
-        for (let i=0; i < this.state.pendingMatches.length; ++i) {
-            let newelement = this.getPhotoForPendingUser(this.state.pendingMatches[i].userId);
-           
+        for (let i = 0; i < this.state.pendingMatches.length; ++i) {
+            this.getPhotoForPendingUser(this.state.pendingMatches[i].userId);
+
         }
         // for (let i=0; i < this.state.wingmanMatches.length; ++i) {
         //     let newelement = this.getPhotoForUser(this.state.wingmanMatches[i].userId);
@@ -206,14 +213,22 @@ class ViewPastMatches extends React.Component {
                 console.log(responseData)
                 if (JSON.stringify(responseData.error) === '{}') {
                     let temp = this.state.pendingMatches
+                    let photoArray = this.state.pendingPhotos
                     let tempResult = temp.filter((obj) => {
                         if (obj.userId === id) {
                             console.log("remove " + JSON.stringify(obj))
                         }
                         return obj.userId !== id
                     })
+                    let tempPhotoResult = photoArray.filter((obj) => {
+                        if (obj.id === id) {
+                            console.log("remove " + JSON.stringify(obj))
+                        }
+                        return obj.id !== id
+                    })
                     this.setState({
                         pendingMatches: tempResult,
+                        pendingPhotos: photoArray,
                         feedback: "Match removed!"
                     })
 
@@ -292,10 +307,10 @@ class ViewPastMatches extends React.Component {
                 if (JSON.stringify(responseData.error) === '{}') {
                     this.setState({
                         currentMatches: responseData.results
-                    
-                },() => {
-                    this.getCurrentPhotos();
-                });
+
+                    }, () => {
+                        this.getCurrentPhotos();
+                    });
                 }
             })
 
@@ -321,11 +336,11 @@ class ViewPastMatches extends React.Component {
                 if (JSON.stringify(responseData.error) === '{}') {
                     this.setState({
                         pendingMatches: responseData.results
-                    },() => {
-                        // this.getPendingPhotos();
+                    }, () => {
+                        this.getPendingPhotos();
                     });
-                      
-               
+
+
                 }
             })
 
@@ -334,15 +349,22 @@ class ViewPastMatches extends React.Component {
 
     filterPendingAfterAdd(id) {
         let temp = this.state.pendingMatches
+        let photoArray = this.state.pendingPhotos
         let tempResult = temp.filter((obj) => {
-            console.log(obj)
             if (obj.userId === id) {
                 console.log("remove " + JSON.stringify(obj))
             }
             return obj.userId !== id
         })
+        let tempPhotoResult = photoArray.filter((obj) => {
+            if (obj.id === id) {
+                console.log("remove " + JSON.stringify(obj))
+            }
+            return obj.id !== id
+        })
         this.setState({
             pendingMatches: tempResult,
+            pendingPhotos: tempPhotoResult
         })
     }
 
@@ -398,12 +420,12 @@ class ViewPastMatches extends React.Component {
             },
             body: JSON.stringify(newRequest)
         })
-        .then(res => res.json())
-        .then(responseData => {
-              if (JSON.stringify(responseData.error) === '{}') {
-    
-           }
-       })
+            .then(res => res.json())
+            .then(responseData => {
+                if (JSON.stringify(responseData.error) === '{}') {
+
+                }
+            })
 
     }
 
@@ -454,52 +476,52 @@ class ViewPastMatches extends React.Component {
                 to="/"
             />
         }
-
-        return (
-            <div className="page">
-                <BearHugsNavbar></BearHugsNavbar>
-                <Tabs
-                    id="match-tabs"
-                    activeKey={this.state.key}
-                    onSelect={key => this.setState({ key })}
-                >
-                    <Tab eventKey="currentMatches" title="Current Matches">
-                        <div className="row center-row">
-                            <h2>Completed Matches</h2>
-                        </div>
-                        <div className="row center-row">
-                            <div className="col center-col">
-                                {
-                                    this.state.currentMatches.map((profile, i) =>
-                                        <div className="row center-row match-container" key={"row0current" + profile.userId}>
-                                            <CompletedMatchesProfile key={profile.userId} userId={profile.userId} imgsrc= {this.state.currentPhotos[i]}
-                                                firstName={profile.firstName} lastName={profile.lastName} email={profile.email} age={profile.age} descrip={profile.description} genderIdentity={profile.genderIdentity} genderPreferences={profile.genderPreferences}
-                                                matched={true}></CompletedMatchesProfile>
-                                        </div>
-                                    )
-                                }
+        if (this.state.numCurrent == this.state.doneLoadingCurrent && this.state.numPending == this.state.doneLoadingPending) {
+            return (
+                <div className="page">
+                    <BearHugsNavbar></BearHugsNavbar>
+                    <Tabs
+                        id="match-tabs"
+                        activeKey={this.state.key}
+                        onSelect={key => this.setState({ key })}
+                    >
+                        <Tab eventKey="currentMatches" title="Current Matches" onClick={this.getCurrentMatches}>
+                            <div className="row center-row">
+                                <h2>Completed Matches</h2>
                             </div>
-                        </div>
-                    </Tab>
-                    <Tab eventKey="pendingMatches" title="Pending Matches">
-                        <div className="row center-row">
-                            <h2>Pending Matches</h2>
-                        </div>
-                        <div className="row center-row">
-                            <div className="col center-col">
-                                {
-                                    this.state.pendingMatches.map((profile, i) =>
-                                        <div className="row center-row match-container" key={"row0pending" + profile.userId}>
-                                            <PendingMatchesProfile key={profile.userId} userId={profile.userId} imgsrc= {this.state.pendingPhotos[i]}
-                                                firstName={profile.firstName} lastName={profile.lastName} email={profile.email} age={profile.age} descrip={profile.description} genderIdentity={profile.genderIdentity} genderPreferences={profile.genderPreferences}
-                                                matched={false} approveMatch={() => this.addMatchFromButton(profile.userId)} rejectMatch={() => this.rejectMatch(profile.userId)} ></PendingMatchesProfile>
-                                        </div>
-                                    )
-                                }
+                            <div className="row center-row">
+                                <div className="col center-col">
+                                    {
+                                        this.state.currentMatches.map((profile, i) =>
+                                            <div className="row center-row match-container" key={"row0current" + profile.userId}>
+                                                <CompletedMatchesProfile key={profile.userId} userId={profile.userId} imgsrc={this.state.currentPhotos[i]}
+                                                    firstName={profile.firstName} lastName={profile.lastName} email={profile.email} age={profile.age} descrip={profile.description} genderIdentity={profile.genderIdentity} genderPreferences={profile.genderPreferences}
+                                                    matched={true}></CompletedMatchesProfile>
+                                            </div>
+                                        )
+                                    }
+                                </div>
                             </div>
-                        </div>
-                    </Tab>
-                    {/* <Tab eventKey="wingmanMatches" title="Wingman Matches Matches">
+                        </Tab>
+                        <Tab eventKey="pendingMatches" title="Pending Matches" onClick={this.getPendingMatches}>
+                            <div className="row center-row">
+                                <h2>Pending Matches</h2>
+                            </div>
+                            <div className="row center-row">
+                                <div className="col center-col">
+                                    {
+                                        this.state.pendingMatches.map((profile, i) =>
+                                            <div className="row center-row match-container" key={"row0pending" + profile.userId}>
+                                                <PendingMatchesProfile key={profile.userId} userId={profile.userId} imgsrc={this.state.pendingPhotos[i]}
+                                                    firstName={profile.firstName} lastName={profile.lastName} email={profile.email} age={profile.age} descrip={profile.description} genderIdentity={profile.genderIdentity} genderPreferences={profile.genderPreferences}
+                                                    matched={false} approveMatch={() => this.addMatchFromButton(profile.userId)} rejectMatch={() => this.rejectMatch(profile.userId)} ></PendingMatchesProfile>
+                                            </div>
+                                        )
+                                    }
+                                </div>
+                            </div>
+                        </Tab>
+                        {/* <Tab eventKey="wingmanMatches" title="Wingman Matches Matches">
                         <div className="row center-row">
                             <h2>Pending Matches</h2>
                         </div>
@@ -517,10 +539,11 @@ class ViewPastMatches extends React.Component {
                             </div>
                         </div>
                     </Tab> */}
-                </Tabs>
-            </div >
+                    </Tabs>
+                </div >
 
-        );
+            );
+        }
     }
 }
 
