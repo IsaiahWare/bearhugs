@@ -12,7 +12,8 @@ class MatchProfile extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            matched: this.props.matched
+            matched: this.props.matched,
+            interactedWith: false
         }
         
         this.handleOnSwipe = this.handleOnSwipe.bind(this);
@@ -22,13 +23,19 @@ class MatchProfile extends React.Component {
     handleOnSwipe = (swipeDirection) => {
         if (swipeDirection === direction.RIGHT) {
           // handle right swipe
-          this.setState({matched: true});
+          this.setState({
+            matched: true,
+            interactedWith:true
+        });
           this.props.approveMatch()
           return;
         }
     
         if (swipeDirection === direction.LEFT) {
             this.props.rejectMatch()
+            this.setState({
+                interactedWith:true
+            })
           // handle left swipe
           return;
         }
