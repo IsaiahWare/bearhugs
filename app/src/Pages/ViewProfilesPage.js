@@ -239,6 +239,7 @@ class ViewProfilePage extends React.Component {
 
         })
         .then(photos => photos.json())
+        console.log(JSON.stringify(photos))
         .then(photos=> {
            let tempPhotoNumber=this.state.doneLoading+1;
                 // TODO: handle case where login is invalid
