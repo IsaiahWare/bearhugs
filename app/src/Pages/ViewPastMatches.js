@@ -40,7 +40,6 @@ class ViewPastMatches extends React.Component {
         }
         this.getCurrentMatches = this.getCurrentMatches.bind(this)
         this.getPendingMatches = this.getPendingMatches.bind(this)
-        this.checkUserEmail = this.checkUserEmail.bind(this)
         this.getCurrentPhotos = this.getCurrentPhotos.bind(this);
         this.getPendingPhotos = this.getPendingPhotos.bind(this);
 
