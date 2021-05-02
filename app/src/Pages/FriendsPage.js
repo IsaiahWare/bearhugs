@@ -456,30 +456,31 @@ class FriendsPage extends React.Component {
         })
             .then(res => res.json())
             .then(responseData => {
-                if (JSON.stringify(responseData.error) === '{}') {
-                    let temp = this.state.pendingFriendsRequest
-                    let tempPhotos = this.state.pendingPhotos
-                    let tempNum = this.state.numPending - 1
-                    let tempDone = this.state.doneLoadingPending - 1
-                    this.setState({
-                        numPending: tempNum,
-                        doneLoadingPending: tempDone,
-                    }, 
-                    function() {
-                    let tempResult = temp.filter((obj) => {
-                        return obj.userId !== id
-                    })
-                    let tempPhotosResult = tempPhotos.filter((obj) => {
-                        return obj.id !== id
-                    })
-                    this.setState({
-                        pendingFriends: tempResult,
-                        pendingPhotos: tempPhotosResult,
-                        feedback: "Friend request rejected"
-                    })
-                    console.log("num pending in reject friend "+ this.numPending)
-                    console.log("num done in reject friend "+this.doneLoadingPending)
-                })
+                this.getPendingFriends();
+                // if (JSON.stringify(responseData.error) === '{}') {
+                //     let temp = this.state.pendingFriendsRequest
+                //     let tempPhotos = this.state.pendingPhotos
+                //     let tempNum = this.state.numPending - 1
+                //     let tempDone = this.state.doneLoadingPending - 1
+                //     this.setState({
+                //         numPending: tempNum,
+                //         doneLoadingPending: tempDone,
+                //     }, 
+                //     function() {
+                //     let tempResult = temp.filter((obj) => {
+                //         return obj.userId !== id
+                //     })
+                //     let tempPhotosResult = tempPhotos.filter((obj) => {
+                //         return obj.id !== id
+                //     })
+                //     this.setState({
+                //         pendingFriends: tempResult,
+                //         pendingPhotos: tempPhotosResult,
+                //         feedback: "Friend request rejected"
+                //     })
+                //     console.log("num pending in reject friend "+ this.numPending)
+                //     console.log("num done in reject friend "+this.doneLoadingPending)
+                // })
             }
             
                 else {
