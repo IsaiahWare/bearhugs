@@ -194,8 +194,8 @@ class ViewPastMatches extends React.Component {
         let url = baseDomain + '/match/reject'
         console.log("in reject match " + id)
         let newRequest = {
-            requesterId: id,
-            requesteeId: UserToken.getUserId()
+            requesterId: UserToken.getUserId(),
+            requesteeId: id
         }
         fetch(url, {
             method: 'POST',

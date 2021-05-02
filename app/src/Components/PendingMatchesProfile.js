@@ -31,7 +31,6 @@ class PendingMatchesProfile extends React.Component {
     
         if (swipeDirection === direction.LEFT) {
           // handle left swipe
-          alert("swipe left on user "+this.props.userId+" :(");
           this.props.rejectMatch();
           return;
         }
