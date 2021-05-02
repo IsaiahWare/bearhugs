@@ -232,8 +232,9 @@ class FriendsPage extends React.Component {
                 if (JSON.stringify(responseData.error) === '{}') {
                     this.setState({
                         currentFriends: responseData.results,
+                        numCurrent: responseData.results.length,
+                        doneLoadingCurrent: 0,
                         currentPhotos: [],
-                        numCurrent: responseData.results.length
                     }, () => {
                         if (responseData.results.length > 0) {
                             for (let i = 0; i < this.state.currentFriends.length; ++i) {
@@ -264,6 +265,7 @@ class FriendsPage extends React.Component {
                 if (JSON.stringify(responseData.error) === '{}') {
                     this.setState({
                         pendingFriendsRequest: responseData.results,
+                        doneLoadingPending:0,
                         pendingPhotos: [],
                         numPending: responseData.results.length
                     }, () => {
@@ -394,9 +396,9 @@ class FriendsPage extends React.Component {
                     this.setState({
                         feedback: "Friend request accepted!",
                     })
-                    this.getCurrentFriends()
                     this.filterPendingAfterAdd(id)
                     this.createAcceptedFriendRequestNotification(id)
+                    this.getCurrentFriends()
                 }
                 else {
                     this.setState({
