@@ -24,7 +24,6 @@ class ViewProfilePage extends React.Component {
         this.getProfiles = this.getProfiles.bind(this)
         this.getPendingAndCurrent = this.getPendingAndCurrent.bind(this)
         this.getRejectedMatches = this.getRejectedMatches.bind(this)
-        this.getCurrentPhotos = this.getCurrentPhotos.bind(this)
     }
 
    checkUserLogIn() {
