@@ -50,7 +50,7 @@ class MatchProfile extends React.Component {
     render() {
         let matchbar;
         {/* displays swiper if not matched yet, if the user is matched, displays a match banner*/}
-        if(!this.state.matched){
+        if(!this.state.matched && !this.state.interactedWith){
             matchbar =
             <div className="swiper">
                 <div className="swiperElement heartbroken">
@@ -68,11 +68,18 @@ class MatchProfile extends React.Component {
                 </div>
             </div>
         }
-        else{
+        else if (!this.state.matched && this.state.interactedWith){
+            matchbar =<div className = "itsAMatch">
+            <p><b>NO DICE...</b></p>
+            <h2>This match has been rejected.</h2>
+        </div>
+            
+        }
+        else if (this.state.matched){
             matchbar = 
             <div className = "itsAMatch">
                 <p><b>IT'S A MATCH! 😁</b></p>
-                <h2>Visit their profile to send them a message</h2>
+                <h2>A pending match request has been sent.</h2>
             </div>
         }
 

@@ -25,9 +25,7 @@ class PendingMatchesProfile extends React.Component {
           this.props.approveMatch();
 
           this.setState({matched: true});
-          if (!this.props.wingman) {
-            this.props.notifyRequesteeofMatch(this.props.userId);
-          }
+          this.props.notifyRequesteeofMatch(this.props.userId);
           //this.matchProfile();
           return;
         }

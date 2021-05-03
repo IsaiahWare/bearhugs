@@ -176,25 +176,25 @@ class ViewProfilePage extends React.Component {
         })
         .then(res => res.json())
         .then(responseData => {
-              if (JSON.stringify(responseData.error) === '{}') {
-                let temp = this.state.profiles
-                let photoArray=this.state.currentPhotos
-                let tempProfiles = this.state.numProfiles-1
-                let doneLoadingTemp = this.state.doneLoading-1
-                let tempResult = temp.filter((obj) => {
-                return obj.userId != userId
-                })
-                let tempPhotos = photoArray.filter((obj) => {
-                    return obj.id != userId
-                    })
-                this.setState({
-                    profiles: tempResult,
-                    numProfiles: tempProfiles,
-                    currentPhotos: tempPhotos,
-                    doneLoading: doneLoadingTemp
+        //       if (JSON.stringify(responseData.error) === '{}') {
+        //         let temp = this.state.profiles
+        //         let photoArray=this.state.currentPhotos
+        //         let tempProfiles = this.state.numProfiles-1
+        //         let doneLoadingTemp = this.state.doneLoading-1
+        //         let tempResult = temp.filter((obj) => {
+        //         return obj.userId != userId
+        //         })
+        //         let tempPhotos = photoArray.filter((obj) => {
+        //             return obj.id != userId
+        //             })
+        //         this.setState({
+        //             profiles: tempResult,
+        //             numProfiles: tempProfiles,
+        //             currentPhotos: tempPhotos,
+        //             doneLoading: doneLoadingTemp
         
-                })
-           }
+        //         })
+        //    }
        })
                   
     }
@@ -277,25 +277,25 @@ class ViewProfilePage extends React.Component {
         })
         .then(res => res.json())
         .then(responseData => {
-              if (JSON.stringify(responseData.error) === '{}') {
-                let temp = this.state.profiles
-                let photoArray=this.state.currentPhotos
-                let tempProfiles = this.state.numProfiles-1
-                let tempDoneLoading = this.state.doneLoading-1
-                let tempResult = temp.filter((obj) => {
-                return obj.userId != userId
-                })
-                let tempPhotos = photoArray.filter((obj) => {
-                    return obj.id != userId
-                    })
-                this.setState({
-                    profiles: tempResult,
-                    numProfiles: tempProfiles,
-                    currentPhotos: tempPhotos,
-                    doneLoading: tempDoneLoading
+            //   if (JSON.stringify(responseData.error) === '{}') {
+            //     let temp = this.state.profiles
+            //     let photoArray=this.state.currentPhotos
+            //     let tempProfiles = this.state.numProfiles-1
+            //     let tempDoneLoading = this.state.doneLoading-1
+            //     let tempResult = temp.filter((obj) => {
+            //     return obj.userId != userId
+            //     })
+            //     let tempPhotos = photoArray.filter((obj) => {
+            //         return obj.id != userId
+            //         })
+            //     this.setState({
+            //         profiles: tempResult,
+            //         numProfiles: tempProfiles,
+            //         currentPhotos: tempPhotos,
+            //         doneLoading: tempDoneLoading
         
-                })
-           }
+            //     })
+           //}
        })
   
     }

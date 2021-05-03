@@ -452,8 +452,22 @@ class ViewPastMatches extends React.Component {
             .then(responseData => {
                 if (JSON.stringify(responseData.error) === '{}') {
                     console.log(responseData)
+                    let temp = this.state.pendingWingmanMatches
+                    let photoArray = this.state.pendingWingmanPhotos
+                    let tempNumberWingman = this.state.numWingmanRequests-1
+                    let tempDone = this.state.doneLoadingPendingWingman-1
+                    let tempResult = temp.filter((obj) => {
+                        return obj.userId !== id
+                    })
+                    let tempPhotoResult = photoArray.filter((obj) => {
+                        return obj.id !== id
+                    })
                     this.setState({
                         feedback: "Wingman approved!",
+                        pendingWingmanMatches: tempResult,
+                        pendingWingmanPhotos: tempPhotoResult,
+                        numWingmanRequests: tempNumberWingman,
+                        doneLoadingPendingWingman: tempDone
                     })
                     this.addMatchFromButton(requesterId)
 
@@ -592,7 +606,7 @@ class ViewPastMatches extends React.Component {
                                             <div className="row center-row match-container match-row" key={"row0pending" + profile.userId}>
                                                 <PendingMatchesProfile key={profile.userId} userId={profile.userId} imgsrc={this.state.pendingPhotos[i].imgsrc}
                                                     firstName={profile.firstName} lastName={profile.lastName} email={profile.email} age={profile.age} descrip={profile.description} genderIdentity={profile.genderIdentity} genderPreferences={profile.genderPreferences}
-                                                    matched={false} wingman={false} approveMatch={() => this.addMatchFromButton(profile.userId)} rejectMatch={() => this.rejectMatch(profile.userId)} notifyRequesteeofMatch={() => this.notifyRequesteeofMatch(profile.userId)} ></PendingMatchesProfile>
+                                                    matched={false} approveMatch={() => this.addMatchFromButton(profile.userId)} rejectMatch={() => this.rejectMatch(profile.userId)} notifyRequesteeofMatch={() => this.notifyRequesteeofMatch(profile.userId)} ></PendingMatchesProfile>
                                             </div>
                                         )
                                     }
@@ -610,7 +624,7 @@ class ViewPastMatches extends React.Component {
                                             <div className="row center-row match-container match-row" key={"row0wingmanpending" + profile.userId}>
                                                 <PendingMatchesProfile key={profile.userId} userId={profile.userId} requestId={profile.requestId} wingmanId={profile.wingmanId} requesterId={profile.requesterId} requesteeId={profile.requesteeId} imgsrc={this.state.currentPhotos[i].imgsrc}
                                                     firstName={profile.firstName} lastName={profile.lastName} email={profile.email} age={profile.age} descrip={profile.description} genderIdentity={profile.genderIdentity} genderPreferences={profile.genderPreferences}
-                                                    matched={false} wingman={true} approveMatch={() => this.completePendingWingman(profile.wingmanId, profile.requesterId, profile.requesteeId)} rejectMatch={() => this.rejectWingmanMatch(profile.userId)}  ></PendingMatchesProfile>
+                                                    matched={false} approveMatch={() => this.completePendingWingman(profile.wingmanId, profile.requesterId, profile.requesteeId)} rejectMatch={() => this.rejectWingmanMatch(profile.userId)} notifyRequesteeofMatch={() => this.notifyRequesteeofMatch(profile.userId)}></PendingMatchesProfile>
                                             </div>
                                         )
                                     }
