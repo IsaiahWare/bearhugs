@@ -626,7 +626,7 @@ class ViewPastMatches extends React.Component {
                                     {
                                         this.state.pendingWingmanMatches.map((profile, i) =>
                                             <div className="row center-row match-container match-row" key={"row0wingmanpending" + profile.requestId}>
-                                                <PendingMatchesProfile key={profile.userId+"wingman"} userId={profile.userId} requestId={profile.requestId} wingmanId={profile.wingmanId} requesterId={profile.requesterId} requesteeId={profile.requesteeId} imgsrc={this.state.currentPhotos[i].imgsrc}
+                                                <PendingMatchesProfile key={profile.userId+"wingman"} userId={profile.userId} requestId={profile.requestId} wingmanId={profile.wingmanId} requesterId={profile.requesterId} requesteeId={profile.requesteeId} imgsrc={this.state.pendingWingmanPhotos[i].imgsrc}
                                                     firstName={profile.firstName} lastName={profile.lastName} email={profile.email} age={profile.age} descrip={profile.description} genderIdentity={profile.genderIdentity} genderPreferences={profile.genderPreferences}
                                                     matched={false} approveMatch={() => this.completePendingWingman(profile.wingmanId, profile.requesterId, profile.requesteeId)} rejectMatch={() => this.rejectWingmanMatch(profile.userId)} notifyRequesteeofMatch={() => this.notifyRequesteeofMatch(profile.userId)}></PendingMatchesProfile>
                                             </div>
@@ -668,7 +668,7 @@ class ViewPastMatches extends React.Component {
                                 </div>
                             </div>
                         </Tab>
-                        <Tab eventKey="wingmanMatches" title="Wingman Matches">
+                        <Tab eventKey="wingmanMatches" title="Pending Wingman Matches">
                             <div className="row center-row">
                                 <h2>HELLO???</h2>
                             </div>
