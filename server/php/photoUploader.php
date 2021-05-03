@@ -12,7 +12,7 @@
     if( move_uploaded_file($_FILES['filename'], $full_path) ){
         echo json_encode(array("results" => "true", "error" => array()));
     }else{
-        echo json_encode(array("results" => array(), "error" => array("message" => "photo upload failure $userId $filename")));
+        echo json_encode(array("results" => array(), "error" => array("message" => "photo upload failure")));
     }
     exit;
 ?>
