@@ -177,6 +177,7 @@ class RegisterPage extends React.Component {
             "femaleGenderPref": this.state.femaleGenderPref,
             "otherGenderPref": this.state.otherGenderPref,
         }
+        console.log(newRequest)
 
         fetch(url, {
             method: 'POST',
@@ -207,6 +208,20 @@ class RegisterPage extends React.Component {
         let target = event.target;
         let value = target.value
         let name = target.name;
+        if (name=="maleGenderPref" || name=="femaleGenderPref" || name=="otherGenderPref") {
+            if (value == 'on') {
+                console.log('name ' + name + 'value '+ value)
+                this.setState({
+                    [name]: true
+                });
+
+            } else {
+                console.log('name ' + name + 'value '+ value)
+                this.setState({
+                    [name]: false
+                });
+            }
+        }
         this.setState({
             [name]: value
         });
@@ -251,7 +266,7 @@ class RegisterPage extends React.Component {
                                 <div className="input-row center-row">
                                     <select defaultValue={this.state.genderIdentity} id="gender_select"
                                         name="genderIdentity" onChange={this.handleInputChange} className="input">
-                                        <option value="" disabled selected>Your Gender</option>
+                                        <option value="" disabled>Your Gender</option>
                                         <option value="MALE">Male</option>
                                         <option value="FEMALE">Female</option>
                                         <option value="OTHER">Other</option>
@@ -259,12 +274,12 @@ class RegisterPage extends React.Component {
                                 </div>
                                 
                                 <div className="input-row center-row match-width">
+                                    <Form.Group>
                                     <Form.Label>Gender Preference for Matching</Form.Label>
-                                    <Form.Check inline label="Male" name="maleGenderPref" onChange={this.handleInputChange} id="male_gender_pref" className="input" checked={this.state.maleGenderPref} />
-                                    <Form.Check inline label="Female" name="femaleGenderPref" onChange={this.handleInputChange} id="female_gender_pref" className="input" checked={this.state.femaleGenderPref} />
-                                    <Form.Check inline label="Other" name="otherGenderPref" onChange={this.handleInputChange} id="other_gender_pref" className="input" checked={this.state.otherGenderPref} />
-                                      
-                
+                                    <Form.Check inline label="Male" name="maleGenderPref" onChange={this.handleInputChange} id="male_gender_pref"  checked={this.state.maleGenderPref} />
+                                    <Form.Check inline label="Female" name="femaleGenderPref" onChange={this.handleInputChange} id="female_gender_pref"  checked={this.state.femaleGenderPref} />
+                                    <Form.Check inline label="Other" name="otherGenderPref" onChange={this.handleInputChange} id="other_gender_pref"  checked={this.state.otherGenderPref} />
+                                    </Form.Group>
                                 </div>
 
                                 <div className="center-row padding-top-1rem">
