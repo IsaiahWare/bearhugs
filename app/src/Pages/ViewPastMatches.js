@@ -292,7 +292,7 @@ class ViewPastMatches extends React.Component {
 
     }
 
-    rejectWingmanMatch(requestId) {
+    rejectWingmanMatch(requestId, requesterId) {
         let url = baseDomain + '/wingman/reject'
         console.log(requestId)
         let newRequest = {
@@ -643,7 +643,7 @@ class ViewPastMatches extends React.Component {
                                             <div className="row center-row match-container match-row" key={"row0wingmanpending" + profile.requestId}>
                                                 <PendingMatchesProfile key={profile.userId+"wingman"} userId={profile.userId} requestId={profile.requestId} wingmanId={profile.wingmanId} requesterId={profile.requesterId} requesteeId={profile.requesteeId} imgsrc={this.state.pendingWingmanPhotos[i].imgsrc}
                                                     firstName={profile.firstName} lastName={profile.lastName} email={profile.email} age={profile.age} descrip={profile.description} genderIdentity={profile.genderIdentity} genderPreferences={profile.genderPreferences}
-                                                    matched={false} approveMatch={() => this.completePendingWingman(profile.wingmanId, profile.requesterId, profile.requesteeId)} rejectMatch={() => this.rejectWingmanMatch(profile.requestId)} notifyRequesteeofMatch={() => this.notifyRequesteeofMatch(profile.userId)}></PendingMatchesProfile>
+                                                    matched={false} approveMatch={() => this.completePendingWingman(profile.wingmanId, profile.requesterId, profile.requesteeId)} rejectMatch={() => this.rejectWingmanMatch(profile.requestId, profile.requesterId)} notifyRequesteeofMatch={() => this.notifyRequesteeofMatch(profile.userId)}></PendingMatchesProfile>
                                             </div>
                                         )
                                     }
