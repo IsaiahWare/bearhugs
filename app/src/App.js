@@ -19,7 +19,7 @@ import WingManPage from './Pages/WingmanPage';
 
 function App() {
   return (
-  <Router basename="http://bearhugs.love">
+  <Router basename={process.env.PUBLIC_URL}>
     <Switch>
         <Route exact path='/' component={LoginPage} />
         <Route exact path="/register" component={RegisterPage}></Route>
