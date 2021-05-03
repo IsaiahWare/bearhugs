@@ -104,9 +104,9 @@ class WingmanPage extends React.Component {
                        doneLoading: 0,
                        numFriends: responseData.results.length
                     }, function() {
-                        if (this.state.currenFriends.length > 0) {
+                        if (this.state.currentFriends.length > 0) {
                             for (let i=0; i < this.state.currentFriends.length; ++i) {
-                                this.getPhotoForCurrentUser(this.state.currenFriends[i].userId) 
+                                this.getPhotoForCurrentUser(this.state.currentFriends[i].userId) 
                              }
 
                         }
