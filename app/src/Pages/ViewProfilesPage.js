@@ -222,7 +222,6 @@ class ViewProfilePage extends React.Component {
 
     getPhotoForCurrentUser(id) {
         console.log("get photo for user " + id)
-        console.log(url)
         let url='http://bearhugs.love/server/php/photoGetter.php'
         let newRequest = {
             "userId": id,

@@ -445,12 +445,8 @@ class ViewPastMatches extends React.Component {
     }
 
 
-    addMatchFromButton(id, isFromWingman) {
+    addMatchFromButton(id) {
         console.log("IN add match by button")
-        if (isFromWingman){
-            let url = baseDomain + 'wingman/send'
-            
-        }
         let url = baseDomain + '/match/send'
         let newRequest = {
             requesterId: UserToken.getUserId(),
