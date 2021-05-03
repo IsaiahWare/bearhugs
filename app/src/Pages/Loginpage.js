@@ -34,9 +34,11 @@ class LoginPage extends React.Component {
     })
     .then(res => res.json())
      .then(responseData => {
+         console.log("login return")
         console.log(responseData)
         // TODO: handle case where login is invalid
 	    if (JSON.stringify(responseData.error) === '{}') {
+            console.log("login")
             UserToken.setUserId(responseData.results[0].userId)
             UserToken.setUserName(responseData.results[0].firstName + " " +responseData.results[0].lastName )
             UserToken.setUserEmail(responseData.results[0].email)
@@ -82,6 +84,7 @@ handleInputChange(event) {
             return <Redirect
             to= "/viewmatches"
             />
+        
 
 	 }
         return (

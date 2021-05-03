@@ -104,7 +104,7 @@ router.post("/requests", (req: Request, res: Response) => {
         return;
     }
 
-    const queryStatement = "SELECT users.userId, users.email, users.firstName, users.lastName, users.age, users.description, users.genderIdentity, users.genderPreferences FROM users INNER JOIN pendingMatches ON pendingMatches.requesterId = users.userId WHERE pendingMatches.requesteeId = ?"; 
+    const queryStatement = "SELECT users.userId, users.email, users.firstName, users.lastName, users.age, users.description, users.genderIdentity, users.maleGenderPref, users.femaleGenderPref, users.otherGenderPref FROM users INNER JOIN pendingMatches ON pendingMatches.requesterId = users.userId WHERE pendingMatches.requesteeId = ?"; 
     db.query(queryStatement, req.body.userId, (queryError: MysqlError | null, queryResults: any ) => {
         if (queryError) {
             matchResponse.error =  {
@@ -131,7 +131,7 @@ router.post("/matches", (req: Request, res: Response) => {
         return;
     }
 
-    const queryStatement = "SELECT users.userId, users.email, users.firstName, users.lastName, users.age, users.description, users.genderIdentity, users.genderPreferences FROM users INNER JOIN completedMatches ON completedMatches.userId2 = users.userId WHERE completedMatches.userId1 = ?"; 
+    const queryStatement = "SELECT users.userId, users.email, users.firstName, users.lastName, users.age, users.description, users.genderIdentity,  users.maleGenderPref, users.femaleGenderPref, users.otherGenderPref FROM users INNER JOIN completedMatches ON completedMatches.userId2 = users.userId WHERE completedMatches.userId1 = ?"; 
     db.query(queryStatement, req.body.userId, (queryError: MysqlError | null, queryResults: any ) => {
         if (queryError) {
             matchResponse.error =  {
@@ -232,7 +232,7 @@ router.post("/rejectedMatches", (req: Request, res: Response) => {
         return;
     }
 
-    const queryStatement = `SELECT users.userId, users.email, users.firstName, users.lastName, users.age, users.description, users.genderIdentity, users.genderPreferences,
+    const queryStatement = `SELECT users.userId, users.email, users.firstName, users.lastName, users.age, users.description, users.genderIdentity, users.maleGenderPref, users.femaleGenderPref, users.otherGenderPref,
     users.phoneNumber FROM users INNER JOIN rejectedMatches ON rejectedMatches.requesteeId = users.userId WHERE rejectedMatches.requesteeId = ? OR rejectedMatches.requesterId = ?`;
     const queryArgs = [req.body.userId, req.body.userId];
     db.query(queryStatement, queryArgs, (queryError: MysqlError | null, queryResults: any ) => {

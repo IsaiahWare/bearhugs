@@ -27,11 +27,14 @@ class ViewProfilePage extends React.Component {
 
    checkUserLogIn() {
         let token =  UserToken.getUserId()
+        console.log("token "+token)
         if(token==null || token==undefined || token=="") {
             this.setState({
                 redirect:true
             })
+            console.log("redirect " + this.state.redirect)
         }
+        console.log("redirect " + this.state.redirect)
     }
 
     getCurrentMatches() {
@@ -122,6 +125,7 @@ class ViewProfilePage extends React.Component {
     }
 
     getPendingMatches() {
+        console.log("get pending matches")
         let url = baseDomain + '/match/requests'
         let newRequest = {
             userId: UserToken.getUserId()
@@ -135,6 +139,7 @@ class ViewProfilePage extends React.Component {
         })
             .then(res => res.json())
             .then(responseData => {
+                 console.log(responseData)
                 if (JSON.stringify(responseData.error) === '{}') {
                     console.log("pending matches response data ")
                     console.log(responseData)
@@ -198,6 +203,7 @@ class ViewProfilePage extends React.Component {
     componentDidMount() {
         this.checkUserLogIn()
             if(!this.state.redirect) {
+                console.log("HLELLO???")
                 this.getPendingMatches()
             }
     }
@@ -348,11 +354,11 @@ class ViewProfilePage extends React.Component {
             to= "/"
             />
         }
-        // console.log("done loading :" + this.state.doneLoading)
-        // console.log("num profiles " + this.state.numProfiles)
+        console.log("done loading :" + this.state.doneLoading)
+        console.log("num profiles " + this.state.numProfiles)
 
         if (this.state.doneLoading==this.state.numProfiles) {
-            // console.log("In render with done loading "+ this.state.doneLoading+ " and num profiles" + this.state.numProfiles)
+            console.log("In render with done loading "+ this.state.doneLoading+ " and num profiles" + this.state.numProfiles)
             return (
                 <div className="page">
                     <BearHugsNavbar></BearHugsNavbar>

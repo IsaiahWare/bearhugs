@@ -52,6 +52,11 @@ router.post("/register", (req: Request, res: Response) => {
                         "email": req.body.email,
                         "firstName": req.body.firstName,
                         "lastName": req.body.lastName,
+                        "age": req.body.age,
+                        "genderIdentity": req.body.genderIdentity,
+                        "maleGenderPref": req.body.maleGenderPref,
+                        "femaleGenderPref": req.body.femaleGenderPref,
+                        "otherGenderPref": req.body.otherGenderPref,
 
                     }
                 ];
