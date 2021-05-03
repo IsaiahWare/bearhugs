@@ -1,7 +1,6 @@
 <?php
 		// Print all of the user's files
 		header('Content-Type: application/json');
-		header("Access-Control-Allow-Origin: *");
 
 		$json = file_get_contents('php://input');
 		$data = json_decode($json);
