@@ -71,7 +71,6 @@ class ViewProfilePage extends React.Component {
         })
             .then(res => res.json())
             .then(responseData => {
-
                 if (JSON.stringify(responseData.error) === '{}') {
                     this.setState({
                         unsuitableMatches: this.state.unsuitableMatches.concat(responseData.results)
@@ -139,7 +138,8 @@ class ViewProfilePage extends React.Component {
                 })
                 this.setState({
                     profiles: tempProfiles,
-                    numProfiles:tempProfiles.length
+                    numProfiles:tempProfiles.length,
+                    unsuitableMatches:[]
                 })      
            }
        }).then(()=>{
@@ -219,7 +219,6 @@ class ViewProfilePage extends React.Component {
            }
        })
     }
-
     getPhotoForCurrentUser(id) {
         console.log("get photo for user " + id)
         let url='http://bearhugs.love/server/php/photoGetter.php'
