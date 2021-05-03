@@ -178,7 +178,6 @@ class ViewProfilePage extends React.Component {
                         let result = responseData.results.findIndex(element => element.userId == this.state.unsuitableMatches[j].userId)
                         if (result != -1) {
                             responseData.results.splice(result)
-                            console.log("splice " + responseData.results[result])
                         }
 
                     }
