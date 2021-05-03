@@ -3,8 +3,10 @@
     header('Content-Type: application/json');
     header("Access-Control-Allow-Origin:*");
     $filename = (string) basename($_FILES['filename']);
+    echo "filename";
     echo $filename;
     $userId = $_POST['userId'];
+    echo "userid";
     echo $userId;
     $path = "./photos/user$userId";
     if (!file_exists($path)) {
