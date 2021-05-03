@@ -24,10 +24,28 @@ Run unit tests (not implemented yet):
 
 ```yarn test```
 
-## Production
-Start server in production mode (not implemented yet):
+## Upload to production
+**be on the isaiah user**
+###Frontend ONLY###
+Step 1.
+```bash
+cd /home/isaiah/public_html/bearhugs/app
+```
+Step 2.
+```bash
+prod
+```
+Step 3.
+```bash
+cd /home/isaiah/public_html/bearhugs
+```
+Step 4.
+```bash
+prodserv
+```
 
-```yarn prod```
+###Backend ONLY###
+TBD
 
 # API
 ## BASE URL
@@ -607,7 +625,7 @@ Response {
 `UPLOADING`
 
 ```
-<form enctype="multipart/form-data" action="../../../server/php/photoUploader.php" method="POST">
+<form enctype="multipart/form-data" action="http://bearhugs.love/server/php/photoUploader.php" method="POST">
     <input type="hidden" name="MAX_FILE_SIZE" value="50000000000000" />
     <input type="file" name="filename" id = "uploadfile_input"/>
     <input type="hidden" name="userId" value={this.state.userId} />
@@ -618,7 +636,7 @@ Response {
 `RETRIEVING`
 
 ```
-fetch('../../../server/php/photoGetter.php', {
+fetch('http://bearhugs.love/server/php/photoGetter.php', {
   method: 'POST',
   headers: {'Content-Type': 'application/json'},
   body: JSON.stringify({
