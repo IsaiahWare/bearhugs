@@ -67,6 +67,9 @@ height: 60vh;
   margin-top: 1rem;
   margin-bottom: 1rem;
 }
+.match-width {
+width: 100%;
+}
 
 .input-row {
   display: flex;
