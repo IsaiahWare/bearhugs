@@ -9,7 +9,7 @@
   /* scroll-snap-stop: always; */
   scroll-snap-align: center;
   overflow-x:hidden;
-
+  background-color: white;
 }
 .page-gradient {
 background: rgb(2,0,36);
@@ -37,7 +37,7 @@ height: 60vh;
   padding-top: 1rem;
 }
 .margin-5rem {
-  margin-top: 5rem;
+  margin-bottom: 5rem;
 }
 
 .row{
@@ -117,9 +117,13 @@ width: 100%;
   max-width: 30em;
 }
 .img-container {
-  max-height: 30em;
-  max-width: 30em;
+  max-height: 25em;
+  max-width: 25em;
   overflow: hidden;
+}
+.profImage {
+  width: 100%;
+  height: 25rem !important;
 }
 .fadeOut{
   opacity:0;
@@ -175,6 +179,7 @@ form {
 
 }
 .box {
+  background-color: white;
   box-shadow: 5px 10px 18px #888888;
 }
 .red {
@@ -312,7 +317,7 @@ form {
         -ms-user-select: none; /* Internet Explorer/Edge */
             user-select: none;
   width: 100%;
-  padding: 1rem 0;
+  padding: 1rem 0 3rem 0;
 }
 .swiperElement{
   width: 33%;
@@ -320,6 +325,19 @@ form {
   text-align: center;
   float: left;
 }
+.finger {
+  background-color: rgb(57, 105, 211);
+  height: 3.5rem;
+  width: 3.5rem;
+  border-radius: 1.75rem;
+  margin: -.5rem auto;
+  padding: .75rem 0;
+}
+.swiperElement p{
+  margin: 1.5rem 0 0 0;
+  font-size: .7rem;
+}
+
 .itsAMatch{
   color: darkgreen;
   background-color: #0eb20080;

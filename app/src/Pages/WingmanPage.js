@@ -112,7 +112,7 @@ class WingmanPage extends React.Component {
                         }
                         else {
                             this.setState({
-                                feedback: "You don't have any friends yet. Go to the friends page to make a friend request!."
+                                feedback: "You don't have any friends yet. Go to the friends page to make a friend request!"
                             }) 
                         }
                       
@@ -257,8 +257,8 @@ class WingmanPage extends React.Component {
             wingmanPanel = 
             <div>
                 <h1 className="pageTitle row center-row">Wingman</h1>
-                <div className="row center-row">
-                    {this.state.feedback}
+                <div className="text-container">
+                    <p className="center">{this.state.feedback}</p>
                 </div>
                 <div className="text-container">
                     <p className="center">Select a friend from below who you think needs a match.

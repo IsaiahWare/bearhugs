@@ -296,23 +296,23 @@ class ViewProfilePage extends React.Component {
             .then(photos => {
                 let tempPhotoNumber = this.state.doneLoading + 1;
                 // TODO: handle case where login is invalid
-                if (photos.length != 0) {
-                    this.setState(prevState => ({
-                        currentPhotos: [...prevState.currentPhotos, { id: id, imgsrc: photos[0] }],
-                        doneLoading: tempPhotoNumber
-                    }))
-                }
-                else {
-                    this.setState(prevState => ({
-                        currentPhotos: [...prevState.currentPhotos, { id: id, imgsrc: "mail-order-wife.png" }],
-                        doneLoading: tempPhotoNumber
-                    }))
-                }
+                    if (photos.length!=0) {
+                            this.setState(prevState => ({
+                                currentPhotos: [...prevState.currentPhotos, {id: id, imgsrc: photos}],
+                                doneLoading: tempPhotoNumber
+                            }))
+                        }
+                    else {
+                        this.setState(prevState => ({
+                            currentPhotos: [...prevState.currentPhotos, {id: id, imgsrc: ["default-profile.png"]}],
+                            doneLoading: tempPhotoNumber
+                        }))
+                    }
 
             }).catch((error) => {
                 let tempPhotoNumber = this.state.doneLoading + 1;
                 this.setState(prevState => ({
-                    currentPhotos: [...prevState.currentPhotos, { id: id, imgsrc: "mail-order-wife.png" }],
+                    currentPhotos: [...prevState.currentPhotos, {id: id, imgsrc: ["default-profile.png"]}],
                     doneLoading: tempPhotoNumber
                 }))
             })
@@ -367,6 +367,11 @@ class ViewProfilePage extends React.Component {
         // console.log("done loading :" + this.state.doneLoading)
         // console.log("num profiles " + this.state.numProfiles)
 
+        let userPhotos = [
+            {imgsrc: "mail-order-wife.png", id: 1},
+            {imgsrc: "possum-on-horse.png", id: 2}
+        ];
+
         if (this.state.doneLoading == this.state.numProfiles) {
             // console.log("In render with done loading "+ this.state.doneLoading+ " and num profiles" + this.state.numProfiles)
             return (
@@ -378,21 +383,17 @@ class ViewProfilePage extends React.Component {
                     <div className="row center-row match-container-row">
                         <div className="col center-col">
                             {
-                                this.state.profiles.map((profile, i) =>
-                                    <div className="row center-row match-container match-row" key={"row0" + profile.userId}>
-                                        <MatchProfile key={profile.userId} userId={profile.userId} imgsrc={this.state.currentPhotos[i].imgsrc}
-                                            firstName={profile.firstName} lastName={profile.lastName} age={profile.age} descrip={profile.description}
-                                            matched={false}
-                                            approveMatch={() => this.onClickAccept(profile.userId)} rejectMatch={() => this.onClickReject(profile.userId)}
-                                        ></MatchProfile>
-
-                                    </div>
+                                this.state.profiles.map((profile,i) =>
+                                <div className="row center-row match-container match-row" key = {"row0" + profile.userId}>
+                                    <MatchProfile key={profile.userId} userId={profile.userId} photos= {this.state.currentPhotos[i].imgsrc}
+                                    firstName={profile.firstName} lastName={profile.lastName} age={profile.age} descrip={profile.description}
+                                     matched={false}
+                                     approveMatch={() => this.onClickAccept(profile.userId)} rejectMatch={() => this.onClickReject(profile.userId)}
+                                     ></MatchProfile>
+                                     
+                                </div>
                                 )
                             }
-
-                            {/* for frontend testing */}
-
-
                         </div>
                     </div>
                 </div>
