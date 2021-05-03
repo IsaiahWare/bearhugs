@@ -71,7 +71,29 @@ class RegisterPage extends React.Component {
                     this.setState({ redirect: true })
                 }
             })
-    }
+    //   .then(sendEmail()) <--uncomment when backend is set up 
+}
+sendEmail(){
+    fetch(`dummyAPIemailURL/email`, {
+        method: 'POST',
+        headers: {
+          accept: 'application/json', 
+          'content-type': 'application/json'
+        },
+        body: JSON.stringify({ email: this.state.email })
+      })
+      .then(res => res.json())  
+      .then(data => {
+        
+       
+        this.setState({ sendingEmail: false})
+        notify.show(data.msg)
+        this.form.reset()
+      })
+      .catch(err => console.log(err))
+
+      .then(this.setState({confirm: true}))
+}
 
     filterInputs(event) {
         event.preventDefault()
