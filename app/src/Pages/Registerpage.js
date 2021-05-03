@@ -255,15 +255,16 @@ class RegisterPage extends React.Component {
                                     </select>
                                 </div>
                                 <div className="input-row center-row match-width">
-                                    <div>
                                         <p>Gender Preferences for Matching</p>
-                                    </div>
+                                </div>
+                                <div className="input-row center-row match-width">
+                                    
                                     <label for="male_gender_pref">Male</label>
-                                    <input type="checkbox" onChange={this.handleInputChange} id="male_gender_pref" className="input" checked={this.state.maleGenderPref} />
+                                    <input type="checkbox" name="maleGenderPref" onChange={this.handleInputChange} id="male_gender_pref" className="input" checked={this.state.maleGenderPref} />
                                     <label for="female_gender_pref">Female</label>
-                                    <input type="checkbox" onChange={this.handleInputChange} id="female_gender_pref" className="input" checked={this.state.femaleGenderPref} />
+                                    <input type="checkbox" name="femaleGenderPref" onChange={this.handleInputChange} id="female_gender_pref" className="input" checked={this.state.femaleGenderPref} />
                                     <label for="other_gender_pref">Other</label>
-                                    <input type="checkbox" onChange={this.handleInputChange} id="other_gender_pref" className="input" checked={this.state.otherGenderPref} />
+                                    <input type="checkbox" name="otherGenderPref" onChange={this.handleInputChange} id="other_gender_pref" className="input" checked={this.state.otherGenderPref} />
                                 </div>
 
                                 <div className="center-row padding-top-1rem">
