@@ -51,7 +51,8 @@ router.post("/register", (req: Request, res: Response) => {
                         "userId": queryResults.insertId,
                         "email": req.body.email,
                         "firstName": req.body.firstName,
-                        "lastName": req.body.lastName
+                        "lastName": req.body.lastName,
+
                     }
                 ];
             }
@@ -103,7 +104,11 @@ router.post("/login", (req: Request, res: Response) => {
                             "firstName": queryResults[0].firstName,
                             "lastName": queryResults[0].lastName,
                             "age": queryResults[0].age,
-                            "description": queryResults[0].description
+                            "description": queryResults[0].description,
+                            "genderIdentity":queryResults[0].genderIdentity,
+                            "maleGenderPref": queryResults[0].maleGenderPref,
+                            "femaleGenderPref": queryResults[0].femaleGenderPref,
+                            "otherGenderPref": queryResults[0].otherGenderPref,
                         }
                     ];
                 }
@@ -132,7 +137,7 @@ router.post("/find", (req: Request, res: Response) => {
         return;
     }
 
-    const queryStatement: string = "SELECT userId, email, firstName, lastName, age, description, genderIdentity, genderPreferences FROM users WHERE userId = ?";
+    const queryStatement: string = "SELECT userId, email, firstName, lastName, age, description, genderIdentity, maleGenderPref, femaleGenderPref, otherGenderPref FROM users WHERE userId = ?";
     db.query(queryStatement, req.body.userId, (queryError: MysqlError | null, queryResults: any ) => {
         if (queryError) {
             findResponse.error =  {
@@ -163,7 +168,7 @@ router.post("/findbyemail", (req: Request, res: Response) => {
         return;
     }
 
-    const queryStatement: string = "SELECT userId, email, firstName, lastName, age, description, genderIdentity, genderPreferences FROM users WHERE email= ?";
+    const queryStatement: string = "SELECT userId, email, firstName, lastName, age, description, genderIdentity, maleGenderPref, femaleGenderPref, otherGenderPref FROM users WHERE email= ?";
     db.query(queryStatement, req.body.email, (queryError: MysqlError | null, queryResults: any ) => {
         if (queryError) {
             findResponse.error =  {
@@ -203,7 +208,7 @@ router.post("/random", (req: Request, res: Response) => {
         return;
     }
 
-    const queryStatement: string = "SELECT userId, email, firstName, lastName, age, description FROM users LIMIT ?";
+    const queryStatement: string = "SELECT userId, email, firstName, lastName, age, description, maleGenderPref, femaleGenderPref, otherGenderPref FROM users LIMIT ?";
     db.query(queryStatement, req.body.count, (queryError: MysqlError | null, queryResults: any ) => {
         if (queryError) {
             randomResponse.error =  {
@@ -231,7 +236,7 @@ router.post("/update", (req: Request, res: Response) => {
         return;
     }    
     
-    const queryStatement: string = "UPDATE users SET email = ?, firstName = ?, lastName = ?, description = ?, genderIdentity = ?, genderPreferences = ? WHERE userId = ?";
+    const queryStatement: string = "UPDATE users SET email = ?, firstName = ?, lastName = ?, description = ?, genderIdentity = ?, maleGenderPref = ?, femaleGenderPref =?, otherGenderPref=? WHERE userId = ?";
     const queryArgs = [
         req.body.email,
         // req.body.password,
@@ -239,7 +244,9 @@ router.post("/update", (req: Request, res: Response) => {
         req.body.lastName,
         req.body.description,
         req.body.genderIdentity,
-        req.body.genderPreferences,
+        req.body.maleGenderPref,
+        req.body.femaleGenderPref,
+        req.body.otherGenderPref,
         // req.body.phoneNumber,
         req.body.userId
     ];
@@ -258,9 +265,12 @@ router.post("/update", (req: Request, res: Response) => {
                     "firstName": req.body.firstName,
                     "lastName": req.body.lastName,
                     "genderIdentity": req.body.genderIdentity,
-                    "genderPreferences": req.body.genderPreferences,
+                    "maleGenderPref":req.body.maleGenderPref,
+                    "femaleGenderPref":req.body.femaleGenderPref,
+                    "otherGenderPref":req.body.otherGenderPref,
                     "description": req.body.description,
-                    "phoneNumber": req.body.phoneNumber
+                    "phoneNumber": req.body.phoneNumber,
+
                 }
             ];
         }
@@ -282,7 +292,7 @@ router.post("/phone", (req: Request, res: Response) => {
         return;
     }
 
-    const queryStatement: string = "SELECT userId, email, firstName, lastName, age, description, genderIdentity, genderPreferences FROM users WHERE phoneNumber = ?";
+    const queryStatement: string = "SELECT userId, email, firstName, lastName, age, description, genderIdentity, maleGenderPref, femaleGenderPref, otherGenderPref FROM users WHERE phoneNumber = ?";
     db.query(queryStatement, req.body.phoneNumber, (queryError: MysqlError | null, queryResults: any ) => {
         if (queryError) {
             phoneResponse.error =  {

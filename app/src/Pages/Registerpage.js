@@ -173,7 +173,9 @@ class RegisterPage extends React.Component {
             "password": this.state.password,
             "age": this.state.age,
             "genderIdentity": this.state.genderIdentity,
-
+            "maleGenderPref": this.state.maleGenderPref,
+            "femaleGenderPref": this.state.femaleGenderPref,
+            "otherGenderPref": this.state.otherGenderPref,
         }
 
         fetch(url, {
@@ -255,15 +257,12 @@ class RegisterPage extends React.Component {
                                         <option value="OTHER">Other</option>
                                     </select>
                                 </div>
-                                        <p>Gender Preferences for Matching</p>
                                 
                                 <div className="input-row center-row match-width">
-                                    <Form.Group>
                                     <Form.Label>Gender Preference for Matching</Form.Label>
                                     <Form.Check inline label="Male" name="maleGenderPref" onChange={this.handleInputChange} id="male_gender_pref" className="input" checked={this.state.maleGenderPref} />
                                     <Form.Check inline label="Female" name="femaleGenderPref" onChange={this.handleInputChange} id="female_gender_pref" className="input" checked={this.state.femaleGenderPref} />
                                     <Form.Check inline label="Other" name="otherGenderPref" onChange={this.handleInputChange} id="other_gender_pref" className="input" checked={this.state.otherGenderPref} />
-                                    </Form.Group>
                                       
                 
                                 </div>

@@ -9,6 +9,11 @@ export interface User {
     lastName: string;
     age: number;
     description: object;
+    genderIdentity: string;
+    maleGenderPref: boolean;
+    femaleGenderPref: boolean;
+    otherGenderPref: boolean;
+
 }
 
 export interface UserRegisterRequest {
@@ -17,6 +22,9 @@ export interface UserRegisterRequest {
    firstName: string;
    lastName: string;
    age: number;
+   maleGenderPref: boolean;
+   femaleGenderPref: boolean;
+   otherGenderPref: boolean;
 }
 
 export interface UserLoginRequest {
@@ -41,7 +49,9 @@ export interface UserUpdateRequest {
     lastName: string;
     description: string;
     genderIdentity: string;
-    genderPreferences: string;
+    maleGenderPref: boolean;
+    femaleGenderPref: boolean;
+    otherGenderPref: boolean;
     userId: number;
 }
 

@@ -14,7 +14,11 @@ export function isUserRegisterRequest(obj: any): obj is UserRegisterRequest {
   obj.firstName !== undefined &&
   obj.lastName !== undefined &&
   obj.age !== undefined &&
-  Object.keys(obj).length === 5;
+  obj.genderIdentity!==undefined &&
+  obj.maleGenderPref !== undefined &&
+  obj.femaleGenderPref !== undefined &&
+  obj.otherGenderPref!== undefined &&
+  Object.keys(obj).length === 9;
 }
 
 export function isUserLoginRequest(obj: any): obj is UserLoginRequest {
@@ -38,8 +42,9 @@ export function isUserRandomRequest(obj: any): obj is UserRandomRequest {
 
 export function isUserUpdateRequest(obj: any): obj is UserUpdateRequest {
   return obj.email !== undefined && obj.firstName !== undefined && obj.lastName !== undefined &&
-  obj.description !== undefined && obj.genderIdentity !== undefined && obj.genderPreferences !== undefined 
-  && obj.userId !== undefined && Object.keys(obj).length === 7;
+  obj.description !== undefined && obj.genderIdentity !== undefined && obj.maleGenderPref !== undefined 
+  && obj.femaleGenderPref !== undefined && obj.otherGenderPref !== undefined 
+  && obj.userId !== undefined && Object.keys(obj).length === 9;
 }
 
 export function isUserPhoneRequest(obj: any): obj is UserPhoneRequest {
