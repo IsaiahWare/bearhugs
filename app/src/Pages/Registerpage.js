@@ -36,6 +36,7 @@ class RegisterPage extends React.Component {
         this.registerAccount = this.registerAccount.bind(this)
         this.handleInputChange = this.handleInputChange.bind(this)
         this.filterInputs = this.filterInputs.bind(this)
+        this.setSelectedPreferences=this.setSelectedPreferences.bind(this)
 
     }
 
