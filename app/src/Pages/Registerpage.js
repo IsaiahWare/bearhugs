@@ -7,6 +7,7 @@ import UserToken from "../Components/UserToken.js"
 import MultiSelect from "react-multi-select-component";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons'
+import {Form} from 'react-bootstrap/Form'
 
 
 let baseDomain = "http://ec2-100-24-237-42.compute-1.amazonaws.com:3000"
@@ -254,17 +255,17 @@ class RegisterPage extends React.Component {
                                         <option value="OTHER">Other</option>
                                     </select>
                                 </div>
-                                <div className="input-row center-row match-width">
                                         <p>Gender Preferences for Matching</p>
-                                </div>
+                                
                                 <div className="input-row center-row match-width">
-                                    
-                                    <label for="male_gender_pref">Male</label>
-                                    <input type="checkbox" name="maleGenderPref" onChange={this.handleInputChange} id="male_gender_pref" className="input" checked={this.state.maleGenderPref} />
-                                    <label for="female_gender_pref">Female</label>
-                                    <input type="checkbox" name="femaleGenderPref" onChange={this.handleInputChange} id="female_gender_pref" className="input" checked={this.state.femaleGenderPref} />
-                                    <label for="other_gender_pref">Other</label>
-                                    <input type="checkbox" name="otherGenderPref" onChange={this.handleInputChange} id="other_gender_pref" className="input" checked={this.state.otherGenderPref} />
+                                    <Form.Group>
+                                    <Form.Label>Gender Preference for Matching</Form.Label>
+                                    <Form.Check inline label="Male" name="maleGenderPref" onChange={this.handleInputChange} id="male_gender_pref" className="input" checked={this.state.maleGenderPref} />
+                                    <Form.Check inline label="Female" name="femaleGenderPref" onChange={this.handleInputChange} id="female_gender_pref" className="input" checked={this.state.femaleGenderPref} />
+                                    <Form.Check inline label="Other" name="otherGenderPref" onChange={this.handleInputChange} id="other_gender_pref" className="input" checked={this.state.otherGenderPref} />
+                                    </Form.Group>
+                                      
+                
                                 </div>
 
                                 <div className="center-row padding-top-1rem">
