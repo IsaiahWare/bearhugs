@@ -2,6 +2,7 @@
 		// Print all of the user's files
 		header('Content-Type: application/json');
 		header("Access-Control-Allow-Origin: http://localhost:3001");
+		header("Access-Control-Allow-Origin: ec2-100-24-237-42.compute-1.amazonaws.com");
 
 		$json = file_get_contents('php://input');
 		$data = json_decode($json);
