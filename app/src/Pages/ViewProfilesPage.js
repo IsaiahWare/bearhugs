@@ -140,6 +140,8 @@ class ViewProfilePage extends React.Component {
                 })      
            }
        }).then(()=>{
+           console.log("unsuitable matches : ")
+           console.log(this.state.unsuitableMatches)
         for (let i=0; i < this.state.profiles.length; ++i) {
            this.getPhotoForCurrentUser(this.state.profiles[i].userId) 
         }
