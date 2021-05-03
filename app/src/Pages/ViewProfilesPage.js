@@ -22,7 +22,6 @@ class ViewProfilePage extends React.Component {
         }
         this.checkUserLogIn = this.checkUserLogIn.bind(this)
         this.getProfiles = this.getProfiles.bind(this)
-        this.getPendingAndCurrent = this.getPendingAndCurrent.bind(this)
         this.getRejectedMatches = this.getRejectedMatches.bind(this)
     }
 
@@ -54,10 +53,10 @@ class ViewProfilePage extends React.Component {
                         unsuitableMatches: this.state.unsuitableMatches.concat(responseData.results)
                     })
                 }
+                this.getRejectedMatches();
             })
 
     }
-
     getRejectedMatches() {
         let url = baseDomain + '/match/rejectedMatches'
         let newRequest = {
@@ -78,6 +77,8 @@ class ViewProfilePage extends React.Component {
                         unsuitableMatches: this.state.unsuitableMatches.concat(responseData.results)
                     })
                 }
+                this.getProfiles();
+                
             })
 
     }
@@ -101,16 +102,12 @@ class ViewProfilePage extends React.Component {
                         unsuitableMatches: this.state.unsuitableMatches.concat(responseData.results)
                     })
                 }
+                this.getCurrentMatches();
             })
 
         }
 
 
-    getPendingAndCurrent() {
-        this.getCurrentMatches();
-        this.getPendingMatches();
-        this.getRejectedMatches();
-    }
 
     getProfiles() {
         let url = baseDomain + '/user/random'
@@ -127,7 +124,6 @@ class ViewProfilePage extends React.Component {
         .then(res => res.json())
         .then(responseData => {
               if (responseData.error!=null) {
-                this.getPendingAndCurrent(()=>{
                 for (let i = 0; i < responseData.results.length; ++i) {
                     if (this.state.unsuitableMatches.includes(responseData.results[i])) {
                         responseData.splice(i)
@@ -141,9 +137,7 @@ class ViewProfilePage extends React.Component {
                 this.setState({
                     profiles: tempProfiles,
                     numProfiles:tempProfiles.length
-                })
-            })
-                  
+                })      
            }
        }).then(()=>{
         for (let i=0; i < this.state.profiles.length; ++i) {
@@ -156,7 +150,7 @@ class ViewProfilePage extends React.Component {
     componentDidMount() {
         this.checkUserLogIn()
             if(!this.state.redirect) {
-                this.getProfiles()
+                this.getPendingMatches()
             }
     }
 
