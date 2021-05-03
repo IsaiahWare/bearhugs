@@ -48,6 +48,8 @@ class ViewProfilePage extends React.Component {
         })
             .then(res => res.json())
             .then(responseData => {
+                console.log("current matches response data ")
+                console.log(responseData)
                 if (JSON.stringify(responseData.error) === '{}') {
                     this.setState({
                         unsuitableMatches: this.state.unsuitableMatches.concat(responseData.results)
@@ -73,6 +75,8 @@ class ViewProfilePage extends React.Component {
         })
             .then(res => res.json())
             .then(responseData => {
+                console.log("rejected matches response data ")
+                console.log(responseData)
                 if (JSON.stringify(responseData.error) === '{}') {
                     this.setState({
                         unsuitableMatches: this.state.unsuitableMatches.concat(responseData.results)
@@ -101,6 +105,8 @@ class ViewProfilePage extends React.Component {
             .then(res => res.json())
             .then(responseData => {
                 if (JSON.stringify(responseData.error) === '{}') {
+                    console.log("pending matches response data ")
+                    console.log(responseData)
                     this.setState({
                         unsuitableMatches: this.state.unsuitableMatches.concat(responseData.results)
                     }, function() {
@@ -137,16 +143,11 @@ class ViewProfilePage extends React.Component {
                         }
                     
                 }
-               let setProfiles = responseData.results
-               let userToken = UserToken.getUserId()
-               let tempProfiles = setProfiles.filter((obj) => {
-                return obj.userId !== userToken
-                })
                 console.log("unsuitable matches : ")
                 console.log(this.state.unsuitableMatches)
                 this.setState({
-                    profiles: tempProfiles,
-                    numProfiles:tempProfiles.length,
+                    profiles: responseData.results,
+                    numProfiles:responseData.results.length,
                     unsuitableMatches:[]
                 })      
            }
