@@ -123,11 +123,14 @@ class ViewProfilePage extends React.Component {
         })
         .then(res => res.json())
         .then(responseData => {
+            let badBoys = []
               if (responseData.error!=null) {
-                for (let i = 0; i < responseData.results.length; ++i) {
-                    if (this.state.unsuitableMatches.includes(responseData.results[i])) {
-                        responseData.splice(i)
-                    }
+                    for (let j = 0; j < this.state.unsuitableMatches.length; ++j) {
+                       let result = responseData.results.findIndex(element => element.userId == this.state.unsuitableMatches[j].userId)
+                        if (result!=-1) {
+                            responseData.results.splice(result)
+                        }
+                    
                 }
                let setProfiles = responseData.results
                let userToken = UserToken.getUserId()
