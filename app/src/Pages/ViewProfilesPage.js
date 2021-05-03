@@ -61,6 +61,36 @@ class ViewProfilePage extends React.Component {
             })
 
     }
+
+    getRejectedWingmanMatches() {
+        let url = baseDomain + '/wingman/rejectedMatches'
+        let newRequest = {
+            userId: UserToken.getUserId()
+        }
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newRequest)
+        })
+            .then(res => res.json())
+            .then(responseData => {
+                console.log("rejected matches response data ")
+                console.log(responseData)
+                if (JSON.stringify(responseData.error) === '{}') {
+                    this.setState({
+                        unsuitableMatches: this.state.unsuitableMatches.concat(responseData.results)
+                    }, function() {
+                        this.getProfiles();
+                    
+                    })
+                }
+           
+                
+            })
+
+    }
     getRejectedMatches() {
         let url = baseDomain + '/match/rejectedMatches'
         let newRequest = {
@@ -81,7 +111,8 @@ class ViewProfilePage extends React.Component {
                     this.setState({
                         unsuitableMatches: this.state.unsuitableMatches.concat(responseData.results)
                     }, function() {
-                        this.getProfiles();
+                        this.getRejectedWingmanMatches()
+                    
                     })
                 }
            
