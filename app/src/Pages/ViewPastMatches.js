@@ -54,7 +54,7 @@ class ViewPastMatches extends React.Component {
         this.checkUserLogIn();
         this.getCurrentMatches();
         this.getPendingMatches();
-        this.getWingmanMatches();
+        this.getPendingWingmanMatches();
     }
 
     setKey(k) {
