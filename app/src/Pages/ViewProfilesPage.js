@@ -159,7 +159,8 @@ class ViewProfilePage extends React.Component {
     getProfiles() {
         let url = baseDomain + '/user/random'
         let newRequest = {
-            count: 20
+            count: 20,
+            userId: UserToken.getUserId()
         }
         fetch(url, {
             method: 'POST',
@@ -182,11 +183,15 @@ class ViewProfilePage extends React.Component {
                         }
                     
                 }
-
+                let temp = responseData.results;
+                let selfid = UserToken.getUserId();
+                let tempResult = temp.filter((obj) => {
+                    return obj.userId !== selfid
+                })
             
                 this.setState({
-                    profiles: responseData.results,
-                    numProfiles:responseData.results.length,
+                    profiles: tempResult,
+                    numProfiles:tempResult.length,
                     unsuitableMatches:[]
                 })      
            }

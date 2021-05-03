@@ -213,9 +213,9 @@ router.post("/random", (req: Request, res: Response) => {
         return;
     }
 
-    const queryStatement: string = "SELECT userId, email, firstName, lastName, age, description, maleGenderPref, femaleGenderPref, otherGenderPref FROM users WHERE userId != ? LIMIT ?";
-    const queryArgs = [req.body.userId, req.body.count];
-    db.query(queryStatement, queryArgs, (queryError: MysqlError | null, queryResults: any ) => {
+    const queryStatement: string = "SELECT userId, email, firstName, lastName, age, description, maleGenderPref, femaleGenderPref, otherGenderPref FROM users LIMIT ?";
+    const queryArgs = [req.body.count];
+    db.query(queryStatement, req.body.count, (queryError: MysqlError | null, queryResults: any ) => {
         if (queryError) {
             randomResponse.error =  {
                 "message": queryError.sqlMessage
