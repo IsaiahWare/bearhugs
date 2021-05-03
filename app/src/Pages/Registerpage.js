@@ -257,7 +257,6 @@ class RegisterPage extends React.Component {
                                 <div className="input-row center-row match-container">
                                     <MultiSelect
                                         options={genderPreferenceOptions}
-                                        value={this.state.selectedGenderPreference}
                                         onChange={this.setSelectedPreferences}
                                         labelledBy="Select Gender Preferences"
                                         className="match-width"
