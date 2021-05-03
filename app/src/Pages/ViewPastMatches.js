@@ -232,7 +232,7 @@ class ViewPastMatches extends React.Component {
 
     getPendingWingmanPhotos() {
         for (let i = 0; i < this.state.pendingWingmanMatches.length; ++i) {
-            this.getPhotoForWingmanUser(this.state.pendingWingmanMatches[i].userId);
+            this.getPhotoforPendingWingmanUser(this.state.pendingWingmanMatches[i].userId);
 
         }
 
