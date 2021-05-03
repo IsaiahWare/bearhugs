@@ -280,7 +280,7 @@ class FriendsPage extends React.Component {
                         }
 
                     });
-                } else{
+                } else {
                     console.log("ERROR: " + responseData.results.error)
                 }
             })
@@ -416,34 +416,43 @@ class FriendsPage extends React.Component {
     }
 
     checkUserEmail() {
-        let url = baseDomain + '/user/findbyemail'
-        let newRequest = {
-            email: this.state.addFriendUser
-        }
-        console.log(newRequest)
-        fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(newRequest)
-        })
-            .then(res => res.json())
-            .then(responseData => {
-                if (JSON.stringify(responseData.error) === '{}') {
-                    this.setState({
-                        feedback: "Friend found!"
-                    })
-                    this.addFriendByEmail(responseData.results[0].userId, responseData.results[0])
-                }
-                else {
-                    this.setState({
-                        feedback: "Friend could not be found :(. Please try a different email"
-                    })
-                }
+        if (this.state.addFriendUser == UserToken.getUserEmail()) {
+            this.setState({
+                feedback: "You can't friend yourself!"
             })
+        }
+        else {
+            let url = baseDomain + '/user/findbyemail'
+            let newRequest = {
+                email: this.state.addFriendUser
+            }
+            console.log(newRequest)
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(newRequest)
+            })
+                .then(res => res.json())
+                .then(responseData => {
+                    if (JSON.stringify(responseData.error) === '{}') {
+                        this.setState({
+                            feedback: "Friend found!"
+                        })
+                        this.addFriendByEmail(responseData.results[0].userId, responseData.results[0])
+                    }
+                    else {
+                        this.setState({
+                            feedback: "Friend could not be found :(. Please try a different email"
+                        })
+                    }
+                })
 
-    }
+             }
+
+
+         }
 
     rejectFriend(id) {
         let url = baseDomain + '/friend/reject'
@@ -461,34 +470,34 @@ class FriendsPage extends React.Component {
             .then(res => res.json())
             .then(responseData => {
                 if (JSON.stringify(responseData.error) === '{}') {
-                console.log("the boy from reject friend")
-                this.getPendingFriends();
-                // console.log(responseData)
-                //     let temp = this.state.pendingFriendsRequest
-                //     let tempPhotos = this.state.pendingPhotos
-                //     let tempNum = this.state.numPending - 1
-                //     let tempDone = this.state.doneLoadingPending - 1
-                //     this.setState({
-                //         numPending: tempNum,
-                //         doneLoadingPending: tempDone,
-                //     }, 
-                //     function() {
-                //     let tempResult = temp.filter((obj) => {
-                //         return obj.userId !== id
-                //     })
-                //     let tempPhotosResult = tempPhotos.filter((obj) => {
-                //         return obj.id !== id
-                //     })
-                //     this.setState({
-                //         pendingFriends: tempResult,
-                //         pendingPhotos: tempPhotosResult,
-                //         feedback: "Friend request rejected"
-                //     })
-                //     console.log("num pending in reject friend "+ this.numPending)
-                //     console.log("num done in reject friend "+this.doneLoadingPending)
-                // })
-            }
-            
+                    console.log("the boy from reject friend")
+                    this.getPendingFriends();
+                    // console.log(responseData)
+                    //     let temp = this.state.pendingFriendsRequest
+                    //     let tempPhotos = this.state.pendingPhotos
+                    //     let tempNum = this.state.numPending - 1
+                    //     let tempDone = this.state.doneLoadingPending - 1
+                    //     this.setState({
+                    //         numPending: tempNum,
+                    //         doneLoadingPending: tempDone,
+                    //     }, 
+                    //     function() {
+                    //     let tempResult = temp.filter((obj) => {
+                    //         return obj.userId !== id
+                    //     })
+                    //     let tempPhotosResult = tempPhotos.filter((obj) => {
+                    //         return obj.id !== id
+                    //     })
+                    //     this.setState({
+                    //         pendingFriends: tempResult,
+                    //         pendingPhotos: tempPhotosResult,
+                    //         feedback: "Friend request rejected"
+                    //     })
+                    //     console.log("num pending in reject friend "+ this.numPending)
+                    //     console.log("num done in reject friend "+this.doneLoadingPending)
+                    // })
+                }
+
                 else {
                     this.setState({
                         feedback: "Friend request could not be rejected"
@@ -540,7 +549,7 @@ class FriendsPage extends React.Component {
                         onSelect={(key => {
                             this.setState({ key })
                             this.setState({
-                                feedback:""
+                                feedback: ""
                             })
                         })}
                     >
@@ -595,55 +604,55 @@ class FriendsPage extends React.Component {
         } else {
             return (
                 <div className="page">
-                <BearHugsNavbar></BearHugsNavbar>
-                <Tabs
-                    id="friend-tabs"
-                    activeKey={this.state.key}
-                    onSelect={(key => {
-                        this.setState({ key })
-                        this.setState({
-                            feedback:""
-                        })
-                    })}
-                >
-                    <Tab eventKey="currentFriends" title="Current Friends">
-                        <div className="friendsContainer">
-                            <div className="row center-row">
-                                <h1 className="pageTitle">Friends</h1>
+                    <BearHugsNavbar></BearHugsNavbar>
+                    <Tabs
+                        id="friend-tabs"
+                        activeKey={this.state.key}
+                        onSelect={(key => {
+                            this.setState({ key })
+                            this.setState({
+                                feedback: ""
+                            })
+                        })}
+                    >
+                        <Tab eventKey="currentFriends" title="Current Friends">
+                            <div className="friendsContainer">
+                                <div className="row center-row">
+                                    <h1 className="pageTitle">Friends</h1>
+                                </div>
+                                <div>{this.state.feedback}</div>
+                                <div className="input-row center-row">
+                                    <Form onSubmit={this.handleSubmit} className="input">
+                                        <Form.Group>
+                                            <Form.Label>Search for User</Form.Label>
+                                            <Form.Control type="text" name="addFriendUser" value={this.state.addFriendUser} onChange={this.handleInputChange} placeholder="Add friend by WUSTL email" />
+                                        </Form.Group>
+                                        <Button type="submit" variant="danger" value="Search">Add Friend</Button>
+                                    </Form>
+                                </div>
+                                <div>
+                                </div>
                             </div>
-                            <div>{this.state.feedback}</div>
-                            <div className="input-row center-row">
-                                <Form onSubmit={this.handleSubmit} className="input">
-                                    <Form.Group>
-                                        <Form.Label>Search for User</Form.Label>
-                                        <Form.Control type="text" name="addFriendUser" value={this.state.addFriendUser} onChange={this.handleInputChange} placeholder="Add friend by WUSTL email" />
-                                    </Form.Group>
-                                    <Button type="submit" variant="danger" value="Search">Add Friend</Button>
-                                </Form>
+                        </Tab>
+                        <Tab eventKey="pendingFriends" title="Pending Friends">
+                            <div className="friendsContainer">
+                                <div className="row center-row">
+                                    <h1 className="pageTitle">Pending Friend Requests</h1>
+                                </div>
+                                <div>{this.state.feedback}</div>
+                                <div>
+                                </div>
                             </div>
-                            <div>
-                            </div>
-                        </div>
-                    </Tab>
-                    <Tab eventKey="pendingFriends" title="Pending Friends">
-                        <div className="friendsContainer">
-                            <div className="row center-row">
-                                <h1 className="pageTitle">Pending Friend Requests</h1>
-                            </div>
-                            <div>{this.state.feedback}</div>
-                            <div>
-                            </div>
-                        </div>
 
-                    </Tab>
-                </Tabs>
+                        </Tab>
+                    </Tabs>
                 </div>
 
 
             );
 
-                
-            
+
+
         }
     }
 }

@@ -50,6 +50,7 @@ class RegisterPage extends React.Component {
                 console.log("in reigster page log in with results " + responseData.results)
                 UserToken.setUserId(responseData.results[0].userId)
                 UserToken.setUserName(responseData.results[0].firstName + " " + responseData.results[0].lastName)
+                UserToken.setUserEmail(responseData.results[0].email)
                 this.setState({redirect:true})
             }
         })

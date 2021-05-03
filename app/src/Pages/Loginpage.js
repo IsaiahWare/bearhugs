@@ -11,7 +11,8 @@ class LoginPage extends React.Component {
             email:"",
             password:"",
 	        redirect: false,
-            photos: []
+            photos: [],
+            feedback:""
         }
         this.logIn= this.logIn.bind(this)
         this.handleInputChange = this.handleInputChange.bind(this)
@@ -37,8 +38,14 @@ class LoginPage extends React.Component {
 	    if (JSON.stringify(responseData.error) === '{}') {
             UserToken.setUserId(responseData.results[0].userId)
             UserToken.setUserName(responseData.results[0].firstName + " " +responseData.results[0].lastName )
+            UserToken.setUserEmail(responseData.results[0].email)
             this.setState({redirect:true})
 	    }
+        else {
+            this.setState({
+                feedback: "Incorrect username or password. Try again with a different username or password."
+            })
+        }
 
     })
 }
@@ -101,6 +108,9 @@ handleInputChange(event) {
                                 </div>
                                 <div className="row center-row">
                                 <p>Don't have an account?  <Link to="/register" className="route-link">Register here! </Link></p>
+                            </div>
+                            <div className="row center-row match-parent">
+                                {this.state.feedback}
                             </div>
                             </form>
 
