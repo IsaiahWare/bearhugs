@@ -74,7 +74,7 @@ class WingmanPage extends React.Component {
 
             }).catch((error)=>{
                 let tempPhotoNumber=this.state.doneLoading+1;
-                console.error
+                console.error(error)
                 this.setState(prevState => ({
                     currentPhotos: [...prevState.currentPhotos, {id: id, imgsrc:"mail-order-wife.png"}],
                     doneLoading: tempPhotoNumber
