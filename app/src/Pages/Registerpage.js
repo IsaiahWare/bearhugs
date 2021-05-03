@@ -30,8 +30,10 @@ class RegisterPage extends React.Component {
             errors: "",
             age: 18,
             feedback: " ",
-            genderIdentity:"",
-            selectedGenderPreference: [],
+            genderIdentity: "",
+            maleGenderPref: false,
+            femaleGenderPref: false,
+            otherGenderPref: false,
             redirect: false
 
         }
@@ -169,7 +171,9 @@ class RegisterPage extends React.Component {
             "lastName": this.state.lastName,
             "email": this.state.email,
             "password": this.state.password,
-            "age": this.state.age
+            "age": this.state.age,
+            "genderIdentity": this.state.genderIdentity,
+
         }
 
         fetch(url, {
@@ -205,18 +209,6 @@ class RegisterPage extends React.Component {
             [name]: value
         });
     }
-
-    setSelectedPreferences(event) {
-        console.log(event)
-        console.log(event.target)
-        const values = Array.from(event.target.selectedOptions, option => option.value);
-        console.log(values)
-        this.setState({
-            selectedGenderPreference: values
-        })
-
-    }
-
 
 
     render() {
@@ -263,40 +255,41 @@ class RegisterPage extends React.Component {
                                         <option value="OTHER">Other</option>
                                     </select>
                                 </div>
-                                    <div className="input-row center-row match-width">
-                                        <FontAwesomeIcon icon={faInfoCircle}></FontAwesomeIcon>
-                                        <select multiple onChange={this.setSelectedPreferences} className="input" id="gender_pref_select">
-                                        <option value="" disabled selected>Your Preferred Genders for Matching</option>
-                                            <option value="MALE">Male</option>
-                                            <option value="FEMALE">Female</option>
-                                            <option value="OTHER">Other</option>
-                                            <option value="NONE">None</option>
-                                        </select>
+                                <div className="input-row center-row match-width">
+                                    <div>
+                                        <p>Gender Preferences for Matching</p>
                                     </div>
+                                    <label for="male_gender_pref">Male</label>
+                                    <input type="checkbox" onChange={this.handleInputChange} id="male_gender_pref" className="input" checked={this.state.maleGenderPref} />
+                                    <label for="female_gender_pref">Female</label>
+                                    <input type="checkbox" onChange={this.handleInputChange} id="female_gender_pref" className="input" checked={this.state.femaleGenderPref} />
+                                    <label for="other_gender_pref">Other</label>
+                                    <input type="checkbox" onChange={this.handleInputChange} id="other_gender_pref" className="input" checked={this.state.otherGenderPref} />
+                                </div>
 
-                                    <div className="center-row padding-top-1rem">
-                                        <div className="divider ">
-                                        </div>
+                                <div className="center-row padding-top-1rem">
+                                    <div className="divider ">
                                     </div>
-                                    <div className="input-row center-row">
-                                        <button className="full-width-button red" type="submit">Register!</button>
-                                    </div>
-                                    <div className="center-row">
-                                        <span className="error-span">{this.state.feedback}</span>
-                                    </div>
-                                    <div className="row center-row">
-                                        <Link to="/" className="route-link">Back to Login </Link>
-                                    </div>
+                                </div>
+                                <div className="input-row center-row">
+                                    <button className="full-width-button red" type="submit">Register!</button>
+                                </div>
+                                <div className="center-row">
+                                    <span className="error-span">{this.state.feedback}</span>
+                                </div>
+                                <div className="row center-row">
+                                    <Link to="/" className="route-link">Back to Login </Link>
+                                </div>
                             </form>
 
 
                         </div>
-                        </div>
-                    </div>
-                    <div className="page-gradient">
-
                     </div>
                 </div>
+                <div className="page-gradient">
+
+                </div>
+            </div>
         );
     }
 }
