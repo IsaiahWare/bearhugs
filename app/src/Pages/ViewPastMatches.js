@@ -240,17 +240,10 @@ class ViewPastMatches extends React.Component {
 
     }
 
-    getWingmanPhotos() {
-        for (let i = 0; i < this.state.pendingWingmanMatches.length; ++i) {
-            this.getPhotoForWingmanUser(this.state.pendingWingmanMatches[i].userId);
-
-        }
-
-    }
 
     getPendingWingmanPhotos() {
-        for (let i = 0; i < this.state.wingmanMatches.length; ++i) {
-            this.getPhotoForWingmanUser(this.state.wingmanMatches[i].userId);
+        for (let i = 0; i < this.state.pendingWingmanMatcheslength; ++i) {
+            this.getPhotoForWingmanUser(this.state.pendingWingmanMatches[i].userId);
 
         }
 
