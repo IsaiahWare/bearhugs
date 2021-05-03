@@ -109,7 +109,7 @@ class ViewProfilePage extends React.Component {
     getPendingAndCurrent() {
         this.getCurrentMatches();
         this.getPendingMatches();
-
+        this.getRejectedMatches();
     }
 
     getProfiles() {
@@ -127,7 +127,7 @@ class ViewProfilePage extends React.Component {
         .then(res => res.json())
         .then(responseData => {
               if (responseData.error!=null) {
-                  this.getPendingAndCurrent();
+                this.getPendingAndCurrent(()=>{
                 for (let i = 0; i < responseData.results.length; ++i) {
                     if (this.state.unsuitableMatches.includes(responseData.results[i])) {
                         responseData.splice(i)
@@ -142,6 +142,7 @@ class ViewProfilePage extends React.Component {
                     profiles: tempProfiles,
                     numProfiles:tempProfiles.length
                 })
+            })
                   
            }
        }).then(()=>{

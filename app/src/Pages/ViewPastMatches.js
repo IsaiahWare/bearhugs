@@ -134,12 +134,9 @@ class ViewPastMatches extends React.Component {
         })
             .then(photos => photos.json())
             .then(photos => {
-                console.log("current photo response : ")
-                console.log(photos)
                 let tempPhotoNumber = this.state.doneLoadingPendingWingman + 1;
                 // TODO: handle case where login is invalid
                 if (photos.length != 0) {
-                    console.log("return actual photo")
                     this.setState(prevState => ({
                         pendingWingmanPhotos: [...prevState.pendingWingmanPhotos, { id: id, imgsrc: photos[0] }],
                         doneLoadingPendingWingman: tempPhotoNumber
@@ -147,7 +144,6 @@ class ViewPastMatches extends React.Component {
 
                 }
                 else {
-                    console.log("Reutnr defualt")
                     this.setState(prevState => ({
                         pendingWingmanPhotos: [...prevState.pendingWingmanPhotos, { id: id, imgsrc: "mail-order-wife.png" }],
                         doneLoadingPendingWingman: tempPhotoNumber
@@ -157,7 +153,6 @@ class ViewPastMatches extends React.Component {
             }).catch((error) => {
                 let tempPhotoNumber = this.state.doneLoadingPendingWingman + 1;
                 console.error(error)
-                console.log("Reutnr defualt")
                 this.setState(prevState => ({
                     pendingWingmanPhotos: [...prevState.pendingWingmanPhotos, { id: id, imgsrc: "mail-order-wife.png" }],
                     doneLoadingPendingWingman: tempPhotoNumber
