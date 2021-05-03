@@ -76,7 +76,7 @@ class ViewProfilePage extends React.Component {
         })
             .then(res => res.json())
             .then(responseData => {
-                console.log("rejected matches response data ")
+                console.log("wingman rejected matches response data ")
                 console.log(responseData)
                 if (JSON.stringify(responseData.error) === '{}') {
                     this.setState({
@@ -263,7 +263,6 @@ class ViewProfilePage extends React.Component {
        })
     }
     getPhotoForCurrentUser(id) {
-        console.log("get photo for user " + id)
         let url='http://bearhugs.love/server/php/photoGetter.php'
         let newRequest = {
             "userId": id,
@@ -349,11 +348,11 @@ class ViewProfilePage extends React.Component {
             to= "/"
             />
         }
-        console.log("done loading :" + this.state.doneLoading)
-        console.log("num profiles " + this.state.numProfiles)
+        // console.log("done loading :" + this.state.doneLoading)
+        // console.log("num profiles " + this.state.numProfiles)
 
         if (this.state.doneLoading==this.state.numProfiles) {
-            console.log("In render with done loading "+ this.state.doneLoading+ " and num profiles" + this.state.numProfiles)
+            // console.log("In render with done loading "+ this.state.doneLoading+ " and num profiles" + this.state.numProfiles)
             return (
                 <div className="page">
                     <BearHugsNavbar></BearHugsNavbar>
