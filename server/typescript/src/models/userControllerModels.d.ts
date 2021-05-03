@@ -41,6 +41,7 @@ export interface UserFindRequest {
 
 export interface UserRandomRequest {
    count: number; 
+   userId: number;
 }
 
 export interface UserUpdateRequest {
