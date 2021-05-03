@@ -73,8 +73,7 @@ class ViewPastMatches extends React.Component {
     }
 
     getPhotoForPendingUser(id) {
-        let url = '../../../server/php/photoGetter.php'
-        console.log("url " + url)
+        let url = 'http://bearhugs.love/server/php/photoGetter.php'
         let newRequest = {
             "userId": id,
         }
@@ -237,7 +236,7 @@ class ViewPastMatches extends React.Component {
 
 
     getPendingWingmanPhotos() {
-        for (let i = 0; i < this.state.pendingWingmanMatcheslength; ++i) {
+        for (let i = 0; i < this.state.pendingWingmanMatches.length; ++i) {
             this.getPhotoForWingmanUser(this.state.pendingWingmanMatches[i].userId);
 
         }
