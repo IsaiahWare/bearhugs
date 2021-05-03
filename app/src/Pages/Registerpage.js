@@ -211,13 +211,16 @@ class RegisterPage extends React.Component {
         if (name=="maleGenderPref" || name=="femaleGenderPref" || name=="otherGenderPref") {
                 let checkValue = event.target.checked;
                 console.log('name ' + name + 'value '+ checkValue)
+                let setValue = false
                 this.setState({
                     [name]: checkValue
                 });
-            }
-        this.setState({
-            [name]: value
-        });
+        } else{
+            this.setState({
+                [name]: value
+            });
+        }
+       
     }
 
 
@@ -272,9 +275,9 @@ class RegisterPage extends React.Component {
                                         <div>
                                         <Form.Label>Gender Preference for Matching</Form.Label>
                                         </div>
-                                    <Form.Check inline label="Male" name="maleGenderPref" onChange={this.handleInputChange} id="male_gender_pref"  value={this.state.maleGenderPref} />
-                                    <Form.Check inline label="Female" name="femaleGenderPref" onChange={this.handleInputChange} id="female_gender_pref"  value={this.state.femaleGenderPref} />
-                                    <Form.Check inline label="Other" name="otherGenderPref" onChange={this.handleInputChange} id="other_gender_pref" value={this.state.otherGenderPref} />
+                                    <Form.Check inline label="Male" name="maleGenderPref" onChange={this.handleInputChange} id="male_gender_pref"  checked={this.state.maleGenderPref} />
+                                    <Form.Check inline label="Female" name="femaleGenderPref" onChange={this.handleInputChange} id="female_gender_pref"  checked={this.state.femaleGenderPref} />
+                                    <Form.Check inline label="Other" name="otherGenderPref" onChange={this.handleInputChange} id="other_gender_pref" checked={this.state.otherGenderPref} />
                                     </Form.Group>
                                 </div>
 
