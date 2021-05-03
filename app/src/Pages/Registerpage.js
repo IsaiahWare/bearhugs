@@ -203,10 +203,9 @@ class RegisterPage extends React.Component {
     }
 
     setSelectedPreferences(event){
+        console.log(event)
         //const values = Array.from(event.target.selectedOptions, option => option.value);
-        console.log(event.target)
-        console.log(event.target.value)
-        console.log(event.target.name)
+        
     }
 
 
@@ -253,6 +252,7 @@ class RegisterPage extends React.Component {
                                 </div>
                                 <div className="input-row center-row">
                                     <MultiSelect
+                                        className="input"
                                         options={genderPreferenceOptions}
                                         value={this.state.selectedGenderPreference}
                                         onChange={this.setSelectedPreferences}
