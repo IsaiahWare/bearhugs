@@ -51,6 +51,23 @@ handleInputChange(event) {
       [name]: value });
 }
 
+    getPhotosTest() {
+        fetch('../../../server/php/photoGetter.php', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+              "userId": this.state.userId
+            })
+          })
+          .then(photos => photos.json())
+          .then(photos => {
+            this.setState({
+              "photos": photos
+            })
+          })
+          .catch(console.error);
+    }
+
     render() {
 	    const redirect = this.state.redirect
 	    if (redirect) {
@@ -91,6 +108,23 @@ handleInputChange(event) {
                         </div>
                     </div>
                 </div>
+                <h1>1. Upload photo for current user</h1>
+                <form enctype="multipart/form-data" action="../../../server/php/photoGetter.php" method="POST">
+                    <input type="hidden" name="MAX_FILE_SIZE" value="50000000000000" />
+                    <input type="file" name="filename" id = "uploadfile_input"/>
+                    <input type="hidden" name="userId" value={30} />
+                    <button type="submit" name="submit"> UPLOAD </button>
+                </form>
+
+                <h1>2. Get all photos for current user in state</h1>
+                <button onClick={this.getPhotosTest}> GET ALL PHOTOS</button>
+
+                <h1>3. Display photos for current user</h1>
+                {
+                    this.state.photos.map((photoLink, idx) =>  (
+                        <img src={photoLink} key={idx} />
+                    ))
+                }
                 <div className="page-gradient">
                 </div>
             </div>
