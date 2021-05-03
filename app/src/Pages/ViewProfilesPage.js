@@ -14,24 +14,24 @@ class ViewProfilePage extends React.Component {
         super(props);
         this.state = {
             profiles: [],
-            numProfiles:-1,
-            redirect:false,
-            unsuitableMatches:[],
-            currentPhotos:[],
+            numProfiles: -1,
+            redirect: false,
+            unsuitableMatches: [],
+            currentPhotos: [],
             doneLoading: 0,
-            feedback:""
+            feedback: "Loading profiles..."
         }
         this.checkUserLogIn = this.checkUserLogIn.bind(this)
         this.getProfiles = this.getProfiles.bind(this)
         this.getRejectedMatches = this.getRejectedMatches.bind(this)
     }
 
-   checkUserLogIn() {
-        let token =  UserToken.getUserId()
-        console.log("token "+token)
-        if(token==null || token==undefined || token=="") {
+    checkUserLogIn() {
+        let token = UserToken.getUserId()
+        console.log("token " + token)
+        if (token == null || token == undefined || token == "") {
             this.setState({
-                redirect:true
+                redirect: true
             })
             console.log("redirect " + this.state.redirect)
         }
@@ -57,11 +57,11 @@ class ViewProfilePage extends React.Component {
                 if (JSON.stringify(responseData.error) === '{}') {
                     this.setState({
                         unsuitableMatches: this.state.unsuitableMatches.concat(responseData.results)
-                    }, function() {
+                    }, function () {
                         this.getRejectedMatches();
                     })
                 }
-         
+
             })
 
     }
@@ -85,13 +85,13 @@ class ViewProfilePage extends React.Component {
                 if (JSON.stringify(responseData.error) === '{}') {
                     this.setState({
                         unsuitableMatches: this.state.unsuitableMatches.concat(responseData.results)
-                    }, function() {
+                    }, function () {
                         this.getProfiles();
-                    
+
                     })
                 }
-           
-                
+
+
             })
 
     }
@@ -114,13 +114,13 @@ class ViewProfilePage extends React.Component {
                 if (JSON.stringify(responseData.error) === '{}') {
                     this.setState({
                         unsuitableMatches: this.state.unsuitableMatches.concat(responseData.results)
-                    }, function() {
+                    }, function () {
                         this.getRejectedWingmanMatches()
-                    
+
                     })
                 }
-           
-                
+
+
             })
 
     }
@@ -140,27 +140,27 @@ class ViewProfilePage extends React.Component {
         })
             .then(res => res.json())
             .then(responseData => {
-                 console.log(responseData)
+                console.log(responseData)
                 if (JSON.stringify(responseData.error) === '{}') {
                     console.log("pending matches response data ")
                     console.log(responseData)
                     this.setState({
                         unsuitableMatches: this.state.unsuitableMatches.concat(responseData.results)
-                    }, function() {
+                    }, function () {
                         this.getCurrentMatches();
                     })
                 }
-                
+
             })
 
-        }
+    }
 
 
 
     getProfiles() {
         let url = baseDomain + '/user/random'
         let newRequest = {
-            count: 20,
+            count: 15,
         }
         fetch(url, {
             method: 'POST',
@@ -169,50 +169,55 @@ class ViewProfilePage extends React.Component {
             },
             body: JSON.stringify(newRequest)
         })
-        .then(res => res.json())
-        .then(responseData => {
-              if (responseData.error!=='{}') {
-                console.log("Current profiles before splicing: ")
-                console.log(responseData)
+            .then(res => res.json())
+            .then(responseData => {
+                if (responseData.error !== '{}') {
+                    console.log("Current profiles before splicing: ")
+                    console.log(responseData)
                     for (let j = 0; j < this.state.unsuitableMatches.length; ++j) {
-                       let result = responseData.results.findIndex(element => element.userId == this.state.unsuitableMatches[j].userId)
-                        if (result!=-1) {
+                        let result = responseData.results.findIndex(element => element.userId == this.state.unsuitableMatches[j].userId)
+                        if (result != -1) {
                             responseData.results.splice(result)
                             console.log("splice " + responseData.results[result])
                         }
-                    
+
+                    }
+                    let temp = responseData.results;
+                    let selfid = parseInt(UserToken.getUserId())
+                    console.log("self id " + selfid)
+                    let tempResult = temp.filter((obj) => {
+                        console.log(obj)
+                        return obj.userId !== selfid
+                    })
+
+                    this.setState({
+                        profiles: tempResult,
+                        numProfiles: tempResult.length,
+                        unsuitableMatches: []
+                    })
                 }
-                let temp = responseData.results;
-                let selfid = UserToken.getUserId();
-                let tempResult = temp.filter((obj) => {
-                    return obj.userId !== selfid
-                })
-            
-                this.setState({
-                    profiles: tempResult,
-                    numProfiles:tempResult.length,
-                    unsuitableMatches:[]
-                })      
-           }
-           else {
-               this.setState({feedback: "No profiles could be obtained. Please try again later."})
-           }
-       }).then(()=>{
-           console.log("Current profiles: ")
-           console.log(this.state.profiles)
-        for (let i=0; i < this.state.profiles.length; ++i) {
-           this.getPhotoForCurrentUser(this.state.profiles[i].userId) 
-        }
-       })
+                else {
+                    this.setState({ feedback: "No profiles could be obtained. Please try again later." })
+                }
+            }).then(() => {
+                console.log("Current profiles: ")
+                console.log(this.state.profiles)
+                for (let i = 0; i < this.state.profiles.length; ++i) {
+                    this.getPhotoForCurrentUser(this.state.profiles[i].userId)
+                }
+            }).then(() => {
+                this.setState({feedback:""})
+
+            })
 
     }
 
     componentDidMount() {
         this.checkUserLogIn()
-            if(!this.state.redirect) {
-                console.log("HLELLO???")
-                this.getPendingMatches()
-            }
+        if (!this.state.redirect) {
+            console.log("HLELLO???")
+            this.getPendingMatches()
+        }
     }
 
 
@@ -230,29 +235,29 @@ class ViewProfilePage extends React.Component {
             },
             body: JSON.stringify(newRequest)
         })
-        .then(res => res.json())
-        .then(responseData => {
-        //       if (JSON.stringify(responseData.error) === '{}') {
-        //         let temp = this.state.profiles
-        //         let photoArray=this.state.currentPhotos
-        //         let tempProfiles = this.state.numProfiles-1
-        //         let doneLoadingTemp = this.state.doneLoading-1
-        //         let tempResult = temp.filter((obj) => {
-        //         return obj.userId != userId
-        //         })
-        //         let tempPhotos = photoArray.filter((obj) => {
-        //             return obj.id != userId
-        //             })
-        //         this.setState({
-        //             profiles: tempResult,
-        //             numProfiles: tempProfiles,
-        //             currentPhotos: tempPhotos,
-        //             doneLoading: doneLoadingTemp
-        
-        //         })
-        //    }
-       })
-                  
+            .then(res => res.json())
+            .then(responseData => {
+                //       if (JSON.stringify(responseData.error) === '{}') {
+                //         let temp = this.state.profiles
+                //         let photoArray=this.state.currentPhotos
+                //         let tempProfiles = this.state.numProfiles-1
+                //         let doneLoadingTemp = this.state.doneLoading-1
+                //         let tempResult = temp.filter((obj) => {
+                //         return obj.userId != userId
+                //         })
+                //         let tempPhotos = photoArray.filter((obj) => {
+                //             return obj.id != userId
+                //             })
+                //         this.setState({
+                //             profiles: tempResult,
+                //             numProfiles: tempProfiles,
+                //             currentPhotos: tempPhotos,
+                //             doneLoading: doneLoadingTemp
+
+                //         })
+                //    }
+            })
+
     }
 
     notifyRequesteeofMatch(userId) {
@@ -269,14 +274,14 @@ class ViewProfilePage extends React.Component {
             },
             body: JSON.stringify(newRequest)
         })
-        .then(res => res.json())
-        .then(responseData => {
-              if (JSON.stringify(responseData.error) === '{}') {
-           }
-       })
+            .then(res => res.json())
+            .then(responseData => {
+                if (JSON.stringify(responseData.error) === '{}') {
+                }
+            })
     }
     getPhotoForCurrentUser(id) {
-        let url='http://bearhugs.love/server/php/photoGetter.php'
+        let url = 'http://bearhugs.love/server/php/photoGetter.php'
         let newRequest = {
             "userId": id,
         }
@@ -288,28 +293,27 @@ class ViewProfilePage extends React.Component {
             body: JSON.stringify(newRequest)
 
         })
-        .then(photos => photos.json())
-        .then(photos=> {
-            console.log(JSON.stringify(photos))
-           let tempPhotoNumber=this.state.doneLoading+1;
+            .then(photos => photos.json())
+            .then(photos => {
+                let tempPhotoNumber = this.state.doneLoading + 1;
                 // TODO: handle case where login is invalid
-                    if (photos.length!=0) {
-                            this.setState(prevState => ({
-                                currentPhotos: [...prevState.currentPhotos, {id: id, imgsrc: photos[0]}],
-                                doneLoading: tempPhotoNumber
-                            }))
-                        }
-                    else {
-                        this.setState(prevState => ({
-                            currentPhotos: [...prevState.currentPhotos, {id: id, imgsrc:"mail-order-wife.png"}],
-                            doneLoading: tempPhotoNumber
-                        }))
-                    }
+                if (photos.length != 0) {
+                    this.setState(prevState => ({
+                        currentPhotos: [...prevState.currentPhotos, { id: id, imgsrc: photos[0] }],
+                        doneLoading: tempPhotoNumber
+                    }))
+                }
+                else {
+                    this.setState(prevState => ({
+                        currentPhotos: [...prevState.currentPhotos, { id: id, imgsrc: "mail-order-wife.png" }],
+                        doneLoading: tempPhotoNumber
+                    }))
+                }
 
-            }).catch((error)=>{
-                let tempPhotoNumber=this.state.doneLoading+1;
+            }).catch((error) => {
+                let tempPhotoNumber = this.state.doneLoading + 1;
                 this.setState(prevState => ({
-                    currentPhotos: [...prevState.currentPhotos, {id: id, imgsrc:"mail-order-wife.png"}],
+                    currentPhotos: [...prevState.currentPhotos, { id: id, imgsrc: "mail-order-wife.png" }],
                     doneLoading: tempPhotoNumber
                 }))
             })
@@ -329,65 +333,67 @@ class ViewProfilePage extends React.Component {
             },
             body: JSON.stringify(newRequest)
         })
-        .then(res => res.json())
-        .then(responseData => {
-            //   if (JSON.stringify(responseData.error) === '{}') {
-            //     let temp = this.state.profiles
-            //     let photoArray=this.state.currentPhotos
-            //     let tempProfiles = this.state.numProfiles-1
-            //     let tempDoneLoading = this.state.doneLoading-1
-            //     let tempResult = temp.filter((obj) => {
-            //     return obj.userId != userId
-            //     })
-            //     let tempPhotos = photoArray.filter((obj) => {
-            //         return obj.id != userId
-            //         })
-            //     this.setState({
-            //         profiles: tempResult,
-            //         numProfiles: tempProfiles,
-            //         currentPhotos: tempPhotos,
-            //         doneLoading: tempDoneLoading
-        
-            //     })
-           //}
-       })
-  
+            .then(res => res.json())
+            .then(responseData => {
+                //   if (JSON.stringify(responseData.error) === '{}') {
+                //     let temp = this.state.profiles
+                //     let photoArray=this.state.currentPhotos
+                //     let tempProfiles = this.state.numProfiles-1
+                //     let tempDoneLoading = this.state.doneLoading-1
+                //     let tempResult = temp.filter((obj) => {
+                //     return obj.userId != userId
+                //     })
+                //     let tempPhotos = photoArray.filter((obj) => {
+                //         return obj.id != userId
+                //         })
+                //     this.setState({
+                //         profiles: tempResult,
+                //         numProfiles: tempProfiles,
+                //         currentPhotos: tempPhotos,
+                //         doneLoading: tempDoneLoading
+
+                //     })
+                //}
+            })
+
     }
-    
+
     render() {
         const redirect = this.state.redirect
-	    if (redirect) {
+        if (redirect) {
             return <Redirect
-            to= "/"
+                to="/"
             />
         }
-        console.log("done loading :" + this.state.doneLoading)
-        console.log("num profiles " + this.state.numProfiles)
+        // console.log("done loading :" + this.state.doneLoading)
+        // console.log("num profiles " + this.state.numProfiles)
 
-        if (this.state.doneLoading==this.state.numProfiles) {
-            console.log("In render with done loading "+ this.state.doneLoading+ " and num profiles" + this.state.numProfiles)
+        if (this.state.doneLoading == this.state.numProfiles) {
+            // console.log("In render with done loading "+ this.state.doneLoading+ " and num profiles" + this.state.numProfiles)
             return (
                 <div className="page">
                     <BearHugsNavbar></BearHugsNavbar>
                     <div className="row center-row">
-                        {this.state.feedback}
+                        <h6>{this.state.feedback}</h6>
+                    </div>
+                    <div className="row center-row match-container-row">
                         <div className="col center-col">
                             {
-                                this.state.profiles.map((profile,i) =>
-                                <div className="row center-row match-container match-row" key = {"row0" + profile.userId}>
-                                    <MatchProfile key={profile.userId} userId={profile.userId} imgsrc= {this.state.currentPhotos[i].imgsrc}
-                                    firstName={profile.firstName} lastName={profile.lastName} age={profile.age} descrip={profile.description}
-                                     matched={false}
-                                     approveMatch={() => this.onClickAccept(profile.userId)} rejectMatch={() => this.onClickReject(profile.userId)}
-                                     ></MatchProfile>
-                                     
-                                </div>
+                                this.state.profiles.map((profile, i) =>
+                                    <div className="row center-row match-container match-row" key={"row0" + profile.userId}>
+                                        <MatchProfile key={profile.userId} userId={profile.userId} imgsrc={this.state.currentPhotos[i].imgsrc}
+                                            firstName={profile.firstName} lastName={profile.lastName} age={profile.age} descrip={profile.description}
+                                            matched={false}
+                                            approveMatch={() => this.onClickAccept(profile.userId)} rejectMatch={() => this.onClickReject(profile.userId)}
+                                        ></MatchProfile>
+
+                                    </div>
                                 )
                             }
-    
+
                             {/* for frontend testing */}
-    
-    
+
+
                         </div>
                     </div>
                 </div>
@@ -395,9 +401,27 @@ class ViewProfilePage extends React.Component {
 
         }
         else {
-            return null;
+            return (
+                <div className="page">
+                    <BearHugsNavbar></BearHugsNavbar>
+                    <div className="row center-row">
+                        <h6>{this.state.feedback}</h6>
+                    </div>
+                    <div className="row center-row match-container-row">
+
+                        <div className="col center-col">
+
+
+                            {/* for frontend testing */}
+
+
+                        </div>
+                    </div>
+                </div>
+
+            )
         }
- 
+
     }
 }
 

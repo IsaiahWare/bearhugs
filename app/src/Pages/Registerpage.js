@@ -86,7 +86,9 @@ class RegisterPage extends React.Component {
         let emailFilter = this.filterEmail(email)
         let passwordFilter = this.filterPassword(password)
         let confirmPassWordCheck = this.checkPassword(password, confirmPassword)
-        if (ageFilter && nameFilter && emailFilter && passwordFilter && confirmPassWordCheck) {
+        let genderIdentityCheck = this.filterGenderIdentity();
+        let genderPreferenceCheck = this.filterGenderPreference()
+        if (ageFilter && nameFilter && emailFilter && passwordFilter && confirmPassWordCheck && genderIdentityCheck && genderPreferenceCheck) {
             this.registerAccount()
         }
         else {
@@ -148,6 +150,26 @@ class RegisterPage extends React.Component {
         return true;
 
 
+    }
+    filterGenderIdentity() {
+        if (this.state.genderIdentity=="") {
+            this.setState({
+                feedback: "Please indicate your gender."
+            })
+            return false;
+
+        }
+        return true;
+    }
+    filterGenderPreference() {
+        if (this.state.maleGenderPref==false && this.state.femaleGenderPref==false && this.otherGenderPref==false) {
+            this.setState({
+                feedback: "Please indicate your preferred gender for matching."
+            })
+            return false;
+
+        }
+        return true;
     }
 
     filterAge(age) {

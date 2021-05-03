@@ -599,7 +599,7 @@ class ViewPastMatches extends React.Component {
                                 <h2>Completed Matches</h2>
                                 <h6>{this.state.feedback}</h6>
                             </div>
-                            <div className="row center-row">
+                            <div className="row center-row match-container-row">
                                 <div className="col center-col">
                                     {
                                         this.state.currentMatches.map((profile, i) =>
@@ -618,7 +618,7 @@ class ViewPastMatches extends React.Component {
                                 <h2>Pending User Matches</h2>
                                 <h6>{this.state.feedback}</h6>
                             </div>
-                            <div className="row center-row">
+                            <div className="row center-row match-container-row">
                                 <div className="col center-col">
                                     {
                                         this.state.pendingMatches.map((profile, i) =>
@@ -635,8 +635,9 @@ class ViewPastMatches extends React.Component {
                         <Tab eventKey="wingmanMatches" title="Wingman Matches">
                             <div className="row center-row">
                                 <h2>Pending Wingman Matches</h2>
+                                <h6>{this.state.feedback}</h6>
                             </div>
-                            <div className="row center-row">
+                            <div className="row center-row match-container-row">
                                 <div className="col center-col">
                                     {
                                         this.state.pendingWingmanMatches.map((profile, i) =>

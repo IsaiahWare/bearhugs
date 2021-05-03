@@ -3,7 +3,6 @@
 
 .page {
   width: 100%;
-
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -16,6 +15,9 @@
 background: rgb(2,0,36);
 background: linear-gradient(180deg, rgba(2,0,36,0) 0%, rgba(9,9,121,0) 58%, rgba(255,0,33,0.6516807406556373) 100%);
 height: 60vh;
+}
+.match-container-row {
+  padding-bottom: 1em;
 }
 
 .fit-container-width {

@@ -27,11 +27,15 @@ class EditSettingsPage extends React.Component {
             redirect: false,
             photo: "",
             genderIdentity: "MALE",
-            genderPreferences: "STRAIGHT",
+            maleGenderPref: false,
+            femaleGenderPref: false,
+            otherGenderPref: false,
             firstName: "",
             lastName: "",
             age: -1,
-            photos: []
+            currentPhotos: [],
+            doneLoading:0,
+            numPhotos:-1
 
         }
         this.handleInputChange = this.handleInputChange.bind(this)
@@ -60,7 +64,6 @@ class EditSettingsPage extends React.Component {
     }
 
     getCurrentUserInfo() {
-        this.getPhotos_new();
         let uid = UserToken.getUserId();
         console.log("user id in edit settings: " + uid)
         let url = baseDomain + '/user/find'
@@ -85,20 +88,12 @@ class EditSettingsPage extends React.Component {
                         description: responseData.results[0].description,
                         firstName: responseData.results[0].firstName,
                         lastName: responseData.results[0].lastName,
-                        age: responseData.results[0].age
+                        age: responseData.results[0].age,
+                        maleGenderPref: responseData.results[0].maleGenderPref,
+                        femaleGenderPref:responseData.results[0].femaleGenderPref,
+                        otherGenderPref:responseData.results[0].otherGenderPref,
                     })
-                    if (responseData.results[0].genderIdentity != null) {
-                        this.setState({
-                            genderIdentity: responseData.results[0].genderIdentity
-                        })
-
-                    }
-                    else if (responseData.results[0].genderPreferences != null) {
-                        this.setState({
-                            genderPreferences: responseData.results[0].genderPreferences,
-                        })
-
-                    }
+                    this.getPhotoInfo();
 
                 }
                 else {
@@ -112,31 +107,11 @@ class EditSettingsPage extends React.Component {
 
     }
 
-    getPhotos_new(){
-        console.log("fetching photos...")
-        let url = baseDomain + "/server/php/photoGetter.php"
-        fetch('../../../server/php/photoGetter.php', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-              "userId": this.state.userId
-            })
-          })
-          .then(photos => photos.json())
-          .then(photos => {
-            this.setState({
-              photos: photos
-            })
-          })
-          .catch(console.error);
-    }
 
     getPhotoInfo() {
-        let uid = UserToken.getUserId();
-        console.log("user id in get photo info: " + uid)
-        let url = baseDomain + '/photo/all'
+        let url = 'http://bearhugs.love/server/php/photoGetter.php'
         let newRequest = {
-            "userId": uid,
+            "userId": UserToken.getUserId(),
         }
         fetch(url, {
             method: 'POST',
@@ -146,27 +121,28 @@ class EditSettingsPage extends React.Component {
             body: JSON.stringify(newRequest)
 
         })
-        .then(res => res.json())
-        .then(responseData => {
-            console.log(JSON.stringify(responseData))
+            .then(photos => photos.json())
+            .then(photos => {
+                let tempPhotoNumber = this.state.doneLoading + 1;
                 // TODO: handle case where login is invalid
-                if (JSON.stringify(responseData.error) === '{}') {
-                    console.log(responseData.results[0])
-                    if (responseData.results.length!=0) {
-                        this.setState({
-                            photo: responseData.results[0].photoUrl
-                        })
-                    }
-
+                if (photos.length != 0) {
+                    this.setState({
+                        currentPhotos: photos,
+                        doneLoading: tempPhotoNumber
+                    })
                 }
                 else {
-                    console.log("No data for edit settings")
-                    console.log(responseData.error)
-                    this.setState({feedback: "Couldn't get photo"})
+                    this.setState({
+                        feedback: "You have not uploaded a photo yet."
+                    })
                 }
 
+            }).catch((error) => {
+                let tempPhotoNumber = this.state.doneLoading + 1;
+                this.setState({
+                    feedback: "Photos could not be obtained at this time, but other user information has been obtained."
+                })
             })
-
 
 
     }
@@ -174,7 +150,7 @@ class EditSettingsPage extends React.Component {
     uploadPhoto() {
         let uid = UserToken.getUserId();
         console.log("user id in get photo info: " + uid)
-        let url = baseDomain + '/photo/all'
+        let url = 'http://bearhugs.love/server/php/photoUploader.php'
         let newRequest = {
             "userId": uid,
             "photoUrl": this.state.photo
@@ -219,10 +195,12 @@ class EditSettingsPage extends React.Component {
             "email": this.state.email,
             "description": this.state.description,
             "genderIdentity": this.state.genderIdentity,
-            "genderPreferences": this.state.genderPreferences,
             "firstName": this.state.firstName,
             "lastName": this.state.lastName,
             "age": this.state.age,
+            "maleGenderPref": this.state.maleGenderPref,
+            "femaleGenderPref":this.state.femaleGenderPref,
+            "otherGenderPref": this.state.otherGenderPref
         }
 
         console.log("New rquest" + newRequest)
@@ -252,13 +230,19 @@ class EditSettingsPage extends React.Component {
 
     handleInputChange(event) {
         let target = event.target;
-
         let value = target.value
         let name = target.name;
-        console.log(name + " " + value)
-        this.setState({
-            [name]: value
-        });
+        if (name=="maleGenderPref" || name=="femaleGenderPref" || name=="otherGenderPref") {
+                let checkValue = event.target.checked;
+                console.log('name ' + name + 'value '+ checkValue)
+                this.setState({
+                    [name]: checkValue
+                });
+        } else{
+            this.setState({
+                [name]: value
+            });
+        };
     }
 
     render() {
@@ -274,41 +258,27 @@ class EditSettingsPage extends React.Component {
             <div className="page" >
                 <BearHugsNavbar></BearHugsNavbar>
                 <div className="row center-row">
-                    <h3>{this.state.feedback}</h3>
+                <h2>Edit User Information</h2>
+                </div>
+                <div className="row center-row">
+                    <h6>{this.state.feedback}</h6>
                 </div>
                     <div className="row center-row">
                             {/*<Image src={this.state.photo} className="img-parent" />*/}
-                            {this.state.photos.map((photoLink, idx) =>  (
-                                <img src={photoLink} key={idx} className="img-parent"/>
-                                
+                            {this.state.currentPhotos.map((photo, idx) =>  (
+                                <img src={photo} key={idx} className="img-parent"/>
                             ))}
-                            <img key="smurf1" className="img-parent" src="https://weneedfun.com/wp-content/uploads/2016/07/Cute-Girl-Profile-pictures-For-Facebook-14.jpg"/>
-                            <img key="smurf2" className="img-parent" src = "https://weneedfun.com/wp-content/uploads/2016/07/Cute-Girl-Profile-pictures-For-Facebook-14.jpg"/>
-                            <img key="smurf3" className="img-parent" src = "https://weneedfun.com/wp-content/uploads/2016/07/Cute-Girl-Profile-pictures-For-Facebook-14.jpg"/>
-
                     </div>
                 <div className="col">
                
                     <Form onSubmit={this.handleSubmit} controlId="editForm">
-                        {/* <Form.Row>
-                            <Form.Group as={Col} controlId="editForm.picture">
-                                <ImageUploader
-                                    withIcon={true}
-                                    buttonText='Choose images'
-                                    onChange={this.onDrop}
-                                    imgExtension={['.jpg', '.png']}
-                                    maxFileSize={5242880}
-                                    singleImage={true}
-                                />
-                            </Form.Group>
-                        </Form.Row> */}
                         <Form.Group>
                             <Form.Label>Upload a profile image</Form.Label>
-                            <Form.File enctype="multipart/form-data" action={baseDomain + "/server/php/photoUploader.php"} method="POST" label="Example file input" id="photo_uploader">
+                            <Form.File enctype="multipart/form-data" action="http://bearhugs.love/server/php/photoUploader.php" method="POST" label="Photo Uploader" id="photo_uploader">
                                 <input type="hidden" name="MAX_FILE_SIZE" value="50000000000000" />
                                 <input type="file" name="filename" id = "uploadfile_input"/>
                                 <input type="hidden" name="userId" value={this.state.userId} />
-                                <button type="submit" name="submit"> UPLOAD </button>
+                                <Button type="submit" variant="danger" name="submit-button">Upload Photo</Button>
                             </Form.File>
                         </Form.Group>
                         <Form.Group controlId="editForm.email">
@@ -320,7 +290,6 @@ class EditSettingsPage extends React.Component {
                             <Form.Control as="textarea" name="description" value={this.state.description} rows={3} onChange={this.handleInputChange} placeholder="Write what you want 
                             people to see on your profile" />
                         </Form.Group>
-
                         <Form.Group controlId="editForm.genderIdentity">
                             <Form.Label>Gender Identity</Form.Label>
                             <Form.Control as="select" defaultValue={this.state.genderIdentity}
@@ -330,16 +299,14 @@ class EditSettingsPage extends React.Component {
                                 <option value="OTHER">Other</option>
                             </Form.Control>
                         </Form.Group>
-                        <Form.Group controlId="editForm.genderPreference">
-                            <Form.Label>Gender Preference</Form.Label>
-                            <Form.Control as="select" defaultValue={this.state.genderPreferences}
-                                name="genderPreferences" onChange={this.handleInputChange}>
-                                <option value="STRAIGHT">Straight</option>
-                                <option value="GAY">Gay</option>
-                                <option value="BISEXUAL">Bisexual</option>
-                                <option value="OTHER">Other</option>
-                            </Form.Control>
-                        </Form.Group>
+                        <Form.Group>
+                            <div>
+                            <Form.Label>Gender Preference for Matching</Form.Label>
+                            </div>
+                            <Form.Check inline label="Male" name="maleGenderPref" onChange={this.handleInputChange} id="male_gender_pref"  checked={this.state.maleGenderPref} />
+                            <Form.Check inline label="Female" name="femaleGenderPref" onChange={this.handleInputChange} id="female_gender_pref"  checked={this.state.femaleGenderPref} />
+                            <Form.Check inline label="Other" name="otherGenderPref" onChange={this.handleInputChange} id="other_gender_pref" checked={this.state.otherGenderPref} />
+                            </Form.Group>
                         <Form.Row>
                             <Form.Group as={Col} controlId="editForm.submit">
                                 <Button type="submit" variant="danger" name="submit-button">Submit Changes</Button>
