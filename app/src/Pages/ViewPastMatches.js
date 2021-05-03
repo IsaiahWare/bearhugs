@@ -309,7 +309,27 @@ class ViewPastMatches extends React.Component {
             .then(responseData => {
                 console.log(responseData)
                 if (JSON.stringify(responseData.error) === '{}') {
-                    this.getPendingWingmanMatches();
+                    let temp = this.state.pendingWingmanMatches
+                    let photoArray = this.state.pendingWingmanPhotos
+                    let tempNumberWingman = this.state.numWingmanRequests-1
+                    let tempDone = this.state.doneLoadingPendingWingman-1
+                    console.log("wingman matches before filter: " + temp)
+                    let tempResult = temp.filter((obj) => {
+                        return obj.requesterId !== requesterId
+                    })
+                    console.log("wingman matches after filter: " + tempResult)
+                    console.log("wingman photos before filter: " + photoArray)
+                    let tempPhotoResult = photoArray.filter((obj) => {
+                        return obj.id !== requesterId
+                    })
+                    console.log("wingman photos after filter: " + tempPhotoResult)
+                    this.setState({
+                        feedback: "Wingman request rejected!",
+                        pendingWingmanMatches: tempResult,
+                        pendingWingmanPhotos: tempPhotoResult,
+                        numWingmanRequests: tempNumberWingman,
+                        doneLoadingPendingWingman: tempDone
+                    })
                 }
             })
 
