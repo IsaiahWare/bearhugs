@@ -28,7 +28,7 @@ class ViewPastMatches extends React.Component {
             pendingMatches: [],
             currentMatches: [],
             pendingWingmanMatches: [],
-            completedWingmanMatches:[],
+            completedWingmanMatches: [],
             pendingPhotos: [],
             currentPhotos: [],
             pendingWingmanPhotos: [],
@@ -121,7 +121,7 @@ class ViewPastMatches extends React.Component {
     }
 
     getPhotoforPendingWingmanUser(id) {
-        let url='http://bearhugs.love/server/php/photoGetter.php'
+        let url = 'http://bearhugs.love/server/php/photoGetter.php'
         let newRequest = {
             "userId": id,
         }
@@ -142,7 +142,7 @@ class ViewPastMatches extends React.Component {
                 if (photos.length != 0) {
                     console.log("return actual photo")
                     this.setState(prevState => ({
-                        pendingWingmanPhotos: [...prevState.pendingWingmanPhotos, { id: id, imgsrc: photos[0]}],
+                        pendingWingmanPhotos: [...prevState.pendingWingmanPhotos, { id: id, imgsrc: photos[0] }],
                         doneLoadingPendingWingman: tempPhotoNumber
                     }))
 
@@ -168,7 +168,7 @@ class ViewPastMatches extends React.Component {
     }
 
     getPhotoForCurrentUser(id) {
-        let url='http://bearhugs.love/server/php/photoGetter.php'
+        let url = 'http://bearhugs.love/server/php/photoGetter.php'
         let newRequest = {
             "userId": id,
         }
@@ -182,20 +182,16 @@ class ViewPastMatches extends React.Component {
         })
             .then(photos => photos.json())
             .then(photos => {
-                console.log("current photo response : ")
-                console.log(photos)
                 let tempPhotoNumber = this.state.doneLoadingCurrent + 1;
                 // TODO: handle case where login is invalid
                 if (photos.length != 0) {
-                    console.log("return actual photo")
                     this.setState(prevState => ({
-                        currentPhotos: [...prevState.currentPhotos, { id: id, imgsrc: photos[0]}],
+                        currentPhotos: [...prevState.currentPhotos, { id: id, imgsrc: photos[0] }],
                         doneLoadingCurrent: tempPhotoNumber
                     }))
 
                 }
                 else {
-                    console.log("Reutnr defualt")
                     this.setState(prevState => ({
                         currentPhotos: [...prevState.currentPhotos, { id: id, imgsrc: "mail-order-wife.png" }],
                         doneLoadingCurrent: tempPhotoNumber
@@ -205,10 +201,9 @@ class ViewPastMatches extends React.Component {
             }).catch((error) => {
                 let tempPhotoNumber = this.state.doneLoadingCurrent + 1;
                 console.error(error)
-                console.log("Reutnr defualt")
                 this.setState(prevState => ({
                     currentPhotos: [...prevState.currentPhotos, { id: id, imgsrc: "mail-order-wife.png" }],
-                    doneLoadingCurrent: tempPhotoNumber
+                    doneLoadingCurrent: tempPhotoNumber,
                 }))
             })
 
@@ -270,8 +265,8 @@ class ViewPastMatches extends React.Component {
                 if (JSON.stringify(responseData.error) === '{}') {
                     let temp = this.state.pendingMatches
                     let photoArray = this.state.pendingPhotos
-                    let tempDoneLoading = this.state.doneLoadingPending-1
-                    let numProfilesPending = this.state.numPending-1
+                    let tempDoneLoading = this.state.doneLoadingPending - 1
+                    let numProfilesPending = this.state.numPending - 1
                     let tempResult = temp.filter((obj) => {
                         if (obj.userId === id) {
                             console.log("remove " + JSON.stringify(obj))
@@ -306,7 +301,7 @@ class ViewPastMatches extends React.Component {
     rejectWingmanMatch(requestId) {
         let url = baseDomain + '/wingman/reject'
         let newRequest = {
-            requestId : requestId
+            requestId: requestId
         }
         fetch(url, {
             method: 'POST',
@@ -344,7 +339,7 @@ class ViewPastMatches extends React.Component {
                     this.setState({
                         pendingWingmanMatches: responseData.results,
                         numWingmanRequests: responseData.results.length,
-                        pendingWingmanPhotos:[],
+                        pendingWingmanPhotos: [],
                         doneLoadingPendingWingman: 0
                     }, () => {
                         this.getPendingWingmanPhotos();
@@ -372,8 +367,8 @@ class ViewPastMatches extends React.Component {
                 if (JSON.stringify(responseData.error) === '{}') {
                     this.setState({
                         currentMatches: responseData.results,
-                        currentPhotos:[],
-                        doneLoadingCurrent:0,
+                        currentPhotos: [],
+                        doneLoadingCurrent: 0,
                         numCurrent: responseData.results.length
 
                     }, () => {
@@ -421,8 +416,8 @@ class ViewPastMatches extends React.Component {
     filterPendingAfterAdd(id) {
         let temp = this.state.pendingMatches
         let photoArray = this.state.pendingPhotos
-        let tempPendingDone = this.state.doneLoadingPending -1
-        let pendingNum = this.state.numPending-1
+        let tempPendingDone = this.state.doneLoadingPending - 1
+        let pendingNum = this.state.numPending - 1
         let tempResult = temp.filter((obj) => {
             return obj.userId !== id
         })
@@ -437,7 +432,41 @@ class ViewPastMatches extends React.Component {
         })
     }
 
+    completePendingWingman(wingmanId, requesterId, requesteeId) {
+        console.log("IN add match by button")
+        let url = baseDomain + '/match/send'
+        let newRequest = {
+            wingmanId: wingmanId,
+            requesterId: requesterId,
+            requesteeId: requesteeId
+        }
+        console.log(newRequest)
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newRequest)
+        })
+            .then(res => res.json())
+            .then(responseData => {
+                if (JSON.stringify(responseData.error) === '{}') {
+                    console.log(responseData)
+                    this.setState({
+                        feedback: "Wingman approved!",
+                    })
+                    this.addMatchFromButton(requesterId)
 
+                }
+                else {
+                    console.log(responseData)
+                    this.setState({
+                        feedback: "Wingman mtch could not be completed :(. Please try again later"
+                    })
+                }
+            })
+
+    }
     addMatchFromButton(id) {
         console.log("IN add match by button")
         let url = baseDomain + '/match/send'
@@ -462,7 +491,7 @@ class ViewPastMatches extends React.Component {
                     })
                     this.filterPendingAfterAdd(id)
                     this.getCurrentMatches()
-  
+
                 }
                 else {
                     console.log(responseData)
@@ -513,9 +542,9 @@ class ViewPastMatches extends React.Component {
                 to="/"
             />
         }
-        console.log("number of matches for current and completed " + this.state.numCurrent + "loading "+ this.state.doneLoadingCurrent)
-        console.log("number of matches for pending " + this.state.numPending + "loading "+ this.state.doneLoadingPending)
-        console.log("number of matches for wignman" + this.state.numWingmanRequests + "loading "+ this.state.doneLoadingPendingWingman)
+        console.log("number of matches for current and completed " + this.state.numCurrent + "loading " + this.state.doneLoadingCurrent)
+        console.log("number of matches for pending " + this.state.numPending + "loading " + this.state.doneLoadingPending)
+        console.log("number of matches for wignman" + this.state.numWingmanRequests + "loading " + this.state.doneLoadingPendingWingman)
         if (this.state.numCurrent == this.state.doneLoadingCurrent && this.state.numPending == this.state.doneLoadingPending && this.state.numWingman == this.state.doneLoadingWingman) {
             return (
                 <div className="page">
@@ -526,11 +555,11 @@ class ViewPastMatches extends React.Component {
                         onSelect={(key => {
                             this.setState({ key })
                             this.setState({
-                                feedback:""
+                                feedback: ""
                             })
                         })
-                    
-                    }
+
+                        }
                     >
                         <Tab eventKey="currentMatches" title="Current Matches">
                             <div className="row center-row">
@@ -563,7 +592,7 @@ class ViewPastMatches extends React.Component {
                                             <div className="row center-row match-container match-row" key={"row0pending" + profile.userId}>
                                                 <PendingMatchesProfile key={profile.userId} userId={profile.userId} imgsrc={this.state.pendingPhotos[i].imgsrc}
                                                     firstName={profile.firstName} lastName={profile.lastName} email={profile.email} age={profile.age} descrip={profile.description} genderIdentity={profile.genderIdentity} genderPreferences={profile.genderPreferences}
-                                                    matched={false} approveMatch={() => this.addMatchFromButton(profile.userId)} rejectMatch={() => this.rejectMatch(profile.userId)} notifyRequesteeofMatch={()=>this.notifyRequesteeofMatch(profile.userId)} ></PendingMatchesProfile>
+                                                    matched={false} approveMatch={() => this.addMatchFromButton(profile.userId)} rejectMatch={() => this.rejectMatch(profile.userId)} notifyRequesteeofMatch={() => this.notifyRequesteeofMatch(profile.userId)} ></PendingMatchesProfile>
                                             </div>
                                         )
                                     }
@@ -571,23 +600,23 @@ class ViewPastMatches extends React.Component {
                             </div>
                         </Tab>
                         <Tab eventKey="wingmanMatches" title="Wingman Matches">
-                        <div className="row center-row">
-                            <h2>Pending Wingman Matches</h2>
-                        </div>
-                        <div className="row center-row">
-                            <div className="col center-col">
-                                {
-                                    this.state.pendingWingmanMatches.map((profile, i) =>
-                                    <div className="row center-row match-container match-row" key={"row0wingmanpending" + profile.userId}>
-                                    <CompletedMatchesProfile key={profile.userId} userId={profile.userId} requestId={profile.requestId} wingmanId = {profile.wingmanId} requesterId = {profile.requesterId} requesteeId={profile.requesteeId} imgsrc={this.state.currentPhotos[i].imgsrc}
-                                        firstName={profile.firstName} lastName={profile.lastName} email={profile.email} age={profile.age} descrip={profile.description} genderIdentity={profile.genderIdentity} genderPreferences={profile.genderPreferences}
-                                        matched={true}></CompletedMatchesProfile>
-                                </div>
-                                    )
-                                }
+                            <div className="row center-row">
+                                <h2>Pending Wingman Matches</h2>
                             </div>
-                        </div>
-                    </Tab>
+                            <div className="row center-row">
+                                <div className="col center-col">
+                                    {
+                                        this.state.pendingWingmanMatches.map((profile, i) =>
+                                            <div className="row center-row match-container match-row" key={"row0wingmanpending" + profile.userId}>
+                                                <PendingMatchesProfile key={profile.userId} userId={profile.userId} requestId={profile.requestId} wingmanId={profile.wingmanId} requesterId={profile.requesterId} requesteeId={profile.requesteeId} imgsrc={this.state.currentPhotos[i].imgsrc}
+                                                    firstName={profile.firstName} lastName={profile.lastName} email={profile.email} age={profile.age} descrip={profile.description} genderIdentity={profile.genderIdentity} genderPreferences={profile.genderPreferences}
+                                                    matched={true} approveMatch={() => this.completePendingWingman(this.props.wingmanId, this.props.requesterId, this.props.requesteeId)} rejectMatch={() => this.rejectWingmanMatch(profile.userId)}  ></PendingMatchesProfile>
+                                            </div>
+                                        )
+                                    }
+                                </div>
+                            </div>
+                        </Tab>
                     </Tabs>
                 </div >
 
@@ -595,42 +624,42 @@ class ViewPastMatches extends React.Component {
         } else {
             return (
                 <div className="page">
-                <BearHugsNavbar></BearHugsNavbar>
-                <Tabs
-                    id="match-tabs"
-                    activeKey={this.state.key}
-                    onSelect={key => this.setState({ key })}
-                >
-                    <Tab eventKey="currentMatches" title="Current Matches">
-                        <div className="row center-row">
-                            <h2>Completed Matches</h2>
-                        </div>
-                        <div className="row center-row">
-                            <div className="col center-col">
-                            
+                    <BearHugsNavbar></BearHugsNavbar>
+                    <Tabs
+                        id="match-tabs"
+                        activeKey={this.state.key}
+                        onSelect={key => this.setState({ key })}
+                    >
+                        <Tab eventKey="currentMatches" title="Current Matches">
+                            <div className="row center-row">
+                                <h2>Completed Matches</h2>
                             </div>
-                        </div>
-                    </Tab>
-                    <Tab eventKey="pendingMatches" title="Pending Matches">
-                        <div className="row center-row">
-                            <h2>Pending Matches</h2>
-                        </div>
-                        <div className="row center-row">
-                            <div className="col center-col">
-                             
+                            <div className="row center-row">
+                                <div className="col center-col">
+
+                                </div>
                             </div>
-                        </div>
-                    </Tab>
-                    <Tab eventKey="wingmanMatches" title="Wingman Matches">
-                        <div className="row center-row">
-                            <h2>HELLO???</h2>
-                        </div>
-                        <div className="row center-row">
-                            <div className="col center-col">
+                        </Tab>
+                        <Tab eventKey="pendingMatches" title="Pending Matches">
+                            <div className="row center-row">
+                                <h2>Pending Matches</h2>
                             </div>
-                        </div>
-                    </Tab>
-                </Tabs>
+                            <div className="row center-row">
+                                <div className="col center-col">
+
+                                </div>
+                            </div>
+                        </Tab>
+                        <Tab eventKey="wingmanMatches" title="Wingman Matches">
+                            <div className="row center-row">
+                                <h2>HELLO???</h2>
+                            </div>
+                            <div className="row center-row">
+                                <div className="col center-col">
+                                </div>
+                            </div>
+                        </Tab>
+                    </Tabs>
                 </div>
 
             );
