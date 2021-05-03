@@ -434,7 +434,7 @@ class ViewPastMatches extends React.Component {
 
     completePendingWingman(wingmanId, requesterId, requesteeId) {
         console.log("IN add match by button")
-        let url = baseDomain + '/match/send'
+        let url = baseDomain + '/wingman/send'
         let newRequest = {
             wingmanId: wingmanId,
             requesterId: requesterId,
@@ -451,7 +451,7 @@ class ViewPastMatches extends React.Component {
             .then(res => res.json())
             .then(responseData => {
                 if (JSON.stringify(responseData.error) === '{}') {
-                    console.log(responseData)
+                    console.log("complete pending " + responseData)
                     let temp = this.state.pendingWingmanMatches
                     let photoArray = this.state.pendingWingmanPhotos
                     let tempNumberWingman = this.state.numWingmanRequests-1
