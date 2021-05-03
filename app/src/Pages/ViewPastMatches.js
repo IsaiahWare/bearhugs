@@ -294,6 +294,7 @@ class ViewPastMatches extends React.Component {
 
     rejectWingmanMatch(requestId) {
         let url = baseDomain + '/wingman/reject'
+        console.log(requestId)
         let newRequest = {
             requestId: requestId
         }
