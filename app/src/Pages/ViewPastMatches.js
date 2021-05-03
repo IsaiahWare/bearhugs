@@ -637,7 +637,7 @@ class ViewPastMatches extends React.Component {
                         </Tab>
                         <Tab eventKey="pendingMatches" title="Pending Matches">
                             <div className="row center-row">
-                                <h2>Pending Matches</h2>
+                                <h2>Pending User Matches</h2>
                                 <h6>{this.state.feedback}</h6>
                             </div>
                             <div className="row center-row">
@@ -656,7 +656,7 @@ class ViewPastMatches extends React.Component {
                         </Tab>
                         <Tab eventKey="wingmanMatches" title="Wingman Matches">
                         <div className="row center-row">
-                            <h2>Wingman Matches</h2>
+                            <h2>Pending Wingman Matches</h2>
                         </div>
                         <div className="row center-row">
                             <div className="col center-col">
