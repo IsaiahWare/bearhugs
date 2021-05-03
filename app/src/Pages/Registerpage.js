@@ -204,6 +204,8 @@ class RegisterPage extends React.Component {
     }
 
     setSelectedPreferences(event){
+        console.log(event)
+        console.log(event.selectedOptions)
       let values = Array.from(event, option => option.value);
       console.log(values)
       this.setState({
