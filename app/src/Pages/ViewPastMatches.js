@@ -557,7 +557,7 @@ class ViewPastMatches extends React.Component {
         console.log("number of matches for current and completed " + this.state.numCurrent + "loading " + this.state.doneLoadingCurrent)
         console.log("number of matches for pending " + this.state.numPending + "loading " + this.state.doneLoadingPending)
         console.log("number of matches for wignman" + this.state.numWingmanRequests + "loading " + this.state.doneLoadingPendingWingman)
-        if (this.state.numCurrent == this.state.doneLoadingCurrent && this.state.numPending == this.state.doneLoadingPending && this.state.numWingman == this.state.doneLoadingWingman) {
+        if (this.state.numCurrent == this.state.doneLoadingCurrent && this.state.numPending == this.state.doneLoadingPending && this.state.doneLoadingPendingWingman == this.state.numWingmanRequests) {
             return (
                 <div className="page">
                     <BearHugsNavbar></BearHugsNavbar>
