@@ -457,10 +457,10 @@ class ViewPastMatches extends React.Component {
                     let tempNumberWingman = this.state.numWingmanRequests-1
                     let tempDone = this.state.doneLoadingPendingWingman-1
                     let tempResult = temp.filter((obj) => {
-                        return obj.userId !== id
+                        return obj.requesterId !== requesterId
                     })
                     let tempPhotoResult = photoArray.filter((obj) => {
-                        return obj.id !== id
+                        return obj.id !== requesterId
                     })
                     this.setState({
                         feedback: "Wingman approved!",
