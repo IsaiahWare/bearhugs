@@ -200,6 +200,7 @@ class RegisterPage extends React.Component {
         let target = event.target;
         let value = target.value
         let name = target.name;
+        console.log(name + " " + value)
         this.setState({
             [name]: value
         });
@@ -251,13 +252,12 @@ class RegisterPage extends React.Component {
                                     <input className="input" type='text' value={this.state.lastName} onChange={this.handleInputChange} name='lastName' placeholder="Last Name" />
                                 </div>
                                 <div className="input-row center-row">
-                                    <label for="age" className="agelabel">Your age:</label>
                                     <input className="input" type='number' name='age' onChange={this.handleInputChange} value={this.state.age} placeholder="Type age here" />
                                 </div>
                                 <div className="input-row center-row">
-                                    <label for="gender_select" className="genderlabel">Your gender:</label>
                                     <select defaultValue={this.state.genderIdentity} id="gender_select"
                                         name="genderIdentity" onChange={this.handleInputChange} className="input">
+                                        <option value="" disabled selected>Your Gender</option>
                                         <option value="MALE">Male</option>
                                         <option value="FEMALE">Female</option>
                                         <option value="OTHER">Other</option>
@@ -265,8 +265,8 @@ class RegisterPage extends React.Component {
                                 </div>
                                     <div className="input-row center-row match-width">
                                         <FontAwesomeIcon icon={faInfoCircle}></FontAwesomeIcon>
-                                        <label for="gender_pref_select" className="genderlabel">Your preferred genders for matching:</label>
                                         <select multiple onChange={this.setSelectedPreferences} className="input" id="gender_pref_select">
+                                        <option value="" disabled selected>Your Preferred Genders for Matching</option>
                                             <option value="MALE">Male</option>
                                             <option value="FEMALE">Female</option>
                                             <option value="OTHER">Other</option>
