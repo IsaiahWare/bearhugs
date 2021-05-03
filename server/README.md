@@ -27,19 +27,24 @@ Run unit tests (not implemented yet):
 ## Upload to production
 **be on the isaiah user**
 ###Frontend ONLY###
+
 Step 1.
 ```bash
 cd /home/isaiah/public_html/bearhugs/app
 ```
 Step 2.
 ```bash
-prod
+npm run build
 ```
 Step 3.
 ```bash
-cd /home/isaiah/public_html/bearhugs
+prod
 ```
 Step 4.
+```bash
+cd /home/isaiah/public_html/bearhugs
+```
+Step 5.
 ```bash
 prodserv
 ```
