@@ -19,7 +19,7 @@ import WingManPage from './Pages/WingmanPage';
 
 function App() {
   return (
-  <BrowserRouter basename={process.env.PUBLIC_URL}>
+  <Router basename="http://bearhugs.love">
     <Switch>
         <Route exact path='/' component={LoginPage} />
         <Route exact path="/register" component={RegisterPage}></Route>
@@ -30,7 +30,7 @@ function App() {
         <Route exact path="/mymatches" component={ViewPastMatches}></Route>
         <Route exact path="/wingman" component={WingManPage}></Route>
     </Switch>
-</BrowserRouter>
+</Router>
   
   );
 }
