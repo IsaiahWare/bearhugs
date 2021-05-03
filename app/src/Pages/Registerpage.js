@@ -6,7 +6,7 @@ import "../App.css"
 import UserToken from "../Components/UserToken.js"
 import MultiSelect from "react-multi-select-component";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faInfoCircle} from '@fortawesome/free-solid-svg-icons'
+import { faInfoCircle } from '@fortawesome/free-solid-svg-icons'
 
 
 let baseDomain = "http://ec2-100-24-237-42.compute-1.amazonaws.com:3000"
@@ -30,7 +30,7 @@ class RegisterPage extends React.Component {
             errors: "",
             age: 18,
             feedback: " ",
-            selectedGender: [],
+            genderIdentity:"",
             selectedGenderPreference: [],
             redirect: false
 
@@ -255,42 +255,48 @@ class RegisterPage extends React.Component {
                                     <input className="input" type='number' name='age' onChange={this.handleInputChange} value={this.state.age} placeholder="Type age here" />
                                 </div>
                                 <div className="input-row center-row">
-                                    <label for="gender" className="genderlabel">Your gender:</label>
-
-                                </div>
-                                <div className="input-row center-row match-width">
-                                <FontAwesomeIcon icon={faInfoCircle}></FontAwesomeIcon>
-                                    <select multiple onChange={this.setSelectedPreferences} className ="input" id="gender_pref_select">
+                                    <label for="gender_select" className="genderlabel">Your gender:</label>
+                                    <select defaultValue={this.state.genderIdentity} id="gender_select"
+                                        name="genderIdentity" onChange={this.handleInputChange} className="input">
                                         <option value="MALE">Male</option>
                                         <option value="FEMALE">Female</option>
                                         <option value="OTHER">Other</option>
-                                        <option value="NONE">None</option>
                                     </select>
                                 </div>
-
-                                <div className="center-row padding-top-1rem">
-                                    <div className="divider ">
+                                    <div className="input-row center-row match-width">
+                                        <FontAwesomeIcon icon={faInfoCircle}></FontAwesomeIcon>
+                                        <label for="gender_pref_select" className="genderlabel">Your preferred genders for matching:</label>
+                                        <select multiple onChange={this.setSelectedPreferences} className="input" id="gender_pref_select">
+                                            <option value="MALE">Male</option>
+                                            <option value="FEMALE">Female</option>
+                                            <option value="OTHER">Other</option>
+                                            <option value="NONE">None</option>
+                                        </select>
                                     </div>
-                                </div>
-                                <div className="input-row center-row">
-                                    <button className="full-width-button red" type="submit">Register!</button>
-                                </div>
-                                <div className="center-row">
-                                    <span className="error-span">{this.state.feedback}</span>
-                                </div>
-                                <div className="row center-row">
-                                    <Link to="/" className="route-link">Back to Login </Link>
-                                </div>
+
+                                    <div className="center-row padding-top-1rem">
+                                        <div className="divider ">
+                                        </div>
+                                    </div>
+                                    <div className="input-row center-row">
+                                        <button className="full-width-button red" type="submit">Register!</button>
+                                    </div>
+                                    <div className="center-row">
+                                        <span className="error-span">{this.state.feedback}</span>
+                                    </div>
+                                    <div className="row center-row">
+                                        <Link to="/" className="route-link">Back to Login </Link>
+                                    </div>
                             </form>
 
 
                         </div>
+                        </div>
+                    </div>
+                    <div className="page-gradient">
+
                     </div>
                 </div>
-                <div className="page-gradient">
-
-                </div>
-            </div>
         );
     }
 }
