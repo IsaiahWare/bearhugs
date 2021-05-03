@@ -1,7 +1,7 @@
 <?php
 		// Print all of the user's files
 		header('Content-Type: application/json');
-		header("Access-Control-Allow-Origin: bearhugs.love");
+		header("Access-Control-Allow-Origin: http://localhost:3000");
 
 		$json = file_get_contents('php://input');
 		$data = json_decode($json);
