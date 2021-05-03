@@ -49,6 +49,29 @@ height: 60vh;
 .wraps {
   flex-wrap: wrap;
 }
+
+.tooltip
+{
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  font-family: sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  letter-spacing: normal;
+  line-height: 1.42857143;
+  text-align: left;
+  text-align: start;
+  text-shadow: none;
+  text-transform: none;
+  white-space: normal;
+  word-break: normal;
+  word-spacing: normal;
+  word-wrap: normal;
+  font-size: 12px;
+  
+  display: inline-block;
+}
 .text-container {
   max-width: 90%;
   margin: 0 auto;

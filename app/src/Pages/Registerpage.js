@@ -5,6 +5,8 @@ import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import "../App.css"
 import UserToken from "../Components/UserToken.js"
 import MultiSelect from "react-multi-select-component";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faInfoCircle} from '@fortawesome/free-solid-svg-icons'
 
 
 let baseDomain = "http://ec2-100-24-237-42.compute-1.amazonaws.com:3000"
@@ -36,7 +38,7 @@ class RegisterPage extends React.Component {
         this.registerAccount = this.registerAccount.bind(this)
         this.handleInputChange = this.handleInputChange.bind(this)
         this.filterInputs = this.filterInputs.bind(this)
-        this.setSelectedPreferences=this.setSelectedPreferences.bind(this)
+        this.setSelectedPreferences = this.setSelectedPreferences.bind(this)
 
     }
 
@@ -203,15 +205,15 @@ class RegisterPage extends React.Component {
         });
     }
 
-    setSelectedPreferences(event){
+    setSelectedPreferences(event) {
         console.log(event)
-        console.log(event.selectedOptions)
-      const values = Array.from(event, option => option.value);
-      console.log(values)
-      this.setState({
-         selectedGenderPreference: values
-      })
-        
+        console.log(event.target)
+        const values = Array.from(event.target.selectedOptions, option => option.value);
+        console.log(values)
+        this.setState({
+            selectedGenderPreference: values
+        })
+
     }
 
 
@@ -256,15 +258,14 @@ class RegisterPage extends React.Component {
                                     <label for="gender" className="genderlabel">Your gender:</label>
 
                                 </div>
-                                <div className="input-row center-row match-container">
-                                    <MultiSelect
-                                        options={genderPreferenceOptions}
-                                        value={this.state.selectedGenderPreference}
-                                        onChange={this.setSelectedPreferences}
-                                        labelledBy="Select Gender Preferences"
-                                        className="match-width"
-                                        hasSelectAll={true}
-                                    />
+                                <div className="input-row center-row match-width">
+                                <FontAwesomeIcon icon={faInfoCircle}></FontAwesomeIcon>
+                                    <select multiple onChange={this.setSelectedPreferences} className ="input" id="gender_pref_select">
+                                        <option value="MALE">Male</option>
+                                        <option value="FEMALE">Female</option>
+                                        <option value="OTHER">Other</option>
+                                        <option value="NONE">None</option>
+                                    </select>
                                 </div>
 
                                 <div className="center-row padding-top-1rem">
