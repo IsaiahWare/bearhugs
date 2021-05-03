@@ -209,19 +209,12 @@ class RegisterPage extends React.Component {
         let value = target.value
         let name = target.name;
         if (name=="maleGenderPref" || name=="femaleGenderPref" || name=="otherGenderPref") {
-            if (value == 'on') {
-                console.log('name ' + name + 'value '+ value)
+                let checkValue = event.target.checked;
+                console.log('name ' + name + 'value '+ checkValue)
                 this.setState({
-                    [name]: true
-                });
-
-            } else {
-                console.log('name ' + name + 'value '+ value)
-                this.setState({
-                    [name]: false
+                    [name]: checkValue
                 });
             }
-        }
         this.setState({
             [name]: value
         });
@@ -274,11 +267,14 @@ class RegisterPage extends React.Component {
                                 </div>
                                 
                                 <div className="input-row center-row match-width">
+                                   
                                     <Form.Group>
-                                    <Form.Label>Gender Preference for Matching</Form.Label>
-                                    <Form.Check inline label="Male" name="maleGenderPref" onChange={this.handleInputChange} id="male_gender_pref"  checked={this.state.maleGenderPref} />
-                                    <Form.Check inline label="Female" name="femaleGenderPref" onChange={this.handleInputChange} id="female_gender_pref"  checked={this.state.femaleGenderPref} />
-                                    <Form.Check inline label="Other" name="otherGenderPref" onChange={this.handleInputChange} id="other_gender_pref"  checked={this.state.otherGenderPref} />
+                                        <div>
+                                        <Form.Label>Gender Preference for Matching</Form.Label>
+                                        </div>
+                                    <Form.Check inline label="Male" name="maleGenderPref" onChange={this.handleInputChange} id="male_gender_pref"  value={this.state.maleGenderPref} />
+                                    <Form.Check inline label="Female" name="femaleGenderPref" onChange={this.handleInputChange} id="female_gender_pref"  value={this.state.femaleGenderPref} />
+                                    <Form.Check inline label="Other" name="otherGenderPref" onChange={this.handleInputChange} id="other_gender_pref" value={this.state.otherGenderPref} />
                                     </Form.Group>
                                 </div>
 
