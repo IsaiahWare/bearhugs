@@ -158,7 +158,6 @@ class EditSettingsPage extends React.Component {
         fetch(url, {
             method: 'POST',
             headers: {
-                "Content-type": "multipart/form-data"
             },
             body: data
         })
