@@ -269,17 +269,12 @@ class EditSettingsPage extends React.Component {
                             ))}
                     </div>
                 <div className="col">
-                        <Form>
-                            <Form.Group>
-                            <Form.Label>Upload a profile image</Form.Label>
-                            <Form.File enctype="multipart/form-data" action="http://bearhugs.love/server/php/photoUploader.php" method="POST" label="Photo Uploader" id="photo_uploader">
-                                <input type="hidden" name="MAX_FILE_SIZE" value="50000000000000" />
-                                <input type="file" name="filename" id = "uploadfile_input"/>
-                                <input type="hidden" name="userId" value={this.state.userId} />
-                                <Button type="submit" variant="danger" name="submit-button">Upload Photo</Button>
-                            </Form.File>
-                            </Form.Group>
-                        </Form>
+                <form enctype="multipart/form-data" action="http://bearhugs.love/server/php/photoUploader.php" method="POST">
+                    <input type="hidden" name="MAX_FILE_SIZE" value="50000000000000" />
+                    <input type="file" name="filename" id = "uploadfile_input"/>
+                    <input type="hidden" name="userId" value={30} />
+                    <Button type="submit" variant="danger" name="submit-button">Submit Changes</Button>
+                </form>
                
                     <Form onSubmit={this.handleSubmit} controlId="editForm">
                         <Form.Group controlId="editForm.email">
