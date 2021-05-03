@@ -127,7 +127,6 @@ class WingmanPage extends React.Component {
     }
 
     sendWingManNotificationToFriend(friend) {
-        console.log("sending notificaiton")
         let url = baseDomain + '/notifications/sendthreeuser'
         let newRequest = {
             userId1: friend.userId,
@@ -230,6 +229,9 @@ class WingmanPage extends React.Component {
             wingmanPanel =
             <div className="friendsContainer">
                 <h1 className="pageTitle row center-row">Wingman:</h1>
+                <div className="row center-row">
+                    {this.state.feedback}
+                </div>
                 <div>
                     <button key={wingmanee.userId} onClick={() => this.sendWingMan(wingmanee)} className="nostyle buttonwrapper">
                     <ListedUser id={wingmanee.userId} key={wingmanee.userId} firstName={wingmanee.firstName}
@@ -255,6 +257,9 @@ class WingmanPage extends React.Component {
             wingmanPanel = 
             <div>
                 <h1 className="pageTitle row center-row">Wingman</h1>
+                <div className="row center-row">
+                    {this.state.feedback}
+                </div>
                 <div className="text-container">
                     <p className="center">Select a friend from below who you think needs a match.
                     From there, you can select another one of your friends to ship them with 😏 </p>

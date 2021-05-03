@@ -167,6 +167,8 @@ class ViewProfilePage extends React.Component {
         .then(responseData => {
             let badBoys = []
               if (responseData.error!=null) {
+                console.log("Current profiles before splicing: ")
+                console.log(responseData.results)
                     for (let j = 0; j < this.state.unsuitableMatches.length; ++j) {
                        let result = responseData.results.findIndex(element => element.userId == this.state.unsuitableMatches[j].userId)
                         if (result!=-1) {
