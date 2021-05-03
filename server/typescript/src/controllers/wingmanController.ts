@@ -37,12 +37,6 @@ router.post("/send", (req: Request, res: Response) => {
         } 
         else {
             if (queryResults.length === 1) {
-                    wingmanResponse.error =  {
-                        "message": "Request already sent"
-                    };
-                res.json(wingmanResponse);
-            } 
-            else {
                 const queryStatement3: string = "SELECT requesterId FROM pendingWingman WHERE wingmanId = ? AND requesteeId = ? AND requesterId = ?";
                 const queryArgs3 = [req.body.wingmanId, req.body.requesterId, req.body.requesteeId];
                 db.query(queryStatement3, queryArgs3, (queryError3: MysqlError | null, queryResults3: any ) => {

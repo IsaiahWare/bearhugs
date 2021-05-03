@@ -314,7 +314,7 @@ class ViewPastMatches extends React.Component {
             .then(responseData => {
                 console.log(responseData)
                 if (JSON.stringify(responseData.error) === '{}') {
-                    this.getWingmanMatches();
+                    this.getPendingWingmanMatches();
                 }
             })
 
