@@ -1,8 +1,7 @@
 <?php    
     // Get the filename and make sure it is valid
     header('Content-Type: application/json');
-    header("Access-Control-Allow-Origin: http://localhost:3001");
-    header("Access-Control-Allow-Origin: ec2-100-24-237-42.compute-1.amazonaws.com");
+    header("Access-Control-Allow-Origin: bearhugs.love");
     $filename = (string) basename($_FILES['filename']['name']);
     $userId = $_POST['userId'];
     $path = "./photos/user$userId";
