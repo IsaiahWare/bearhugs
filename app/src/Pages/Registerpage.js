@@ -7,7 +7,7 @@ import UserToken from "../Components/UserToken.js"
 import MultiSelect from "react-multi-select-component";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons'
-import {Form} from 'react-bootstrap/Form'
+import Form from 'react-bootstrap/Form';
 
 
 let baseDomain = "http://ec2-100-24-237-42.compute-1.amazonaws.com:3000"
