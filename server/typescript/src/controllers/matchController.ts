@@ -233,8 +233,8 @@ router.post("/rejectedMatches", (req: Request, res: Response) => {
     }
 
     const queryStatement = `SELECT users.userId, users.email, users.firstName, users.lastName, users.age, users.description, users.genderIdentity, users.genderPreferences,
-    users.phoneNumber FROM users INNER JOIN rejectedMatches ON rejectedMatches.requesterId = users.userId WHERE rejectedMatches.requesteeId = ? OR rejectedMatches.requesterId = ?`;
-    const queryArgs = [req.body.userId, req.body.userId];
+    users.phoneNumber FROM users INNER JOIN rejectedMatches ON rejectedMatches.requesterId = users.userId WHERE rejectedMatches.requesterId = ?`;
+    const queryArgs = [req.body.userId];
     db.query(queryStatement, queryArgs, (queryError: MysqlError | null, queryResults: any ) => {
         if (queryError) {
             matchResponse.error =  {
