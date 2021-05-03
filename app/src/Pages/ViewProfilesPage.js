@@ -51,9 +51,11 @@ class ViewProfilePage extends React.Component {
                 if (JSON.stringify(responseData.error) === '{}') {
                     this.setState({
                         unsuitableMatches: this.state.unsuitableMatches.concat(responseData.results)
+                    }, function() {
+                        this.getRejectedMatches();
                     })
                 }
-                this.getRejectedMatches();
+         
             })
 
     }
@@ -74,9 +76,11 @@ class ViewProfilePage extends React.Component {
                 if (JSON.stringify(responseData.error) === '{}') {
                     this.setState({
                         unsuitableMatches: this.state.unsuitableMatches.concat(responseData.results)
+                    }, function() {
+                        this.getProfiles();
                     })
                 }
-                this.getProfiles();
+           
                 
             })
 
@@ -99,9 +103,11 @@ class ViewProfilePage extends React.Component {
                 if (JSON.stringify(responseData.error) === '{}') {
                     this.setState({
                         unsuitableMatches: this.state.unsuitableMatches.concat(responseData.results)
+                    }, function() {
+                        this.getCurrentMatches();
                     })
                 }
-                this.getCurrentMatches();
+                
             })
 
         }
@@ -136,6 +142,8 @@ class ViewProfilePage extends React.Component {
                let tempProfiles = setProfiles.filter((obj) => {
                 return obj.userId !== userToken
                 })
+                console.log("unsuitable matches : ")
+                console.log(this.state.unsuitableMatches)
                 this.setState({
                     profiles: tempProfiles,
                     numProfiles:tempProfiles.length,
@@ -143,8 +151,6 @@ class ViewProfilePage extends React.Component {
                 })      
            }
        }).then(()=>{
-           console.log("unsuitable matches : ")
-           console.log(this.state.unsuitableMatches)
         for (let i=0; i < this.state.profiles.length; ++i) {
            this.getPhotoForCurrentUser(this.state.profiles[i].userId) 
         }
