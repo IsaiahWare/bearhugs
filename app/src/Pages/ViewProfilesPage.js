@@ -19,6 +19,7 @@ class ViewProfilePage extends React.Component {
             unsuitableMatches:[],
             currentPhotos:[],
             doneLoading: 0,
+            feedback:""
         }
         this.checkUserLogIn = this.checkUserLogIn.bind(this)
         this.getProfiles = this.getProfiles.bind(this)
@@ -160,7 +161,6 @@ class ViewProfilePage extends React.Component {
         let url = baseDomain + '/user/random'
         let newRequest = {
             count: 20,
-            userId: UserToken.getUserId()
         }
         fetch(url, {
             method: 'POST',
@@ -171,10 +171,9 @@ class ViewProfilePage extends React.Component {
         })
         .then(res => res.json())
         .then(responseData => {
-            let badBoys = []
-              if (responseData.error!=null) {
+              if (responseData.error!=='{}') {
                 console.log("Current profiles before splicing: ")
-                console.log(responseData.results)
+                console.log(responseData)
                     for (let j = 0; j < this.state.unsuitableMatches.length; ++j) {
                        let result = responseData.results.findIndex(element => element.userId == this.state.unsuitableMatches[j].userId)
                         if (result!=-1) {
@@ -194,6 +193,9 @@ class ViewProfilePage extends React.Component {
                     numProfiles:tempResult.length,
                     unsuitableMatches:[]
                 })      
+           }
+           else {
+               this.setState({feedback: "No profiles could be obtained. Please try again later."})
            }
        }).then(()=>{
            console.log("Current profiles: ")
@@ -368,6 +370,7 @@ class ViewProfilePage extends React.Component {
                 <div className="page">
                     <BearHugsNavbar></BearHugsNavbar>
                     <div className="row center-row">
+                        {this.state.feedback}
                         <div className="col center-col">
                             {
                                 this.state.profiles.map((profile,i) =>
