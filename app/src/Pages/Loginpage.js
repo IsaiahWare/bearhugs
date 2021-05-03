@@ -34,6 +34,7 @@ class LoginPage extends React.Component {
     })
     .then(res => res.json())
      .then(responseData => {
+        console.log(responseData)
         // TODO: handle case where login is invalid
 	    if (JSON.stringify(responseData.error) === '{}') {
             UserToken.setUserId(responseData.results[0].userId)

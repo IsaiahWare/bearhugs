@@ -59,7 +59,9 @@ class RegisterPage extends React.Component {
             body: JSON.stringify(newRequest)
         })
             .then(res => res.json())
+            
             .then(responseData => {
+                console.log(responseData)
                 // TODO: handle case where login is invalid
                 if (JSON.stringify(responseData.error) === '{}') {
                     console.log("in reigster page log in with results " + responseData.results)
