@@ -32,15 +32,12 @@ class ViewPastMatches extends React.Component {
             pendingPhotos: [],
             currentPhotos: [],
             pendingWingmanPhotos: [],
-            completedWingmanPhotos:[],
             doneLoadingPending: 0,
             doneLoadingCurrent: 0,
-            doneLoadingWingman:0,
             doneLoadingPendingWingman: 0,
             numPending: -1,
             numCurrent: -1,
             numWingmanRequests: -1,
-            numWingman:-1,
             key: "currentMatches"
 
         }
@@ -124,7 +121,7 @@ class ViewPastMatches extends React.Component {
     }
 
     getPhotoforPendingWingmanUser(id) {
-        let url = '../../../server/php/photoGetter.php'
+        let url='http://bearhugs.love/server/php/photoGetter.php'
         let newRequest = {
             "userId": id,
         }
@@ -142,10 +139,10 @@ class ViewPastMatches extends React.Component {
                 console.log(photos)
                 let tempPhotoNumber = this.state.doneLoadingPendingWingman + 1;
                 // TODO: handle case where login is invalid
-                if (photos.results.length != 0) {
+                if (photos.length != 0) {
                     console.log("return actual photo")
                     this.setState(prevState => ({
-                        pendingWingmanPhotos: [...prevState.pendingWingmanPhotos, { id: id, imgsrc: photos.results[0]}],
+                        pendingWingmanPhotos: [...prevState.pendingWingmanPhotos, { id: id, imgsrc: photos[0]}],
                         doneLoadingPendingWingman: tempPhotoNumber
                     }))
 
@@ -169,56 +166,9 @@ class ViewPastMatches extends React.Component {
             })
 
     }
-    getPhotoForWingmanUser(id) {
-        let url = '../../../server/php/photoGetter.php'
-        let newRequest = {
-            "userId": id,
-        }
-        fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(newRequest)
-
-        })
-            .then(photos => photos.json())
-            .then(photos => {
-                console.log("current photo response : ")
-                console.log(photos)
-                let tempPhotoNumber = this.state.doneLoadingWingman + 1;
-                // TODO: handle case where login is invalid
-                if (photos.results.length != 0) {
-                    console.log("return actual photo")
-                    this.setState(prevState => ({
-                        completedWingmanPhotos: [...prevState.completedWingmanPhotos, { id: id, imgsrc: photos.results[0]}],
-                        doneLoadingWingman: tempPhotoNumber
-                    }))
-
-                }
-                else {
-                    console.log("Reutnr defualt")
-                    this.setState(prevState => ({
-                        completedWingmanPhotos: [...prevState.completedWingmanPhotos, { id: id, imgsrc: "mail-order-wife.png" }],
-                        doneLoadingWingman: tempPhotoNumber
-                    }))
-                }
-
-            }).catch((error) => {
-                let tempPhotoNumber = this.state.doneLoadingWingman + 1;
-                console.error(error)
-                console.log("Reutnr defualt")
-                this.setState(prevState => ({
-                    wingmanPhotos: [...prevState.completedWingmanPhotos, { id: id, imgsrc: "mail-order-wife.png" }],
-                    doneLoadingWingman: tempPhotoNumber
-                }))
-            })
-
-    }
-
 
     getPhotoForCurrentUser(id) {
-        let url = '../../../server/php/photoGetter.php'
+        let url='http://bearhugs.love/server/php/photoGetter.php'
         let newRequest = {
             "userId": id,
         }
@@ -236,10 +186,10 @@ class ViewPastMatches extends React.Component {
                 console.log(photos)
                 let tempPhotoNumber = this.state.doneLoadingCurrent + 1;
                 // TODO: handle case where login is invalid
-                if (photos.results.length != 0) {
+                if (photos.length != 0) {
                     console.log("return actual photo")
                     this.setState(prevState => ({
-                        currentPhotos: [...prevState.currentPhotos, { id: id, imgsrc: photos.results[0]}],
+                        currentPhotos: [...prevState.currentPhotos, { id: id, imgsrc: photos[0]}],
                         doneLoadingCurrent: tempPhotoNumber
                     }))
 
@@ -411,33 +361,6 @@ class ViewPastMatches extends React.Component {
 
     }
 
-    getWingmanMatches() {
-        let url = baseDomain + '/wingman/matches'
-        let newRequest = {
-            userId: UserToken.getUserId()
-        }
-        fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(newRequest)
-        })
-            .then(res => res.json())
-            .then(responseData => {
-                console.log(responseData)
-                if (JSON.stringify(responseData.error) === '{}') {
-                    this.setState({
-                        completedWingmanMatches:responseData.results,
-                        numWingman: responseData.results.length,
-                        completedWingmanPhotos:[],
-                        doneLoadingWingman: 0
-                    }, () => {
-                        this.getWingmanPhotos();
-                    })
-                }
-            })
-    }
     getCurrentMatches() {
         let url = baseDomain + '/match/matches'
         let newRequest = {
@@ -522,8 +445,12 @@ class ViewPastMatches extends React.Component {
     }
 
 
-    addMatchFromButton(id) {
+    addMatchFromButton(id, isFromWingman) {
         console.log("IN add match by button")
+        if (isFromWingman){
+            let url = baseDomain + 'wingman/send'
+            
+        }
         let url = baseDomain + '/match/send'
         let newRequest = {
             requesterId: UserToken.getUserId(),
@@ -625,7 +552,7 @@ class ViewPastMatches extends React.Component {
                                 <div className="col center-col">
                                     {
                                         this.state.currentMatches.map((profile, i) =>
-                                            <div className="row center-row match-container" key={"row0current" + profile.userId}>
+                                            <div className="row center-row match-container match-row" key={"row0current" + profile.userId}>
                                                 <CompletedMatchesProfile key={profile.userId} userId={profile.userId} imgsrc={this.state.currentPhotos[i].imgsrc}
                                                     firstName={profile.firstName} lastName={profile.lastName} email={profile.email} age={profile.age} descrip={profile.description} genderIdentity={profile.genderIdentity} genderPreferences={profile.genderPreferences}
                                                     matched={true}></CompletedMatchesProfile>
@@ -644,7 +571,7 @@ class ViewPastMatches extends React.Component {
                                 <div className="col center-col">
                                     {
                                         this.state.pendingMatches.map((profile, i) =>
-                                            <div className="row center-row match-container" key={"row0pending" + profile.userId}>
+                                            <div className="row center-row match-container match-row" key={"row0pending" + profile.userId}>
                                                 <PendingMatchesProfile key={profile.userId} userId={profile.userId} imgsrc={this.state.pendingPhotos[i].imgsrc}
                                                     firstName={profile.firstName} lastName={profile.lastName} email={profile.email} age={profile.age} descrip={profile.description} genderIdentity={profile.genderIdentity} genderPreferences={profile.genderPreferences}
                                                     matched={false} approveMatch={() => this.addMatchFromButton(profile.userId)} rejectMatch={() => this.rejectMatch(profile.userId)} notifyRequesteeofMatch={()=>this.notifyRequesteeofMatch(profile.userId)} ></PendingMatchesProfile>
@@ -661,9 +588,9 @@ class ViewPastMatches extends React.Component {
                         <div className="row center-row">
                             <div className="col center-col">
                                 {
-                                    this.state.completedWingmanMatches.map((profile, i) =>
-                                    <div className="row center-row match-container" key={"row0wingmancomplete" + profile.userId}>
-                                    <CompletedMatchesProfile key={profile.userId} userId={profile.userId} imgsrc={this.state.currentPhotos[i].imgsrc}
+                                    this.state.pendingWingmanMatches.map((profile, i) =>
+                                    <div className="row center-row match-container match-row" key={"row0wingmanpending" + profile.userId}>
+                                    <CompletedMatchesProfile key={profile.userId} userId={profile.userId} requestId={profile.requestId} wingmanId = {profile.wingmanId} requesterId = {profile.requesterId} requesteeId={profile.requesteeId} imgsrc={this.state.currentPhotos[i].imgsrc}
                                         firstName={profile.firstName} lastName={profile.lastName} email={profile.email} age={profile.age} descrip={profile.description} genderIdentity={profile.genderIdentity} genderPreferences={profile.genderPreferences}
                                         matched={true}></CompletedMatchesProfile>
                                 </div>

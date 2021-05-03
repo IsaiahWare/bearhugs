@@ -320,7 +320,7 @@ class ViewProfilePage extends React.Component {
                         <div className="col center-col">
                             {
                                 this.state.profiles.map((profile,i) =>
-                                <div className="row center-row match-container" key = {"row0" + profile.userId}>
+                                <div className="row center-row match-container match-row" key = {"row0" + profile.userId}>
                                     <MatchProfile key={profile.userId} userId={profile.userId} imgsrc= {this.state.currentPhotos[i].imgsrc}
                                     firstName={profile.firstName} lastName={profile.lastName} age={profile.age} descrip={profile.description}
                                      matched={false}

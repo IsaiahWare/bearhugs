@@ -100,6 +100,9 @@ height: 60vh;
   transition: width 0.5s 0.5s, height 0.5s 0.5s, opacity 0.5s;
 
 }
+.match-row {
+  min-height: 5em;
+}
 .center-col {
   justify-content: center;
   align-items: center;
