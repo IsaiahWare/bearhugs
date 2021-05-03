@@ -151,17 +151,14 @@ class EditSettingsPage extends React.Component {
         let uid = UserToken.getUserId();
         console.log("user id in get photo info: " + uid)
         const data = new FormData();
-        const imagedata = event.target.files[0];
-        data.append(imagedata);
+        const fileInput = document.getElementById("uploadfile_input")
+        data.append("filename", fileInput.files[0])
+        data.append("userId", parseInt(UserToken.getUserId()))
         let url = 'http://bearhugs.love/server/php/photoUploader.php'
-        let newRequest = {
-            "userId": uid,
-            "photoUrl": this.state.photo
-        }
         fetch(url, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                "Content-type": "multipart/form-data"
             },
             body: data
         })
@@ -267,7 +264,7 @@ class EditSettingsPage extends React.Component {
                 <form enctype="multipart/form-data" onSubmit={this.uploadPhoto} method="POST">
                     <input type="hidden" name="MAX_FILE_SIZE" value="50000000000000" />
                     <input type="file" name="filename" id = "uploadfile_input"/>
-                    <input type="hidden" name="userId" value={30} />
+                    <input type="hidden" name="userId" value={parseInt(UserToken.getUserId())} />
                     <Button type="submit" variant="danger" name="submit-button">Submit Changes</Button>
                 </form>
                
