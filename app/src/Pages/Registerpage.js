@@ -188,6 +188,7 @@ class RegisterPage extends React.Component {
         })
             .then(res => res.json())
             .then(responseData => {
+                console.log(responseData)
                 // TODO: handle case where login is invalid
                 if (JSON.stringify(responseData.error) !== '{}') {
                     this.setState({
@@ -206,7 +207,6 @@ class RegisterPage extends React.Component {
         let target = event.target;
         let value = target.value
         let name = target.name;
-        console.log(name + " " + value)
         this.setState({
             [name]: value
         });
