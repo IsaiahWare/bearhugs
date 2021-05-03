@@ -128,7 +128,7 @@ router.post("/requests", (req: Request, res: Response) => {
         return;
     }
 
-    const queryStatement = "SELECT pendingWingman.requestId, pendingWingman.requesterId, pendingWingman.requesteeId, pendingWingman.wingmanId, users.userId, users.email, users.firstName, users.lastName, users.age, users.description, users.genderIdentity, users.maleGenderPref, users.femaleGenderPref, users.otherGenderPref, FROM users INNER JOIN pendingWingman ON pendingWingman.requesterId = users.userId WHERE pendingWingman.requesteeId = ?"; 
+    const queryStatement = "SELECT pendingWingman.requestId, pendingWingman.requesterId, pendingWingman.requesteeId, pendingWingman.wingmanId, users.userId, users.email, users.firstName, users.lastName, users.age, users.description, users.genderIdentity, users.maleGenderPref, users.femaleGenderPref, users.otherGenderPref FROM users INNER JOIN pendingWingman ON pendingWingman.requesterId = users.userId WHERE pendingWingman.requesteeId = ?"; 
     db.query(queryStatement, req.body.userId, (queryError: MysqlError | null, queryResults: any ) => {
         if (queryError) {
             wingmanResponse.error =  {
