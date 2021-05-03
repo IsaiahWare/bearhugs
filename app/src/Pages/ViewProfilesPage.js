@@ -171,6 +171,7 @@ class ViewProfilePage extends React.Component {
                        let result = responseData.results.findIndex(element => element.userId == this.state.unsuitableMatches[j].userId)
                         if (result!=-1) {
                             responseData.results.splice(result)
+                            console.log("splice " + responseData.result[result])
                         }
                     
                 }
@@ -188,6 +189,8 @@ class ViewProfilePage extends React.Component {
                 })      
            }
        }).then(()=>{
+           console.log("Current profiles: ")
+           console.log(this.state.profiles)
         for (let i=0; i < this.state.profiles.length; ++i) {
            this.getPhotoForCurrentUser(this.state.profiles[i].userId) 
         }
