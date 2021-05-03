@@ -82,13 +82,7 @@ class WingmanPage extends React.Component {
         })
         .then(res => res.json())
         .then(responseData => {
-            if (JSON.stringify(responseData.error) === '{}') {
-                console.log(responseData)
-
-            }
-            else {
-                console.log(responseData)
-            }
+           
        })
     
 
@@ -113,13 +107,7 @@ class WingmanPage extends React.Component {
         })
         .then(res => res.json())
         .then(responseData => {
-            if (JSON.stringify(responseData.error) === '{}') {
-                console.log(responseData)
-
-            }
-            else {
-                console.log(responseData)
-            }
+           
        })
     
 
@@ -128,7 +116,6 @@ class WingmanPage extends React.Component {
 
 
     sendWingMan(friend){
-
         let url = baseDomain + '/wingman/send'
         let newRequest = {
             wingmanId: UserToken.getUserId(),

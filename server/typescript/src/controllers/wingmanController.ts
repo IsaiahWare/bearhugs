@@ -26,7 +26,7 @@ router.post("/send", (req: Request, res: Response) => {
         return;
     }
 
-    const queryStatement: string = "SELECT requesterId FROM pendingWingman WHERE wingmanId = ? AND requesteeId = ? AND requesterId = ?";
+    const queryStatement: string = "SELECT * FROM pendingWingman WHERE wingmanId = ? AND requesteeId = ? AND requesterId = ?";
     const queryArgs = [req.body.wingmanId, req.body.requesteeId, req.body.requesterId];
     db.query(queryStatement, queryArgs, (queryError: MysqlError | null, queryResults: any ) => {
         if (queryError) {
