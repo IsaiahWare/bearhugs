@@ -175,16 +175,11 @@ class ViewProfilePage extends React.Component {
                         }
                     
                 }
-                console.log("unsuitable matches : ")
-                console.log(this.state.unsuitableMatches)
-                let temp = responseData.results
-                let selfId = UserToken.getUserId()
-                let tempResult = temp.filter((obj) => {
-                    return obj.userId !== selfId
-                })
+
+            
                 this.setState({
-                    profiles: tempResult,
-                    numProfiles:tempResult.length,
+                    profiles: responseData.results,
+                    numProfiles:responseData.results.length,
                     unsuitableMatches:[]
                 })      
            }

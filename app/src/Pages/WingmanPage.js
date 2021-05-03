@@ -17,7 +17,11 @@ class WingmanPage extends React.Component {
             redirect: false,
             currentFriends: [],
             wingmanee: { userId: -1 },
-            wingmanning: false
+            wingmanning: false,
+            currentPhotos:[],
+            doneLoading:0,
+            numFriends:-1,
+            feedback: ""
         }
         this.wingMan = this.wingMan.bind(this);
         this.sendWingMan = this.sendWingMan.bind(this);
@@ -37,6 +41,48 @@ class WingmanPage extends React.Component {
         }
     }
 
+    getPhotoForCurrentUser(id) {
+        let url='http://bearhugs.love/server/php/photoGetter.php'
+        let newRequest = {
+            "userId": id,
+        }
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newRequest)
+
+        })
+        .then(photos => photos.json())
+        .then(photos=> {
+            console.log(JSON.stringify(photos))
+           let tempPhotoNumber=this.state.doneLoading+1;
+                // TODO: handle case where login is invalid
+                    if (photos.length!=0) {
+                            this.setState(prevState => ({
+                                currentPhotos: [...prevState.currentPhotos, {id: id, imgsrc: photos[0]}],
+                                doneLoading: tempPhotoNumber
+                            }))
+                        }
+                    else {
+                        this.setState(prevState => ({
+                            currentPhotos: [...prevState.currentPhotos, {id: id, imgsrc:"mail-order-wife.png"}],
+                            doneLoading: tempPhotoNumber
+                        }))
+                    }
+
+            }).catch((error)=>{
+                let tempPhotoNumber=this.state.doneLoading+1;
+                console.error
+                this.setState(prevState => ({
+                    currentPhotos: [...prevState.currentPhotos, {id: id, imgsrc:"mail-order-wife.png"}],
+                    doneLoading: tempPhotoNumber
+                }))
+            })
+
+    }
+
     getCurrentFriends() {
         let url = baseDomain + '/friend/friends'
         let newRequest = {
@@ -54,13 +100,29 @@ class WingmanPage extends React.Component {
 		    console.log(responseData)
                 if (JSON.stringify(responseData.error) === '{}') {
                     this.setState({
-                       currentFriends: responseData.results
+                       currentFriends: responseData.results, 
+                       doneLoading: 0,
+                       numFriends: responseData.results.length
+                    }, function() {
+                        if (this.state.currenFriends.length > 0) {
+                            for (let i=0; i < this.state.currentFriends.length; ++i) {
+                                this.getPhotoForCurrentUser(this.state.currenFriends[i].userId) 
+                             }
+
+                        }
+                        else {
+                            this.setState({
+                                feedback: "You don't have any friends yet. Go to the friends page to make a friend request!."
+                            }) 
+                        }
+                      
+                    })
+                } else{
+                    this.setState({
+                        feedback: "Friends could not be retrieved. Please try again later."
                     })
                 }
                 //TODO: add message for if no friends yet
-                if(this.state.currentFriends.length == 0){
-
-                }
             })
     }
 
@@ -132,7 +194,7 @@ class WingmanPage extends React.Component {
             .then(res => res.json())
             .then(responseData => {
             if (JSON.stringify(responseData.error) === '{}') {
-            alert("Wingman match suggestion sent to "+ this.state.wingmanee.firstName + " and "+ friend.firstName );
+            alert("Wingman match suggestion sent to "+ this.state.wingmanee.firstName + " " +this.state.wingmanee.lastName + " and "+ friend.firstName + " " +friend.lastName );
             this.sendWingManNotificationToFriend(friend)
             this.sendWingManNotificationToWingmanee(friend)
             }   
@@ -159,6 +221,7 @@ class WingmanPage extends React.Component {
                 to="/"
             />
         }
+
 
         let wingmanPanel;
         let backbutton;
@@ -201,28 +264,48 @@ class WingmanPage extends React.Component {
             backbutton = null;
         }
 
-        return(
-            <div className = "page">
-                <BearHugsNavbar></BearHugsNavbar>
-
-                {wingmanPanel}
-
-                <div className="friendsContainer">
-                    {
-                        this.state.currentFriends.filter(friend => friend.userId != this.state.wingmanee.userId).map((friend) =>
-                            <button key={friend.userId} onClick={() => this.wingMan(friend)} className="nostyle buttonwrapper">
-                                <ListedUser id={friend.userId} key={friend.userId} firstName={friend.firstName}
-                                lastName={friend.lastName}
-                                removeTrue = {false} profPicSrc="possum-on-horse.png" age={friend.age}></ListedUser>
-                            </button>
-                        )
-                    }
-
+        if (this.state.doneLoading == this.state.numFriends) {
+            return(
+                <div className = "page">
+                    <BearHugsNavbar></BearHugsNavbar>
+    
+                    {wingmanPanel}
+    
+                    <div className="friendsContainer">
+                        {
+                            this.state.currentFriends.filter(friend => friend.userId != this.state.wingmanee.userId).map((friend) =>
+                                <button key={friend.userId} onClick={() => this.wingMan(friend)} className="nostyle buttonwrapper">
+                                    <ListedUser id={friend.userId} key={friend.userId} firstName={friend.firstName}
+                                    lastName={friend.lastName}
+                                    removeTrue = {false} profPicSrc="possum-on-horse.png" age={friend.age}></ListedUser>
+                                </button>
+                            )
+                        }
+    
+                    </div>
+                    
+                    {backbutton}
                 </div>
-                
-                {backbutton}
-            </div>
-        );
+            );
+
+        } else {
+            return (
+                <div className = "page">
+                    <BearHugsNavbar></BearHugsNavbar>
+    
+                    {wingmanPanel}
+    
+                    <div className="friendsContainer">
+    
+                    </div>
+                    
+                    {backbutton}
+                </div>
+
+            )
+        }
+
+        
     }
 
 
