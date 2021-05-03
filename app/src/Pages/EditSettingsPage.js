@@ -93,7 +93,6 @@ class EditSettingsPage extends React.Component {
                         femaleGenderPref:responseData.results[0].femaleGenderPref,
                         otherGenderPref:responseData.results[0].otherGenderPref,
                     })
-                    this.getPhotoInfo();
 
                 }
                 else {
@@ -270,9 +269,8 @@ class EditSettingsPage extends React.Component {
                             ))}
                     </div>
                 <div className="col">
-               
-                    <Form onSubmit={this.handleSubmit} controlId="editForm">
-                        <Form.Group>
+                        <Form>
+                            <Form.Group>
                             <Form.Label>Upload a profile image</Form.Label>
                             <Form.File enctype="multipart/form-data" action="http://bearhugs.love/server/php/photoUploader.php" method="POST" label="Photo Uploader" id="photo_uploader">
                                 <input type="hidden" name="MAX_FILE_SIZE" value="50000000000000" />
@@ -280,7 +278,10 @@ class EditSettingsPage extends React.Component {
                                 <input type="hidden" name="userId" value={this.state.userId} />
                                 <Button type="submit" variant="danger" name="submit-button">Upload Photo</Button>
                             </Form.File>
-                        </Form.Group>
+                            </Form.Group>
+                        </Form>
+               
+                    <Form onSubmit={this.handleSubmit} controlId="editForm">
                         <Form.Group controlId="editForm.email">
                             <Form.Label>Email</Form.Label>
                             <Form.Control type="email" name="email" value={this.state.email} onChange={this.handleInputChange} placeholder="newemail@wustl.edu" />
