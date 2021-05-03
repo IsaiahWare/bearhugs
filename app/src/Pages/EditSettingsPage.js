@@ -146,9 +146,13 @@ class EditSettingsPage extends React.Component {
 
     }
 
-    uploadPhoto() {
+    uploadPhoto(event) {
+        event.preventDefault()
         let uid = UserToken.getUserId();
         console.log("user id in get photo info: " + uid)
+        const data = new FormData();
+        const imagedata = event.target.files[0];
+        data.append(imagedata);
         let url = 'http://bearhugs.love/server/php/photoUploader.php'
         let newRequest = {
             "userId": uid,
@@ -159,26 +163,17 @@ class EditSettingsPage extends React.Component {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(newRequest)
-
+            body: data
         })
             .then(res => res.json())
             .then(responseData => {
-                // TODO: handle case where login is invalid
-                if (JSON.stringify(responseData.error) === '{}') {
-                    console.log("photo re")
-                    console.log(responseData)
-                    console.log(responseData.results[0])
-                    this.setState({
-                        feedback: "Photo and other info changed!"
-                    })
-                }
-                else {
-                    console.log("No data for edit settings")
-                    console.log(responseData.error)
-                    this.setState({ feedback: "Couldn't upload photo, but uploaded other data" })
-                }
+                console.log(responseData)
 
+            }).catch((error) => {
+                console.error(error)
+                this.setState({
+                    feedback: "Photos could not be obtained at this time, but other user information has been obtained."
+                })
             })
 
 
@@ -269,7 +264,7 @@ class EditSettingsPage extends React.Component {
                             ))}
                     </div>
                 <div className="col">
-                <form enctype="multipart/form-data" action="http://bearhugs.love/server/php/photoUploader.php" onSubmit={(event) => event.preventDefault()} method="POST">
+                <form enctype="multipart/form-data" onSubmit={this.uploadPhoto} method="POST">
                     <input type="hidden" name="MAX_FILE_SIZE" value="50000000000000" />
                     <input type="file" name="filename" id = "uploadfile_input"/>
                     <input type="hidden" name="userId" value={30} />
