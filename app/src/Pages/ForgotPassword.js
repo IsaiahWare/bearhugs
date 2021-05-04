@@ -84,12 +84,20 @@ class ForgotPassword extends React.Component {
             this.setState({
                 feedback: "Password and confirm password do not match."
             })
+            window.scrollTo({
+                top: 200,
+                behavior: "smooth"
+            })
             return false
         }
         const re = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/
         if (!re.test(password)) {
             this.setState({
                 feedback: "Password should contain at least eight characters, and it should have at least one uppercase character, one lowercase character, and one digit."
+            })
+            window.scrollTo({
+                top: 200,
+                behavior: "smooth"
             })
             return false
         }
@@ -202,7 +210,7 @@ class ForgotPassword extends React.Component {
                     <input className="input" type='password' value={this.state.password} onChange={this.handleInputChange} name='password' placeholder="New Password"/>
                 </div>
                 <div className="input-row center-row">
-                    <input className="input" type='password' value={this.state.password2} onChange={this.handleInputChange} name='password2' placeholder="Comfirm New Password"/>
+                    <input className="input" type='password' value={this.state.password2} onChange={this.handleInputChange} name='password2' placeholder="Confirm New Password"/>
                 </div>
                 <div className="input-row center-row">
                     <button className="full-width-button red" type="submit">Reset Password</button>

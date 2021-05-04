@@ -25,7 +25,7 @@ class RegisterPage extends React.Component {
         this.state = {
             firstName: "",
             lastName: "",
-            email: "charles@wustl.edu",
+            email: "",
             password: "",
             confirmPassword: "",
             errors: "",
@@ -209,11 +209,20 @@ class RegisterPage extends React.Component {
         let genderPreferenceCheck = this.filterGenderPreference()
         if (ageFilter && nameFilter && emailFilter && passwordFilter && confirmPassWordCheck && genderIdentityCheck && genderPreferenceCheck) {
             this.setState({
-                securityQs: true
+                securityQs: true,
+                feedback: ""
+            })
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
             })
         }
         else {
             console.log("Filters failed")
+            window.scrollTo({
+                top: 300,
+                behavior: "smooth"
+            })
         }
     }
     
@@ -222,6 +231,10 @@ class RegisterPage extends React.Component {
             this.setState({
                 feedback: "Please select two different security questions."
             });
+            window.scrollTo({
+                top: 200,
+                behavior: "smooth"
+            })
         }
         var regex = /^[ a-zA-Z\-\’]+$/;
         if (!regex.test(this.state.a1) || !regex.test(this.state.a2)) {
@@ -229,6 +242,10 @@ class RegisterPage extends React.Component {
                 feedback: "Please enter a valid answer for both questions."
             })
             return false;
+            window.scrollTo({
+                top: 200,
+                behavior: "smooth"
+            })
         }
         return true;
     }
@@ -451,7 +468,7 @@ class RegisterPage extends React.Component {
                 <div className="row center-row">
                     <div className="col center-col padding-5rem">
                         <div className="box margin-5rem ">
-
+                            
                             {registerform}
 
                                 <p className="center"><Link to="/" className="route-link">Back to Login </Link></p>
