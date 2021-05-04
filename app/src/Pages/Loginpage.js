@@ -3,6 +3,9 @@ import { Redirect } from 'react-router-dom';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import "../App.css"
 import UserToken from  "../Components/UserToken.js"
+
+const axios = require('axios');
+
 let baseDomain = "http://ec2-100-24-237-42.compute-1.amazonaws.com:3000"
 class LoginPage extends React.Component {
     constructor(props) {
@@ -16,6 +19,8 @@ class LoginPage extends React.Component {
         }
         this.logIn= this.logIn.bind(this)
         this.handleInputChange = this.handleInputChange.bind(this)
+        this.uploadPhotosTest = this.uploadPhotosTest.bind(this)
+        this.getPhotosTest = this.getPhotosTest.bind(this)
     }
 
     logIn(event) {
@@ -66,16 +71,38 @@ handleInputChange(event) {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
-              "userId": this.state.userId
+                "userId": this.state.userId
             })
-          })
-          .then(photos => photos.json())
-          .then(photos => {
-            this.setState({
-              "photos": photos
-            })
-          })
-          .catch(console.error);
+        })
+        .then(photos => photos.json())
+        .then(photos => {
+        this.setState({
+            "photos": photos
+        })
+        })
+        .catch(console.error);
+    }
+
+    uploadPhotosTest(event) {
+        event.preventDefault();
+        let formData = new FormData();
+
+        formData.append('userId', this.state.userId);
+        formData.append('filename', event.target.filename);
+
+        const config = {
+            headers: { 'content-type': 'multipart/form-data' }
+        }
+
+        const url = "../../../server/php/photoGetter.php"
+
+        axios.post(url, formData, config)
+        .then(response => {
+            console.log(response);
+        })
+        .catch(error => {
+            console.log(error);
+        });
     }
 
     render() {
@@ -84,7 +111,7 @@ handleInputChange(event) {
             return <Redirect
             to= "/viewmatches"
             />
-        
+
 
 	 }
         return (
@@ -130,9 +157,9 @@ handleInputChange(event) {
                         </div>
                     </div>
                 </div>
-                {/*
+
                 <h1>1. Upload photo for current user</h1>
-                <form enctype="multipart/form-data" action="../../../server/php/photoGetter.php" method="POST">
+                <form onSubmit={this.uploadPhotosTest}>
                     <input type="hidden" name="MAX_FILE_SIZE" value="50000000000000" />
                     <input type="file" name="filename" id = "uploadfile_input"/>
                     <input type="hidden" name="userId" value={30} />
@@ -150,7 +177,7 @@ handleInputChange(event) {
                 }
                 <div className="page-gradient">
                 </div>
-                */}
+
             </div>
         );
     }
