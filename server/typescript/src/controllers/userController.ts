@@ -225,7 +225,7 @@ router.post("/random", (req: Request, res: Response) => {
             };
         } else {
             shuffleArray(queryResults);
-            randomResponse.results = queryResults.slice(0, req.body.count);
+            randomResponse.results = queryResults
         }
         res.json(randomResponse);
     }); 
