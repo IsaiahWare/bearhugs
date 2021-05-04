@@ -14,7 +14,7 @@ class ForgotPassword extends React.Component {
             a1: "",
             a2: "",
             a3: "",
-            q1: "",
+            q1: "beep boop?",
             q2: "",
             q3: "",
             emailentered: false,
@@ -46,7 +46,7 @@ class ForgotPassword extends React.Component {
     filterPassword(password) {
         if (password != this.state.password2) {
             this.setState({
-                feedback: "Password and confirm password do not match"
+                feedback: "Password and confirm password do not match."
             })
             return false
         }
@@ -62,9 +62,11 @@ class ForgotPassword extends React.Component {
 
     resetPassword(event){
         event.preventDefault();
-        if(this.filterPassword(this.state.password)){
+        //check to see if security question answers match
 
-        }
+            if(this.filterPassword(this.state.password)){
+
+            }
         console.log("password rest")
     }
 
@@ -73,7 +75,19 @@ class ForgotPassword extends React.Component {
         if(this.state.emailentered){
             securityQs = 
             <form onSubmit={this.resetPassword}>
-                <p>Security questions:</p>
+                <h2 className="center">Security questions:</h2>
+                <p>1. {this.state.q1}</p>
+                <div className="input-row center-row">
+                    <input className="input" type='text' value={this.state.a1} onChange={this.handleInputChange} name='a1' placeholder="Answer"/>
+                </div>
+                <p>2. {this.state.q2}</p>
+                <div className="input-row center-row">
+                    <input className="input" type='text' value={this.state.a2} onChange={this.handleInputChange} name='a2' placeholder="Answer"/>
+                </div>
+                <p>3. {this.state.q3}</p>
+                <div className="input-row center-row">
+                    <input className="input" type='text' value={this.state.a3} onChange={this.handleInputChange} name='a3' placeholder="Answer"/>
+                </div>
                 <div className="input-row center-row">
                     <input className="input" type='password' value={this.state.password} onChange={this.handleInputChange} name='password' placeholder="New Password"/>
                 </div>
@@ -108,10 +122,10 @@ class ForgotPassword extends React.Component {
                             {securityQs}
 
                             <div className="center">
-                                <p><Link to="/" className="route-link center">Back ⬅️</Link></p>
+                                <p><Link to="/" className="route-link center">Back to Login</Link></p>
                             </div>
                             <div className="feedback-wrapper">
-                                {this.state.feedback}
+                                <p>{this.state.feedback}</p>
                             </div>
                         </div>
                     </div>
