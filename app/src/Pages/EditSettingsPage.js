@@ -213,7 +213,6 @@ class EditSettingsPage extends React.Component {
                 // TODO: handle case where login is invalid
                 if (JSON.stringify(responseData.error) === '{}') {
                     this.setState({ feedback: "Changes saved!" })
-                    this.uploadPhoto()
                 }
                 else {
                     this.setState({ feedback: "Changes could not be saved :( Please try again" })

@@ -346,7 +346,6 @@ class RegisterPage extends React.Component {
                 </div>
                 
                 <div className="input-row center-row match-width">
-                    
                     <Form.Group>
                         <div>
                         <Form.Label>Gender Preference for Matching</Form.Label>
