@@ -95,6 +95,8 @@ handleInputChange(event) {
             headers: { 'content-type': 'multipart/form-data' }
         }
 
+        const url = '../../../server/php/photoUploader.php'
+
         axios.post(url, formData, config)
         .then(response => {
             console.log(response);
