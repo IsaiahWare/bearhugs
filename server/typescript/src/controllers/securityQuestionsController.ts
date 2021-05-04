@@ -14,7 +14,6 @@ import {
 const router = express.Router();
 
 router.post("/send", (req: Request, res: Response) => {
-    console.log(req.body);
     const SecurityQuestionsSend: any = {
         "error": {},
         "results": []
@@ -31,7 +30,7 @@ router.post("/send", (req: Request, res: Response) => {
     const queryStatement: string = "INSERT INTO securityQuestions SET ?";
     
     const queryArgs = {
-        "userId": req.body.userId,
+        "email": req.body.email,
         "securityQuestions": JSON.stringify(req.body.securityQuestions)
     };
 
@@ -67,9 +66,9 @@ router.post("/get", (req: Request, res: Response) => {
         return;
     }
 
-    const queryStatement: string = "SELECT * FROM securityQuestions WHERE userId = ?";
+    const queryStatement: string = "SELECT * FROM securityQuestions WHERE email = ?";
  
-    db.query(queryStatement, req.body.userId, (queryError: MysqlError | null, queryResults: any) => {
+    db.query(queryStatement, req.body.email, (queryError: MysqlError | null, queryResults: any) => {
         if (queryError) {
             SecurityQuestionsGetResponse.error = {
                 "message": queryError.sqlMessage
@@ -77,7 +76,7 @@ router.post("/get", (req: Request, res: Response) => {
         } else {
             SecurityQuestionsGetResponse.results = [
                 {
-                    "userId": queryResults[0].userId,
+                    "email": queryResults[0].email,
                     "securityQuestionsId": queryResults[0].securityQuestionsId,
                     "securityQuestions": JSON.parse(queryResults[0].securityQuestions)
                 }

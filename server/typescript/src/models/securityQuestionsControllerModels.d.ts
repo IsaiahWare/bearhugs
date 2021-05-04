@@ -1,9 +1,9 @@
 declare module "securityQuestionsControllerModels";
 
 export interface SecurityQuestionsSendRequest {
-    userId: number;
+    email: string;
     securityQuestions: object;
 }
 export interface SecurityQuestionsGetRequest {
-    userId: number;
+    email: string;
 }
