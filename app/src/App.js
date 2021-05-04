@@ -22,15 +22,15 @@ function App() {
   return (
   <Router basename={process.env.PUBLIC_URL}>
     <Switch>
-        <Route exact path='/' component={LoginPage} />
-        <Route exact path="/register" component={RegisterPage}></Route>
-        <Route exact path="/viewmatches" component={ViewProfilePage}></Route>
-        <Route exact path="/editsettings" component={EditSettingsPage}></Route>
-        <Route exact path="/friends" component={FriendsPage}></Route>
-        <Route exact path="/notifications" component={NotificationsPage}></Route>
-        <Route exact path="/mymatches" component={ViewPastMatches}></Route>
-        <Route exact path="/wingman" component={WingManPage}></Route>
-        <Route exact path="/forgotpassword" component={ForgotPassword}></Route>
+        <Route  path='/' component={LoginPage} />
+        <Route  path="/register" component={RegisterPage}></Route>
+        <Route  path="/viewmatches" component={ViewProfilePage}></Route>
+        <Route  path="/editsettings" component={EditSettingsPage}></Route>
+        <Route  path="/friends" component={FriendsPage}></Route>
+        <Route  path="/notifications" component={NotificationsPage}></Route>
+        <Route  path="/mymatches" component={ViewPastMatches}></Route>
+        <Route  path="/wingman" component={WingManPage}></Route>
+        <Route  path="/forgotpassword" component={ForgotPassword}></Route>
     </Switch>
 </Router>
 
