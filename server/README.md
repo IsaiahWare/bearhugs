@@ -30,7 +30,7 @@ Run unit tests (not implemented yet):
 
 Step 1.
 ```bash
-cd /home/isaiah/public_html/bearhugs/app
+cd /home/ec2-user/public_html/bearhugs/app
 ```
 Step 2.
 ```bash
@@ -42,7 +42,7 @@ prod
 ```
 Step 4.
 ```bash
-cd /home/isaiah/public_html/bearhugs
+cd /home/ec2-user/public_html/bearhugs
 ```
 Step 5.
 ```bash
