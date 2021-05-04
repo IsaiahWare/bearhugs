@@ -207,34 +207,53 @@ Response {
 }
 ```
 
-## QUIZ
-### `POST /quiz/create`
+## SECURITY QUESTIONS
+### `POST /securityQuestions/send`
 
-Store a quiz for a particular user
+Store securityQuestions for a user
 
 ```
-Request {
-  userId: number
-  quizResults: JSON
+requestData = {
+    "userId": 30,
+    "securityQuestions": {
+        "What is your favorite band?": "Paramore"
+    }
+}
+
+responseData = {
+    "error": {},
+    "results": [
+        {
+            "securityQuestionsId": 1,
+            "securityQuestions": {
+                "What is your favorite color?": "red"
+            }
+        }
+    ]
 }
 ```
-### `POST /quiz/find`
+### `POST /securityQuestions/get`
 
 Find a quiz for a particular user
 
 ```
-Request {
-  userId: number
+
+requestData = {
+  "userId": 30
+}
+responseData = {
+    "error": {},
+    "results": [
+        {
+            "userId": 30,
+            "securityQuestionsId": 1,
+            "securityQuestions": {
+                "What is your favorite color?": "red"
+            }
+        }
+    ]
 }
 
-Response {
-  error: {}
-  results: [
-    {
-      "quizResults": JSON
-    }
-  ]
-}
 ```
 ## MATCH
 ### `POST /match/send`
