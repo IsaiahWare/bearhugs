@@ -91,11 +91,13 @@ handleInputChange(event) {
         formData.append('userId', this.state.userId);
         formData.append('filename', event.target.filename);
 
+        console.log(formData);
+
         const config = {
             headers: { 'content-type': 'multipart/form-data' }
         }
 
-        const url = '../../../server/php/photoUploader.php'
+        const url = '../../../server/php/photoUploader.php';
 
         axios.post(url, formData, config)
         .then(response => {
