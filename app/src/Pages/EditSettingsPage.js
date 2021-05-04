@@ -13,6 +13,7 @@ import { Row } from 'react-bootstrap';
 import ImageUploader from 'react-images-upload';
 import Image from "react-bootstrap/Image"
 
+const axios = require('axios');
 
 let baseDomain = "http://ec2-100-24-237-42.compute-1.amazonaws.com:3000"
 
@@ -25,7 +26,7 @@ class EditSettingsPage extends React.Component {
             feedback: "",
             password: "",
             redirect: false,
-            photo: "",
+            photos:[],
             genderIdentity: "MALE",
             maleGenderPref: false,
             femaleGenderPref: false,
@@ -35,7 +36,8 @@ class EditSettingsPage extends React.Component {
             age: -1,
             currentPhotos: [],
             doneLoading:0,
-            numPhotos:-1
+            numPhotos:-1,
+            file: null
 
         }
         this.handleInputChange = this.handleInputChange.bind(this)
@@ -43,6 +45,7 @@ class EditSettingsPage extends React.Component {
         this.getCurrentUserInfo = this.getCurrentUserInfo.bind(this);
         this.getPhotoInfo = this.getPhotoInfo.bind(this);
         this.uploadPhoto = this.uploadPhoto.bind(this);
+        this.onPhotosChange = this.onPhotosChange.bind(this)
 
     }
 
@@ -108,18 +111,13 @@ class EditSettingsPage extends React.Component {
 
 
     getPhotoInfo() {
-        let url = 'http://bearhugs.love/server/php/photoGetter.php'
-        let newRequest = {
-            "userId": UserToken.getUserId(),
-        }
-        fetch(url, {
+        fetch('../../../server/php/photoGetter.php', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(newRequest)
-
-        })
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+              "userId": parseInt(UserToken.getUserId())
+            })
+          })
             .then(photos => photos.json())
             .then(photos => {
                 let tempPhotoNumber = this.state.doneLoading + 1;
@@ -147,53 +145,59 @@ class EditSettingsPage extends React.Component {
     }
 
     uploadPhoto(event) {
-        event.preventDefault()
-        let uid = UserToken.getUserId();
-        console.log("user id in get photo info: " + uid)
-        const data = new FormData();
-        const fileInput = document.getElementById("uploadfile_input")
-        data.append("filename", fileInput.files[0])
-        data.append("userId", parseInt(UserToken.getUserId()))
-        let url = 'http://bearhugs.love/server/php/photoUploader.php'
-        fetch(url, {
-            method: 'POST',
-            headers: {
-            },
-            body: data
-        })
-            .then(res => res.json())
-            .then(responseData => {
-                console.log(responseData)
+        event.preventDefault();
+        let formData = new FormData();
 
-            }).catch((error) => {
-                console.error(error)
-                this.setState({
-                    feedback: "Photos could not be obtained at this time, but other user information has been obtained."
-                })
-            })
+        formData.append('userId', parseInt(UserToken.getUserId()));
+        formData.append('filename', this.state.file);
+
+        console.log(this.state);
+
+        // const config = {
+        //     headers: { 'content-type': 'multipart/form-data' }
+        // }
+
+        const url = '../../../server/php/photoUploader.php';
+
+        axios.post(url, formData, {
+            headers: {
+                'content-type': 'multipart/form-data'
+            }
+        })
+        .then(response => {
+            console.log(response);
+        })
+        .catch(error => {
+            console.log(error);
+        });
+
+
 
 
 
     }
 
+    onPhotosChange(e) {
+        this.setState({
+            "file":e.target.files[0]
+        })
+    }
+
     handleSubmit(event) {
         event.preventDefault();
-        let uid = UserToken.getUserId();
+        let uid = parseInt(UserToken.getUserId());
         let url = baseDomain + '/user/update'
         let newRequest = {
             "userId": uid,
             "email": this.state.email,
             "description": this.state.description,
             "genderIdentity": this.state.genderIdentity,
-            "firstName": this.state.firstName,
-            "lastName": this.state.lastName,
-            "age": this.state.age,
             "maleGenderPref": this.state.maleGenderPref,
             "femaleGenderPref":this.state.femaleGenderPref,
             "otherGenderPref": this.state.otherGenderPref
         }
 
-        console.log("New rquest" + newRequest)
+        console.log("New request for edit" + JSON.stringify(newRequest))
 
         fetch(url, {
             method: 'POST',
@@ -263,12 +267,12 @@ class EditSettingsPage extends React.Component {
                             ))}
                     </div>
                 <div className="col">
-                <form enctype="multipart/form-data" onSubmit={this.uploadPhoto} method="POST">
+                <form onSubmit={this.uploadPhoto}>
                     <input type="hidden" name="MAX_FILE_SIZE" value="50000000000000" />
-                    <input type="file" name="filename" id = "uploadfile_input"/>
-                    <input type="hidden" name="userId" value={parseInt(UserToken.getUserId())} />
-                    <Button type="submit" variant="danger" name="submit-button">Submit Changes</Button>
+                    <input type="file" name="filename" id = "uploadfile_input" onChange={this.onPhotosChange}/>
+                    <Button type="submit" variant="danger" name="submit"> UPLOAD </Button>
                 </form>
+
                
                     <Form onSubmit={this.handleSubmit} controlId="editForm">
                         <Form.Group controlId="editForm.email">

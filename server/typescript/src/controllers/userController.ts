@@ -242,12 +242,10 @@ router.post("/update", (req: Request, res: Response) => {
         return;
     }    
     
-    const queryStatement: string = "UPDATE users SET email = ?, firstName = ?, lastName = ?, description = ?, genderIdentity = ?, maleGenderPref = ?, femaleGenderPref =?, otherGenderPref=? WHERE userId = ?";
+    const queryStatement: string = "UPDATE users SET email = ?, description = ?, genderIdentity = ?, maleGenderPref = ?, femaleGenderPref =?, otherGenderPref=? WHERE userId = ?";
     const queryArgs = [
         req.body.email,
         // req.body.password,
-        req.body.firstName,
-        req.body.lastName,
         req.body.description,
         req.body.genderIdentity,
         req.body.maleGenderPref,

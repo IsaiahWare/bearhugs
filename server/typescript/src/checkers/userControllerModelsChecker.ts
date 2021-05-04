@@ -41,10 +41,11 @@ export function isUserRandomRequest(obj: any): obj is UserRandomRequest {
 }
 
 export function isUserUpdateRequest(obj: any): obj is UserUpdateRequest {
-  return obj.email !== undefined && obj.firstName !== undefined && obj.lastName !== undefined &&
-  obj.description !== undefined && obj.genderIdentity !== undefined && obj.maleGenderPref !== undefined 
+  return obj.email !== undefined 
+  && obj.description !== undefined 
+  && obj.genderIdentity !== undefined && obj.maleGenderPref !== undefined 
   && obj.femaleGenderPref !== undefined && obj.otherGenderPref !== undefined 
-  && obj.userId !== undefined && Object.keys(obj).length === 9;
+  && obj.userId !== undefined && Object.keys(obj).length === 7;
 }
 
 export function isUserPhoneRequest(obj: any): obj is UserPhoneRequest {
