@@ -60,7 +60,8 @@ class ForgotPassword extends React.Component {
         return true
     }
 
-    resetPassword(){
+    resetPassword(event){
+        event.preventDefault();
         if(this.filterPassword(this.state.password)){
 
         }
