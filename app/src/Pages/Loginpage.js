@@ -16,7 +16,8 @@ class LoginPage extends React.Component {
 	        redirect: false,
             photos: [],
             feedback:"",
-            userId: 0
+            userId: 0,
+            file: null
         }
         this.logIn= this.logIn.bind(this)
         this.handleInputChange = this.handleInputChange.bind(this)
@@ -89,23 +90,31 @@ handleInputChange(event) {
         let formData = new FormData();
 
         formData.append('userId', this.state.userId);
-        formData.append('filename', event.target.filename);
+        formData.append('filename', this.state.file);
 
-        console.log(formData);
+        console.log(this.state);
 
-        const config = {
-            headers: { 'content-type': 'multipart/form-data' }
-        }
+        // const config = {
+        //     headers: { 'content-type': 'multipart/form-data' }
+        // }
 
         const url = '../../../server/php/photoUploader.php';
 
-        axios.post(url, formData, config)
+        axios.post(url, formData, {
+            headers: {
+                'content-type': 'multipart/form-data'
+            }
+        })
         .then(response => {
             console.log(response);
         })
         .catch(error => {
             console.log(error);
         });
+    }
+
+    onPhotosChange(e) {
+        this.setState({"file":e.target.files[0]})
     }
 
     render() {
