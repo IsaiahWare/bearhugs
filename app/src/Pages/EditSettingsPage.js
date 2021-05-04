@@ -81,30 +81,30 @@ class EditSettingsPage extends React.Component {
             body: JSON.stringify(newRequest)
 
         })
-            .then(res => res.json())
-            .then(responseData => {
-                // TODO: handle case where login is invalid
-                if (JSON.stringify(responseData.error) === '{}') {
-                    console.log(responseData.results[0])
-                    this.setState({
-                        email: responseData.results[0].email,
-                        description: responseData.results[0].description,
-                        firstName: responseData.results[0].firstName,
-                        lastName: responseData.results[0].lastName,
-                        age: responseData.results[0].age,
-                        maleGenderPref: responseData.results[0].maleGenderPref,
-                        femaleGenderPref:responseData.results[0].femaleGenderPref,
-                        otherGenderPref:responseData.results[0].otherGenderPref,
-                    })
+        .then(res => res.json())
+        .then(responseData => {
+            // TODO: handle case where login is invalid
+            if (JSON.stringify(responseData.error) === '{}') {
+                console.log(responseData.results[0])
+                this.setState({
+                    email: responseData.results[0].email,
+                    description: responseData.results[0].description,
+                    firstName: responseData.results[0].firstName,
+                    lastName: responseData.results[0].lastName,
+                    age: responseData.results[0].age,
+                    maleGenderPref: responseData.results[0].maleGenderPref,
+                    femaleGenderPref:responseData.results[0].femaleGenderPref,
+                    otherGenderPref:responseData.results[0].otherGenderPref,
+                })
 
-                }
-                else {
-                    console.log("No data for edit settings")
-                    console.log(responseData.error)
-                    this.setState({ feedback: "Couldn't get data" })
-                }
+            }
+            else {
+                console.log("No data for edit settings")
+                console.log(responseData.error)
+                this.setState({ feedback: "Couldn't get data" })
+            }
 
-            })
+        })
 
 
     }
@@ -133,8 +133,8 @@ class EditSettingsPage extends React.Component {
                         feedback: "You have not uploaded a photo yet."
                     })
                 }
-
             }).catch((error) => {
+                console.log(error);
                 let tempPhotoNumber = this.state.doneLoading + 1;
                 this.setState({
                     feedback: "Photos could not be obtained at this time, but other user information has been obtained."
@@ -174,11 +174,6 @@ class EditSettingsPage extends React.Component {
         .catch(error => {
             console.log(error);
         });
-
-
-
-
-
     }
 
     onPhotosChange(e) {
@@ -276,7 +271,7 @@ class EditSettingsPage extends React.Component {
                     <Button type="submit" variant="danger" name="submit"> UPLOAD </Button>
                 </form>
 
-               
+
                     <Form onSubmit={this.handleSubmit} controlId="editForm">
                         <Form.Group controlId="editForm.email">
                             <Form.Label>Email</Form.Label>
@@ -284,7 +279,7 @@ class EditSettingsPage extends React.Component {
                         </Form.Group>
                         <Form.Group controlId="editForm.description">
                             <Form.Label>Description</Form.Label>
-                            <Form.Control as="textarea" name="description" value={this.state.description} rows={3} onChange={this.handleInputChange} placeholder="Write what you want 
+                            <Form.Control as="textarea" name="description" value={this.state.description} rows={3} onChange={this.handleInputChange} placeholder="Write what you want
                             people to see on your profile" />
                         </Form.Group>
                         <Form.Group controlId="editForm.genderIdentity">

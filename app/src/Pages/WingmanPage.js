@@ -42,7 +42,7 @@ class WingmanPage extends React.Component {
     }
 
     getPhotoForCurrentUser(id) {
-        let url='http://bearhugs.love/server/php/photoGetter.php'
+        let url='http://ec2-34-239-255-127.compute-1.amazonaws.com/server/php/photoGetter.php'
         let newRequest = {
             "userId": id,
         }
@@ -100,22 +100,22 @@ class WingmanPage extends React.Component {
 		    console.log(responseData)
                 if (JSON.stringify(responseData.error) === '{}') {
                     this.setState({
-                       currentFriends: responseData.results, 
+                       currentFriends: responseData.results,
                        doneLoading: 0,
                        numFriends: responseData.results.length
                     }, function() {
                         if (this.state.currentFriends.length > 0) {
                             for (let i=0; i < this.state.currentFriends.length; ++i) {
-                                this.getPhotoForCurrentUser(this.state.currentFriends[i].userId) 
+                                this.getPhotoForCurrentUser(this.state.currentFriends[i].userId)
                              }
 
                         }
                         else {
                             this.setState({
                                 feedback: "You don't have any friends yet. Go to the friends page to make a friend request!"
-                            }) 
+                            })
                         }
-                      
+
                     })
                 } else{
                     this.setState({
@@ -143,13 +143,13 @@ class WingmanPage extends React.Component {
         })
         .then(res => res.json())
         .then(responseData => {
-           
+
        })
-    
+
 
 
     }
-    
+
 
     sendWingManNotificationToWingmanee(friend) {
         let url = baseDomain + '/notifications/sendthreeuser'
@@ -168,9 +168,9 @@ class WingmanPage extends React.Component {
         })
         .then(res => res.json())
         .then(responseData => {
-           
+
        })
-    
+
 
 
     }
@@ -197,7 +197,7 @@ class WingmanPage extends React.Component {
             alert("Wingman match suggestion sent to "+ this.state.wingmanee.firstName + " " +this.state.wingmanee.lastName + " and "+ friend.firstName + " " +friend.lastName );
             this.sendWingManNotificationToFriend(friend)
             this.sendWingManNotificationToWingmanee(friend)
-            }   
+            }
             })
     }
 
@@ -236,26 +236,26 @@ class WingmanPage extends React.Component {
                 <div>
                     <button key={wingmanee.userId} onClick={() => this.sendWingMan(wingmanee)} className="nostyle buttonwrapper">
                     <ListedUser id={wingmanee.userId} key={wingmanee.userId} firstName={wingmanee.firstName}
-                        lastName={wingmanee.lastName} 
+                        lastName={wingmanee.lastName}
                         removeTrue = {false} profPicSrc="possum-on-horse.png" age={wingmanee.age}></ListedUser>
-                    </button>  
+                    </button>
                 </div>
-                
+
                 <div className="text-container">
                     <p className="wingmanSub">Choose a friend from below to send them a notification that you think they
                         and {wingmanee.firstName} would like each other 😉 ⬇️</p>
                 </div>
-                
+
             </div>;
 
-            backbutton = 
+            backbutton =
                 <button className="backButton" onClick={() => this.goBack()}>
-                    <FontAwesomeIcon icon={faArrowLeft}></FontAwesomeIcon> Back 
+                    <FontAwesomeIcon icon={faArrowLeft}></FontAwesomeIcon> Back
                 </button>;
-            
+
         }
         else{
-            wingmanPanel = 
+            wingmanPanel =
             <div>
                 <h1 className="pageTitle row center-row">Wingman</h1>
                 <div className="text-container">
@@ -274,9 +274,9 @@ class WingmanPage extends React.Component {
             return(
                 <div className = "page">
                     <BearHugsNavbar></BearHugsNavbar>
-    
+
                     {wingmanPanel}
-    
+
                     <div className="friendsContainer">
                         {
                             this.state.currentFriends.filter(friend => friend.userId != this.state.wingmanee.userId).map((friend) =>
@@ -287,9 +287,9 @@ class WingmanPage extends React.Component {
                                 </button>
                             )
                         }
-    
+
                     </div>
-                    
+
                     {backbutton}
                 </div>
             );
@@ -298,20 +298,20 @@ class WingmanPage extends React.Component {
             return (
                 <div className = "page">
                     <BearHugsNavbar></BearHugsNavbar>
-    
+
                     {wingmanPanel}
-    
+
                     <div className="friendsContainer">
-    
+
                     </div>
-                    
+
                     {backbutton}
                 </div>
 
             )
         }
 
-        
+
     }
 
 

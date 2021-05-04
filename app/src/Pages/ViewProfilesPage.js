@@ -272,7 +272,7 @@ class ViewProfilePage extends React.Component {
             })
     }
     getPhotoForCurrentUser(id) {
-        let url = 'http://bearhugs.love/server/php/photoGetter.php'
+        let url = 'http://ec2-34-239-255-127.compute-1.amazonaws.com/server/php/photoGetter.php'
         let newRequest = {
             "userId": id,
         }
@@ -382,7 +382,7 @@ class ViewProfilePage extends React.Component {
                                      matched={false}
                                      approveMatch={() => this.onClickAccept(profile.userId)} rejectMatch={() => this.onClickReject(profile.userId)}
                                      ></MatchProfile>
-                                     
+
                                 </div>
                                 )
                             }
