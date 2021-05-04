@@ -27,7 +27,7 @@ class EditSettingsPage extends React.Component {
             password: "",
             redirect: false,
             photos:[],
-            genderIdentity: "MALE",
+            genderIdentity: "",
             maleGenderPref: false,
             femaleGenderPref: false,
             otherGenderPref: false,
@@ -90,6 +90,7 @@ class EditSettingsPage extends React.Component {
                     firstName: responseData.results[0].firstName,
                     lastName: responseData.results[0].lastName,
                     age: responseData.results[0].age,
+                    genderIdentity:responseData.results[0].genderIdentity,
                     maleGenderPref: responseData.results[0].maleGenderPref,
                     femaleGenderPref:responseData.results[0].femaleGenderPref,
                     otherGenderPref:responseData.results[0].otherGenderPref,
@@ -280,7 +281,7 @@ class EditSettingsPage extends React.Component {
                         </Form.Group>
                         <Form.Group controlId="editForm.genderIdentity">
                             <Form.Label>Gender Identity</Form.Label>
-                            <Form.Control as="select" defaultValue={this.state.genderIdentity}
+                            <Form.Control as="select" value={this.state.genderIdentity}
                                 name="genderIdentity" onChange={this.handleInputChange}>
                                 <option value="MALE">Male</option>
                                 <option value="FEMALE">Female</option>
