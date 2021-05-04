@@ -67,7 +67,7 @@ class WingmanPage extends React.Component {
                         }
                     else {
                         this.setState(prevState => ({
-                            currentPhotos: [...prevState.currentPhotos, {id: id, imgsrc:"mail-order-wife.png"}],
+                            currentPhotos: [...prevState.currentPhotos, {id: id, imgsrc:"default-profile.png"}],
                             doneLoading: tempPhotoNumber
                         }))
                     }
@@ -76,7 +76,7 @@ class WingmanPage extends React.Component {
                 let tempPhotoNumber=this.state.doneLoading+1;
                 console.error(error)
                 this.setState(prevState => ({
-                    currentPhotos: [...prevState.currentPhotos, {id: id, imgsrc:"mail-order-wife.png"}],
+                    currentPhotos: [...prevState.currentPhotos, {id: id, imgsrc:"default-profile.png"}],
                     doneLoading: tempPhotoNumber
                 }))
             })
@@ -177,6 +177,7 @@ class WingmanPage extends React.Component {
 
 
     sendWingMan(friend){
+        console.log("send wingman for friend " +friend)
         let url = baseDomain + '/wingman/send'
         let newRequest = {
             wingmanId: UserToken.getUserId(),

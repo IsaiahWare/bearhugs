@@ -26,7 +26,7 @@ router.post("/send", (req: Request, res: Response) => {
         return;
     }
 
-    const queryStatement: string = "SELECT * FROM pendingWingman WHERE wingmanId = ? AND requesteeId = ? AND requesterId = ?";
+    const queryStatement: string = "SELECT * FROM pendingWingman WHERE (wingmanId = ? AND requesteeId = ? AND requesterId = ? ";
     const queryArgs = [req.body.wingmanId, req.body.requesteeId, req.body.requesterId];
     // db.query(queryStatement, queryArgs, (queryError: MysqlError | null, queryResults: any ) => {
         // if (queryError) {
@@ -43,8 +43,8 @@ router.post("/send", (req: Request, res: Response) => {
             //     res.json(wingmanResponse);
             // } 
             // else {
-                const queryStatement3: string = "SELECT requestId FROM pendingWingman WHERE wingmanId = ? AND requesteeId = ? AND requesterId = ?";
-                const queryArgs3 = [req.body.wingmanId, req.body.requesterId, req.body.requesteeId];
+                const queryStatement3: string = "SELECT requestId FROM pendingWingman WHERE ((wingmanId = ? AND requesteeId = ? AND requesterId = ?) OR (wingmanId = ? AND requesteeId = ? AND requesterId = ?)) ";
+                const queryArgs3 = [req.body.wingmanId, req.body.requesterId, req.body.requesteeId, req.body.wingmanId, req.body.requesteeId, req.body.requesterId ];
                 db.query(queryStatement3, queryArgs3, (queryError3: MysqlError | null, queryResults3: any ) => {
                     if (queryError3) {
                         wingmanResponse.error =  {
@@ -128,7 +128,7 @@ router.post("/requests", (req: Request, res: Response) => {
         return;
     }
 
-    const queryStatement = "SELECT pendingWingman.requestId, pendingWingman.requesterId, pendingWingman.requesteeId, pendingWingman.wingmanId, users.userId, users.email, users.firstName, users.lastName, users.age, users.description, users.genderIdentity, users.maleGenderPref, users.femaleGenderPref, users.otherGenderPref FROM users INNER JOIN pendingWingman ON pendingWingman.requesterId = users.userId WHERE pendingWingman.requesteeId = ?"; 
+    const queryStatement = "SELECT pendingWingman.requestId, pendingWingman.requesterId, pendingWingman.requesteeId, pendingWingman.wingmanId, users.userId, users.email, users.firstName, users.lastName, users.age, users.description, users.genderIdentity, users.maleGenderPref, users.femaleGenderPref, users.otherGenderPref FROM users INNER JOIN pendingWingman ON pendingWingman.requesterId = users.userId WHERE pendingWingman.requesteeId = ? OR pendingWingman.requesterId = ?"; 
     db.query(queryStatement, req.body.userId, (queryError: MysqlError | null, queryResults: any ) => {
         if (queryError) {
             wingmanResponse.error =  {

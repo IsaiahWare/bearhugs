@@ -101,7 +101,7 @@ class FriendsPage extends React.Component {
                 else {
                     console.log("Reutnr defualt")
                     this.setState(prevState => ({
-                        pendingPhotos: [...prevState.pendingPhotos, { id: id, imgsrc: "mail-order-wife.png" }],
+                        pendingPhotos: [...prevState.pendingPhotos, { id: id, imgsrc: "default-profile.png" }],
                         doneLoadingPending: tempPhotoNumber
                     }))
                 }
@@ -111,7 +111,7 @@ class FriendsPage extends React.Component {
                 console.error(error)
                 console.log("Reutnr defualt")
                 this.setState(prevState => ({
-                    pendingPhotos: [...prevState.pendingPhotos, { id: id, imgsrc: "mail-order-wife.png" }],
+                    pendingPhotos: [...prevState.pendingPhotos, { id: id, imgsrc: "default-profile.png" }],
                     doneLoadingPending: tempPhotoNumber
                 }))
             })
@@ -150,7 +150,7 @@ class FriendsPage extends React.Component {
                 else {
                     console.log("Reutnr defualt")
                     this.setState(prevState => ({
-                        currentPhotos: [...prevState.currentPhotos, { id: id, imgsrc: "mail-order-wife.png" }],
+                        currentPhotos: [...prevState.currentPhotos, { id: id, imgsrc: "default-profile.png" }],
                         doneLoading: tempPhotoNumber
                     }))
                 }
@@ -160,7 +160,7 @@ class FriendsPage extends React.Component {
                 console.error(error)
                 console.log("Reutnr defualt")
                 this.setState(prevState => ({
-                    currentPhotos: [...prevState.currentPhotos, { id: id, imgsrc: "mail-order-wife.png" }],
+                    currentPhotos: [...prevState.currentPhotos, { id: id, imgsrc: "default-profile.png" }],
                     doneLoadingCurrent: tempPhotoNumber
                 }))
             })
