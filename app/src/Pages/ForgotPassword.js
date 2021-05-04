@@ -17,7 +17,7 @@ class ForgotPassword extends React.Component {
             q1: "beep boop?",
             q2: "",
             q3: "",
-            emailentered: false,
+            emailentered: true,
             feedback: ""
         };
         this.handleInputChange = this.handleInputChange.bind(this);
