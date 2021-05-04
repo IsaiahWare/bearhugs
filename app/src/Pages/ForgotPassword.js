@@ -62,11 +62,10 @@ class ForgotPassword extends React.Component {
                 .then(responseData => {
                     if (JSON.stringify(responseData.error) === '{}') {
 
-                        //**TODO ** securityQuestions/get/
-
                             this.setState({
                                 //if security questions are found, progress to security questions
-                                emailentered: true
+                                emailentered: true,
+
                             })
                         this.getQuestions();
                         //this.addFriendByEmail(responseData.results[0].userId, responseData.results[0])
@@ -118,17 +117,14 @@ class ForgotPassword extends React.Component {
                         feedback: "Error getting security questions"
                     })
                 } else {
-                    console.log("responseData.results: "+responseData.results.securityQuestions);
-                    console.log("responseData "+JSON.stringify(responseData));
-                    let res = Object.keys(responseData.results[0].securityQuestions);
-                    console.log(JSON.stringify(responseData.results[0].securityQuestions).split("\\"))
-                    // let res2;// = Object.values(responseData.results.securityQuestions);
+                    let res = responseData.results[0];
+                    console.log("sec que response data: "+ res);
                     this.setState({
                         feedback: "Security questions obtained successfully",
-                        //answer1: res2[0],
-                        //answer2: res2[1],
-                        //q1: res[0],
-                        //q2: res[1]
+                        answer1: res.a1,
+                        answer2: res.a2,
+                        q1: res.q1,
+                        q2: res.q2
                     })
                     console.log("security q 1: " + this.state.q1 + " answer: "+ this.state.a1
                     +"security q 2: " + this.state.q2 + " answer: " + this.state.a2);
@@ -146,21 +142,16 @@ class ForgotPassword extends React.Component {
          this.state.a2.toLowerCase() === this.state.answer2.toLowerCase()){
             console.log("questions match!");
             //check to see if security question answers match
-            this.updateAccount();
+            this.updatePassword();
         }
     }
 
-    updateAccount() {
-        let url = baseDomain + '/user/update'
+    updatePassword() {
+        console.log("trying to update...");
+        let url = baseDomain + '/user/updatePassword'
         let newRequest = {
-            "userId": this.state.userId,
             "email": this.state.email,
-            "password": this.state.password,
-            "firstName": this.state.firstName,
-            "lastName": this.state.lastName,
-            "genderIdentity": this.state.genderIdentity,
-            "genderPreferences": this.state.genderPreferences,
-            "phoneNumber":this.state.phoneNumber
+            "password": this.state.password
         }
         console.log(newRequest)
 
@@ -199,11 +190,11 @@ class ForgotPassword extends React.Component {
             securityQs = 
             <form onSubmit={this.resetPassword}>
                 <h2 className="center">Security questions:</h2>
-                <p>1. {this.state.q1}</p>
+                <p>{this.state.q1}:</p>
                 <div className="input-row center-row">
                     <input className="input" type='text' value={this.state.a1} onChange={this.handleInputChange} name='a1' placeholder="Answer"/>
                 </div>
-                <p>2. {this.state.q2}</p>
+                <p>{this.state.q2}:</p>
                 <div className="input-row center-row">
                     <input className="input" type='text' value={this.state.a2} onChange={this.handleInputChange} name='a2' placeholder="Answer"/>
                 </div>

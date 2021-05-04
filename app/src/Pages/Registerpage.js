@@ -240,13 +240,13 @@ class RegisterPage extends React.Component {
         if(this.filterSecurity()){
             let url = baseDomain + '/securityQuestions/send'
             let a1 = this.state.a1; let a2 = this.state.a2;
-            let que1 = this.state.q1_select; let que2 = this.state.q2_select;
+            let q1 = this.state.q1_select; let q2 = this.state.q2_select;
             let newRequest = {
                 "email": this.state.email,
-                "securityQuestions": JSON.stringify({
-                    [que1] : a1,
-                    [que2] : a2
-                })
+                "a1": a1,
+                "a2": a2,
+                "q1": q1,
+                "q2": q2
             }
             console.log("securityQ: "+ newRequest)
             fetch(url, {
