@@ -16,12 +16,14 @@ class LoginPage extends React.Component {
 	        redirect: false,
             photos: [],
             feedback:"",
-            userId: 0
+            userId: 0,
+            file: null
         }
         this.logIn= this.logIn.bind(this)
         this.handleInputChange = this.handleInputChange.bind(this)
         this.uploadPhotosTest = this.uploadPhotosTest.bind(this)
         this.getPhotosTest = this.getPhotosTest.bind(this)
+        this.onPhotosChange = this.onPhotosChange.bind(this)
     }
 
     logIn(event) {
@@ -89,21 +91,33 @@ handleInputChange(event) {
         let formData = new FormData();
 
         formData.append('userId', this.state.userId);
-        formData.append('filename', event.target.filename);
+        formData.append('filename', this.state.file);
 
-        const config = {
-            headers: { 'content-type': 'multipart/form-data' }
-        }
+        console.log(this.state);
 
-        const url = '../../../server/php/photoUploader.php'
+        // const config = {
+        //     headers: { 'content-type': 'multipart/form-data' }
+        // }
 
-        axios.post(url, formData, config)
+        const url = '../../../server/php/photoUploader.php';
+
+        axios.post(url, formData, {
+            headers: {
+                'content-type': 'multipart/form-data'
+            }
+        })
         .then(response => {
             console.log(response);
         })
         .catch(error => {
             console.log(error);
         });
+    }
+
+    onPhotosChange(e) {
+        this.setState({
+            "file":e.target.files[0]
+        })
     }
 
     render() {
@@ -160,7 +174,7 @@ handleInputChange(event) {
                 <h1>1. Upload photo for current user</h1>
                 <form onSubmit={this.uploadPhotosTest}>
                     <input type="hidden" name="MAX_FILE_SIZE" value="50000000000000" />
-                    <input type="file" name="filename" id = "uploadfile_input"/>
+                    <input type="file" name="filename" id = "uploadfile_input" onChange={this.onPhotosChange}/>
                     <input type="number" name="userId" placeholder="userId" onChange={this.handleInputChange}/>
                     <button type="submit" name="submit"> UPLOAD </button>
                 </form>
