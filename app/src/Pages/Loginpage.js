@@ -23,6 +23,7 @@ class LoginPage extends React.Component {
         this.handleInputChange = this.handleInputChange.bind(this)
         this.uploadPhotosTest = this.uploadPhotosTest.bind(this)
         this.getPhotosTest = this.getPhotosTest.bind(this)
+        this.onPhotosChange = this.onPhotosChange.bind(this)
     }
 
     logIn(event) {
@@ -114,7 +115,9 @@ handleInputChange(event) {
     }
 
     onPhotosChange(e) {
-        this.setState({"file":e.target.files[0]})
+        this.setState({
+            "file":e.target.files[0]
+        })
     }
 
     render() {
