@@ -10,7 +10,7 @@ import { faInfoCircle } from '@fortawesome/free-solid-svg-icons'
 import Form from 'react-bootstrap/Form';
 
 
-let baseDomain = "http://ec2-100-24-237-42.compute-1.amazonaws.com:3000"
+let baseDomain = "http://ec2-34-239-255-127.compute-1.amazonaws.com:3000"
 
 
 const genderPreferenceOptions = [
@@ -25,7 +25,7 @@ class RegisterPage extends React.Component {
         this.state = {
             firstName: "",
             lastName: "",
-            email: "",
+            email: "charles@wustl.edu",
             password: "",
             confirmPassword: "",
             errors: "",
@@ -36,7 +36,7 @@ class RegisterPage extends React.Component {
             femaleGenderPref: false,
             otherGenderPref: false,
             redirect: false,
-            securityQs: false,
+            securityQs: true,
             q1_select: "",
             q2_select: "",
             a1: "",
@@ -218,7 +218,7 @@ class RegisterPage extends React.Component {
     }
     
     filterSecurity(){
-        if(this.state.q1_select == this.state.q2_select){
+        if(this.state.q1_select === this.state.q2_select || this.state.q1_select === "" || this.state.q1_select === ""){
             this.setState({
                 feedback: "Please select two different security questions."
             });
@@ -235,9 +235,42 @@ class RegisterPage extends React.Component {
 
     checkSecurity(event){
         event.preventDefault();
-        this.filterSecurity();
-        //filter answers& send questions to backend
 
+        //filter answers & send questions to backend
+        if(this.filterSecurity()){
+            let url = baseDomain + '/securityQuestions/send'
+            let a1 = this.state.a1; let a2 = this.state.a2;
+            let que1 = this.state.q1_select; let que2 = this.state.q2_select;
+            let newRequest = {
+                "email": this.state.email,
+                "securityQuestions": {
+                    que1 : a1,
+                    que2 : a2
+                }
+            }
+            console.log("securityQ: "+ newRequest)
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(newRequest)
+            })
+                .then(res => res.json())
+                .then(responseData => {
+                    console.log(responseData)
+                    if (JSON.stringify(responseData.error) !== '{}') {
+                        this.setState({
+                            feedback: "Problem uploading security questions to server 🤒"
+                        })
+                    } else {
+                        this.setState({
+                            feedback: "Registering account..."
+                        })
+                        this.registerAccount()
+                    }
+                })
+        }
         //then call registerAccount();
     }
 
@@ -377,11 +410,11 @@ class RegisterPage extends React.Component {
                     <select defaultValue="" id="q1_select"
                         name="q1_select" onChange={this.handleInputChange} className="input">
                         <option value="" disabled>Question 1</option>
-                        <option value="Q1">Your mom's maiden name:</option>
-                        <option value="Q2">Your best friend in kindergarten:</option>
-                        <option value="Q3">Favorite type of nut:</option>
-                        <option value="Q4">Name of your first kiss:</option>
-                        <option value="Q5">Dream job:</option>
+                        <option value="Your mom's maiden name">Your mom's maiden name:</option>
+                        <option value="Your best friend in kindergarten">Your best friend in kindergarten:</option>
+                        <option value="Favorite type of nut">Favorite type of nut:</option>
+                        <option value="Name of your first kiss">Name of your first kiss:</option>
+                        <option value="Dream job">Dream job:</option>
                     </select>
                 </div>
                 <div className="input-row center-row">
@@ -391,11 +424,11 @@ class RegisterPage extends React.Component {
                     <select defaultValue="" id="q2_select"
                         name="q2_select" onChange={this.handleInputChange} className="input">
                         <option value="" disabled>Question 2</option>
-                        <option value="Q1">Your mom's maiden name:</option>
-                        <option value="Q2">Your best friend in kindergarten:</option>
-                        <option value="Q3">Favorite type of nut:</option>
-                        <option value="Q4">Name of your first kiss:</option>
-                        <option value="Q5">Dream job:</option>
+                        <option value="Your mom's maiden name">Your mom's maiden name:</option>
+                        <option value="Your best friend in kindergarten">Your best friend in kindergarten:</option>
+                        <option value="Favorite type of nut">Favorite type of nut:</option>
+                        <option value="Name of your first kiss">Name of your first kiss:</option>
+                        <option value="Dream job">Dream job:</option>
                     </select>
                 </div>
                 <div className="input-row center-row">

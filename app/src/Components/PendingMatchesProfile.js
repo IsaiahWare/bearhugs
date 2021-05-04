@@ -8,7 +8,6 @@ import { Swipeable, direction } from 'react-deck-swiper';
 import UserToken from "../Components/UserToken"
 
 
-let baseDomain = "http://ec2-54-146-61-111.compute-1.amazonaws.com:3000";
 class PendingMatchesProfile extends React.Component {
     constructor(props) {
         super(props);

@@ -4,21 +4,28 @@ import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import "../App.css"
 import UserToken from "../Components/UserToken"
 
+let baseDomain = "http://ec2-34-239-255-127.compute-1.amazonaws.com:3000"
+
 class ForgotPassword extends React.Component {
     constructor(props){
         super(props);
         this.state = {
+            a1: "",
+            a2: "",
+            q1: "beep boop?",
+            q2: "sceet scoot?",
+            emailentered: true,
+            feedback: "",
+            userId: -1,
             email: "",
             password: "",
             password2: "",
-            a1: "",
-            a2: "",
-            a3: "",
-            q1: "beep boop?",
-            q2: "",
-            q3: "",
-            emailentered: true,
-            feedback: ""
+            firstName: "",
+            lastName: "",
+            description: "",
+            genderIdentity: "",
+            genderPreferences: "",
+            phoneNumber: ""
         };
         this.handleInputChange = this.handleInputChange.bind(this);
         this.checkEmail = this.checkEmail.bind(this);
@@ -37,10 +44,37 @@ class ForgotPassword extends React.Component {
     checkEmail(event){
         event.preventDefault();
         //fetch security questions for email
-        //if security questions are found:
-        this.setState({
-            emailentered: true
-        });
+        let url = baseDomain + '/user/findbyemail'
+            let newRequest = {
+                email: this.state.email
+            }
+            console.log(newRequest)
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(newRequest)
+            })
+                .then(res => res.json())
+                .then(responseData => {
+                    if (JSON.stringify(responseData.error) === '{}') {
+
+                        //**TODO ** securityQuestions/get/
+
+                            this.setState({
+                                //if security questions are found, progress to security questions
+                                emailentered: true
+                            })
+                        this.addFriendByEmail(responseData.results[0].userId, responseData.results[0])
+                    }
+                    else {
+                        this.setState({
+                            feedback: "No user found with that email 🧐"
+                        })
+                    }
+                })
+        
     }
 
     filterPassword(password) {
@@ -62,12 +96,83 @@ class ForgotPassword extends React.Component {
 
     resetPassword(event){
         event.preventDefault();
+        
         //check to see if security question answers match
+        let url = baseDomain + '/securityQuestions/get'
+        let newRequest = {
+            "userId": this.state.userId
+        }
+        console.log(newRequest)
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newRequest)
+        })
+            .then(res => res.json())
+            .then(responseData => {
+                console.log(responseData)
+                if (JSON.stringify(responseData.error) !== '{}') {
+                    this.setState({
+                        feedback: "Password change failed 🤨"
+                    })
+                } else {
+                    this.setState({
+                        feedback: "Password changed successfully :)"
+                    })
+                    this.logIn();
+                }
+            })
+
 
             if(this.filterPassword(this.state.password)){
 
             }
         console.log("password rest")
+    }
+
+    updateAccount() {
+        let url = baseDomain + '/user/update'
+        let newRequest = {
+            "userId": this.state.userId,
+            "email": this.state.email,
+            "password": this.state.password,
+            "firstName": this.state.firstName,
+            "lastName": this.state.lastName,
+            "genderIdentity": this.state.genderIdentity,
+            "genderPreferences": this.state.genderPreferences,
+            "phoneNumber":this.state.phoneNumber
+        }
+        console.log(newRequest)
+
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newRequest)
+
+        })
+            .then(res => res.json())
+            .then(responseData => {
+                console.log(responseData)
+                // TODO: handle case where login is invalid
+                if (JSON.stringify(responseData.error) !== '{}') {
+                    this.setState({
+                        feedback: "Password change failed 🤨"
+                    })
+                } else {
+                    this.setState({
+                        feedback: "Password changed successfully :)"
+                    })
+                    this.logIn();
+                }
+            })
+    }
+
+    logIn(){
+        console.log("login event with");
     }
 
     render(){

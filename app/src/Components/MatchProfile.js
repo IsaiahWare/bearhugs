@@ -8,7 +8,6 @@ import Carousel from 'react-bootstrap/Carousel'
 import UserToken from "../Components/UserToken"
 
 
-let baseDomain = "http://ec2-54-146-61-111.compute-1.amazonaws.com:3000";
 class MatchProfile extends React.Component {
     constructor(props) {
         super(props);
@@ -80,7 +79,7 @@ class MatchProfile extends React.Component {
         else if (this.state.matched){
             matchbar = 
             <div className = "itsAMatch">
-                <p><b>IT'S A MATCH! 😁</b></p>
+                <p><b>OKAYY! 😁</b></p>
                 <h2>A pending match request has been sent.</h2>
             </div>
         }

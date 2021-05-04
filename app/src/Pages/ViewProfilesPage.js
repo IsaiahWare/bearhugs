@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Redirect } from 'react-router-dom';
 import { faHeart, faHeartBroken } from '@fortawesome/free-solid-svg-icons'
 
-let baseDomain = "http://ec2-100-24-237-42.compute-1.amazonaws.com:3000"
+let baseDomain = "http://ec2-34-239-255-127.compute-1.amazonaws.com:3000"
 class ViewProfilePage extends React.Component {
     constructor(props) {
         super(props);

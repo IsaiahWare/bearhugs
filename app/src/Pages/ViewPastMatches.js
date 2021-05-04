@@ -17,7 +17,7 @@ import Form from 'react-bootstrap/Form'
 import CompletedMatchesProfile from "../Components/CompletedMatchesProfile"
 import PendingMatchesProfile from "../Components/PendingMatchesProfile"
 
-let baseDomain = "http://ec2-100-24-237-42.compute-1.amazonaws.com:3000"
+let baseDomain = "http://ec2-34-239-255-127.compute-1.amazonaws.com:3000"
 
 class ViewPastMatches extends React.Component {
     constructor(props) {

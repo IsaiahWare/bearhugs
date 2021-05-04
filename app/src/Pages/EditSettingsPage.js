@@ -15,7 +15,7 @@ import Image from "react-bootstrap/Image"
 
 const axios = require('axios');
 
-let baseDomain = "http://ec2-100-24-237-42.compute-1.amazonaws.com:3000"
+let baseDomain = "http://ec2-34-239-255-127.compute-1.amazonaws.com:3000"
 
 class EditSettingsPage extends React.Component {
     constructor(props) {

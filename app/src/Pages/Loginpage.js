@@ -6,7 +6,7 @@ import UserToken from  "../Components/UserToken.js"
 
 const axios = require('axios');
 
-let baseDomain = "http://ec2-100-24-237-42.compute-1.amazonaws.com:3000"
+let baseDomain = "http://ec2-34-239-255-127.compute-1.amazonaws.com:3000"
 class LoginPage extends React.Component {
     constructor(props) {
         super(props);

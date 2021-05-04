@@ -5,7 +5,7 @@ import BearHugsNavbar from "../Components/BearHugsNavbar"
 import UserToken from "../Components/UserToken"
 import { Redirect } from 'react-router-dom';
 
-let baseDomain = "http://ec2-100-24-237-42.compute-1.amazonaws.com:3000"
+let baseDomain = "http://ec2-34-239-255-127.compute-1.amazonaws.com:3000"
 
 class NotificationsPage extends React.Component {
     constructor(props) {
