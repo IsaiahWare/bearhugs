@@ -16,6 +16,15 @@ export interface User {
 
 }
 
+export interface UserResetPasswordRequest {
+    userId: string;
+    newPassword: string;
+    oldPassword: string;
+
+}
+
+
+
 export interface UserRegisterRequest {
    email: string;
    password: string;

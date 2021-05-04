@@ -166,6 +166,10 @@ class EditSettingsPage extends React.Component {
         })
         .then(response => {
             console.log(response);
+            this.setState({
+                feedback:"Photo successfully uploaded!"
+            })
+            this.getPhotoInfo()
         })
         .catch(error => {
             console.log(error);

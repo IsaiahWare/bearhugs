@@ -5,7 +5,8 @@ import {
   FindByEmailRequest, 
   UserRandomRequest, 
   UserUpdateRequest,
-  UserPhoneRequest
+  UserPhoneRequest,
+  UserResetPasswordRequest
 } from "../models/userControllerModels";
 
 export function isUserRegisterRequest(obj: any): obj is UserRegisterRequest {
@@ -29,6 +30,10 @@ export function isUserLoginRequest(obj: any): obj is UserLoginRequest {
 
 export function isUserFindRequest(obj: any): obj is UserFindRequest {
   return obj.userId !== undefined && Object.keys(obj).length === 1;
+}
+
+export function isUserResetPasswordRequest(obj: any): obj is UserResetPasswordRequest {
+  return obj.userId !== undefined && obj.newPassword!==undefined && obj.oldPassword!==undefined && Object.keys(obj).length === 3;
 }
 
 

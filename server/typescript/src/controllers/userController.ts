@@ -7,7 +7,8 @@ import {
     UserLoginResponse,
     UserFindResponse,
     UserRandomResponse,
-    FindByEmailResponse
+    FindByEmailResponse,
+    UserResetPasswordRequest
 } from "./../models/userControllerModels";
 import {
     isUserFindByEmailRequest,
@@ -16,11 +17,13 @@ import {
     isUserFindRequest,
     isUserRandomRequest,
     isUserUpdateRequest,
-    isUserPhoneRequest
+    isUserPhoneRequest,
+    isUserResetPasswordRequest,
 } from "./../checkers/userControllerModelsChecker";
 
 const saltRounds: number = 10;
 const router = express.Router();
+
 
 router.post("/register", (req: Request, res: Response) => {
     const registerResponse: UserRegisterResponse = {
