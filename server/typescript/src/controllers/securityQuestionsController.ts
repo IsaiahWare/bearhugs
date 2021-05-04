@@ -19,19 +19,22 @@ router.post("/send", (req: Request, res: Response) => {
         "results": []
     };
     
-    if (!isSecurityQuestionsSendRequest(req.body)) {
-        SecurityQuestionsSend.error = {
-            "message": "Invalid request parameters"
-        };
-        res.json(SecurityQuestionsSend);
-        return;
-    }
+    // if (!isSecurityQuestionsSendRequest(req.body)) {
+    // //     SecurityQuestionsSend.error = {
+    //         "message": "Invalid request parameters"
+    //     };
+    //     res.json(SecurityQuestionsSend);
+    //     return;
+    // }
 
     const queryStatement: string = "INSERT INTO securityQuestions SET ?";
     
-    const queryArgs = {
+    const queryArgs: any = {
         "email": req.body.email,
-        "securityQuestions": JSON.stringify(req.body.securityQuestions)
+        "a1": req.body.a1,
+        "a2": req.body.a2,
+        "q1": req.body.q1,
+        "q2": req.body.q2
     };
 
     db.query(queryStatement, queryArgs, (queryError: MysqlError | null, queryResults: any) => {
@@ -43,7 +46,6 @@ router.post("/send", (req: Request, res: Response) => {
             SecurityQuestionsSend.results = [
                 {
                     "securityQuestionsId": queryResults.insertId,
-                    "securityQuestions": req.body.securityQuestions
                 }
             ];
         }   
@@ -58,13 +60,13 @@ router.post("/get", (req: Request, res: Response) => {
         "results": []
     };
 
-    if (!isSecurityQuestionsGetRequest(req.body)) {
-        SecurityQuestionsGetResponse.error = {
-            "message": "Invalid request parameters"
-        };
-        res.json(isSecurityQuestionsGetRequest);
-        return;
-    }
+    // if (!isSecurityQuestionsGetRequest(req.body)) {
+    //     SecurityQuestionsGetResponse.error = {
+    //         "message": "Invalid request parameters"
+    //     };
+    //     res.json(isSecurityQuestionsGetRequest);
+    //     return;
+    // }
 
     const queryStatement: string = "SELECT * FROM securityQuestions WHERE email = ?";
  
@@ -77,8 +79,11 @@ router.post("/get", (req: Request, res: Response) => {
             SecurityQuestionsGetResponse.results = [
                 {
                     "email": queryResults[0].email,
-                    "securityQuestionsId": queryResults[0].securityQuestionsId,
-                    "securityQuestions": JSON.parse(queryResults[0].securityQuestions)
+                    "securityQuestionsId": queryResults[0].id,
+                    "q1": queryResults[0].q1,
+                    "q2": queryResults[0].q2,
+                    "a1": queryResults[0].a1,
+                    "a2": queryResults[0].a2
                 }
             ]
         }
