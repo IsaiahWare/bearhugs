@@ -112,8 +112,16 @@ handleInputChange(event) {
                                 </div>
                                 <div className="row center-row">
                                 <p>Don't have an account?  <Link to="/register" className="route-link">Register here! </Link></p>
+                                
+                                
                             </div>
-                            <div className="row center-row match-parent">
+                            <div className="center">
+                                <p><Link to="/forgotpassword" className="route-link center">Forgot password </Link></p>
+                            </div>
+                                
+                                
+                            
+                            <div className="feedback-wrapper">
                                 {this.state.feedback}
                             </div>
                             </form>

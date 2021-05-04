@@ -10,6 +10,7 @@ import EditSettingsPage from './Pages/EditSettingsPage';
 import EditProfile from './Components/EditProfile.js'
 import EditSecurity from './Components/EditSecurity.js'
 import FriendsPage from './Pages/FriendsPage';
+import ForgotPassword from './Pages/ForgotPassword'
 import NotificationsPage from './Pages/NotificationsPage.js';
 import ViewMatchesPage from './Pages/ViewMatches';
 import ViewPastMatches from "./Pages/ViewPastMatches"
@@ -29,6 +30,7 @@ function App() {
         <Route exact path="/notifications" component={NotificationsPage}></Route>
         <Route exact path="/mymatches" component={ViewPastMatches}></Route>
         <Route exact path="/wingman" component={WingManPage}></Route>
+        <Route exact path="/forgotpassword" component={ForgotPassword}></Route>
     </Switch>
 </Router>
   
