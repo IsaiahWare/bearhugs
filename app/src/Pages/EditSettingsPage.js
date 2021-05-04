@@ -214,7 +214,10 @@ class EditSettingsPage extends React.Component {
                 else {
                     this.setState({ feedback: "Changes could not be saved :( Please try again" })
                 }
-
+                window.scrollTo({
+                    top: 0,
+                    behavior: "smooth"
+                })
             })
     }
 

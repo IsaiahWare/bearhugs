@@ -94,7 +94,7 @@ class ViewPastMatches extends React.Component {
                 if (photos.results.length != 0) {
                     console.log("return actual photo")
                     this.setState(prevState => ({
-                        pendingPhotos: [...prevState.pendingPhotos, { id: id, imgsrc: photos.results[0] }],
+                        pendingPhotos: [...prevState.pendingPhotos, { id: id, imgsrc: photos.results }],
                         doneLoadingPending: tempPhotoNumber
                     }))
 
@@ -102,7 +102,7 @@ class ViewPastMatches extends React.Component {
                 else {
                     console.log("Reutnr defualt")
                     this.setState(prevState => ({
-                        pendingPhotos: [...prevState.pendingPhotos, { id: id, imgsrc: "mail-order-wife.png" }],
+                        pendingPhotos: [...prevState.pendingPhotos, { id: id, imgsrc: ["default-profile.png"] }],
                         doneLoadingPending: tempPhotoNumber
                     }))
                 }
@@ -112,7 +112,7 @@ class ViewPastMatches extends React.Component {
                 console.error(error)
                 console.log("Reutnr defualt")
                 this.setState(prevState => ({
-                    pendingPhotos: [...prevState.pendingPhotos, { id: id, imgsrc: "mail-order-wife.png" }],
+                    pendingPhotos: [...prevState.pendingPhotos, { id: id, imgsrc: ["default-profile.png"] }],
                     doneLoadingPending: tempPhotoNumber
                 }))
             })

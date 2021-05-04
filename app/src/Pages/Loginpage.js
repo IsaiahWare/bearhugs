@@ -91,8 +91,8 @@ handleInputChange(event) {
             <div className="page">
 
                 <div className="row center-row">
-                    <div className="col center-col">
-                        <div className="box margin-5rem ">
+                    <div className="col center-col padding-5rem">
+                        <div className="box margin-5rem">
                             <form onSubmit={this.logIn}>
                             <div className="input-row center-row">
                             <h2 className="font-red">Log In To Bear Hugs</h2>
@@ -122,6 +122,7 @@ handleInputChange(event) {
                         </div>
                     </div>
                 </div>
+                {/*
                 <h1>1. Upload photo for current user</h1>
                 <form enctype="multipart/form-data" action="../../../server/php/photoGetter.php" method="POST">
                     <input type="hidden" name="MAX_FILE_SIZE" value="50000000000000" />
@@ -141,6 +142,7 @@ handleInputChange(event) {
                 }
                 <div className="page-gradient">
                 </div>
+                */}
             </div>
         );
     }
