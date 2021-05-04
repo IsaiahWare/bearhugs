@@ -33,7 +33,7 @@ export function isUserFindRequest(obj: any): obj is UserFindRequest {
 }
 
 export function isUserResetPasswordRequest(obj: any): obj is UserResetPasswordRequest {
-  return obj.userId !== undefined && obj.newPassword!==undefined && Object.keys(obj).length === 2;
+  return obj.userId !== undefined && obj.newPassword!==undefined && obj.oldPassword!==undefined && Object.keys(obj).length === 3;
 }
 
 
