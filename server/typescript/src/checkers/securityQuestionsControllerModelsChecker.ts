@@ -2,7 +2,7 @@ import { SecurityQuestionsSendRequest,  SecurityQuestionsGetRequest } from "../m
 
 export function isSecurityQuestionsSendRequest(obj: any): obj is SecurityQuestionsSendRequest {
   return obj.userId !== undefined &&
-  obj.SecurityQuestions !== undefined &&
+  obj.securityQuestions !== undefined &&
   Object.keys(obj).length === 2;
 }
 
