@@ -253,7 +253,7 @@ class EditSettingsPage extends React.Component {
                 <div className="row center-row">
                 <h2>Edit User Information</h2>
                 </div>
-                <div className="row center-row">
+                <div className="feedback-wrapper">
                     <h6>{this.state.feedback}</h6>
                 </div>
                     <div className="row center-row">

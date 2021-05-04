@@ -35,13 +35,17 @@ class RegisterPage extends React.Component {
             maleGenderPref: false,
             femaleGenderPref: false,
             otherGenderPref: false,
-            redirect: false
-
+            redirect: false,
+            securityQs: false,
+            q1_select: "",
+            q2_select: "",
+            a1: "",
+            a2: ""
         }
         this.registerAccount = this.registerAccount.bind(this)
         this.handleInputChange = this.handleInputChange.bind(this)
         this.filterInputs = this.filterInputs.bind(this)
-
+        this.checkSecurity = this.checkSecurity.bind(this);
     }
 
     logIn() {
@@ -95,29 +99,7 @@ class RegisterPage extends React.Component {
 //       .then(this.setState({confirm: true}))
 // }
 
-    filterInputs(event) {
-        event.preventDefault()
-        let age = this.state.age;
-        let firstName = this.state.firstName
-        let lastName = this.state.lastName
-        let email = this.state.email
-        let password = this.state.password
-        let confirmPassword = this.state.confirmPassword
-        let ageFilter = this.filterAge(age)
-        let nameFilter = this.filterName(firstName, lastName)
-        let emailFilter = this.filterEmail(email)
-        let passwordFilter = this.filterPassword(password)
-        let confirmPassWordCheck = this.checkPassword(password, confirmPassword)
-        let genderIdentityCheck = this.filterGenderIdentity();
-        let genderPreferenceCheck = this.filterGenderPreference()
-        if (ageFilter && nameFilter && emailFilter && passwordFilter && confirmPassWordCheck && genderIdentityCheck && genderPreferenceCheck) {
-            this.registerAccount()
-        }
-        else {
-            console.log("Filters failed")
-        }
-
-    }
+    
 
     checkPassword(password, confirmPassword) {
         if (password != confirmPassword) {
@@ -129,7 +111,7 @@ class RegisterPage extends React.Component {
         return true
     }
     filterPassword(password) {
-        const re = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/
+        const re = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/;
         if (!re.test(password)) {
             this.setState({
                 feedback: "Password should contain at least eight characters, and it should have at least one uppercase character, one lowercase character, and one digit."
@@ -210,6 +192,55 @@ class RegisterPage extends React.Component {
         return true;
     }
 
+    filterInputs(event) {
+        event.preventDefault()
+        let age = this.state.age;
+        let firstName = this.state.firstName
+        let lastName = this.state.lastName
+        let email = this.state.email
+        let password = this.state.password
+        let confirmPassword = this.state.confirmPassword
+        let ageFilter = this.filterAge(age)
+        let nameFilter = this.filterName(firstName, lastName)
+        let emailFilter = this.filterEmail(email)
+        let passwordFilter = this.filterPassword(password)
+        let confirmPassWordCheck = this.checkPassword(password, confirmPassword)
+        let genderIdentityCheck = this.filterGenderIdentity();
+        let genderPreferenceCheck = this.filterGenderPreference()
+        if (ageFilter && nameFilter && emailFilter && passwordFilter && confirmPassWordCheck && genderIdentityCheck && genderPreferenceCheck) {
+            this.setState({
+                securityQs: true
+            })
+        }
+        else {
+            console.log("Filters failed")
+        }
+    }
+    
+    filterSecurity(){
+        if(this.state.q1_select == this.state.q2_select){
+            this.setState({
+                feedback: "Please select two different security questions."
+            });
+        }
+        var regex = /^[ a-zA-Z\-\’]+$/;
+        if (!regex.test(this.state.a1) || !regex.test(this.state.a2)) {
+            this.setState({
+                feedback: "Please enter a valid answer for both questions."
+            })
+            return false;
+        }
+        return true;
+    }
+
+    checkSecurity(event){
+        event.preventDefault();
+        this.filterSecurity();
+        //filter answers& send questions to backend
+
+        //then call registerAccount();
+    }
+
     registerAccount() {
         let url = baseDomain + '/user/register'
         let newRequest = {
@@ -251,6 +282,7 @@ class RegisterPage extends React.Component {
     }
 
     handleInputChange(event) {
+        event.preventDefault();
         let target = event.target;
         let value = target.value
         let name = target.name;
@@ -278,69 +310,123 @@ class RegisterPage extends React.Component {
             />
         }
 
+        let registerform;
+        
+        if(!this.state.securityQs) {
+        registerform =
+            <form onSubmit={this.filterInputs}>
+                <div className="input-row center-row">
+                    <h2 className="font-red">Register for Bear Hugs</h2>
+                </div>
+
+                <div className="input-row center-row">
+                    <input className="input" type='text' value={this.state.email} onChange={this.handleInputChange} name='email' placeholder="yourwustlemail@wustl.edu" />
+                </div>
+                <div className="input-row center-row">
+                    <input className="input" value={this.state.password} onChange={this.handleInputChange} type='password' name='password' placeholder="Password" />
+                </div>
+                <div className="input-row center-row">
+                    <input className="input" type='password' value={this.state.confirmPassword} onChange={this.handleInputChange} name='confirmPassword' placeholder="Confirm Password" />
+                </div>
+                <div className="input-row center-row">
+                    <input className="input" type='text' value={this.state.firstName} onChange={this.handleInputChange} name='firstName' placeholder="First Name" />
+                    <input className="input" type='text' value={this.state.lastName} onChange={this.handleInputChange} name='lastName' placeholder="Last Name" />
+                </div>
+                <div className="input-row center-row">
+                    <input className="input" type='number' name='age' onChange={this.handleInputChange} value={this.state.age} placeholder="Type age here" />
+                </div>
+                <div className="input-row center-row">
+                    <select defaultValue={this.state.genderIdentity} id="gender_select"
+                        name="genderIdentity" onChange={this.handleInputChange} className="input">
+                        <option value="" disabled>Your Gender</option>
+                        <option value="MALE">Male</option>
+                        <option value="FEMALE">Female</option>
+                        <option value="OTHER">Other</option>
+                    </select>
+                </div>
+                
+                <div className="input-row center-row match-width">
+                    
+                    <Form.Group>
+                        <div>
+                        <Form.Label>Gender Preference for Matching</Form.Label>
+                        </div>
+                    <Form.Check inline label="Male" name="maleGenderPref" onChange={this.handleInputChange} id="male_gender_pref"  checked={this.state.maleGenderPref} />
+                    <Form.Check inline label="Female" name="femaleGenderPref" onChange={this.handleInputChange} id="female_gender_pref"  checked={this.state.femaleGenderPref} />
+                    <Form.Check inline label="Other" name="otherGenderPref" onChange={this.handleInputChange} id="other_gender_pref" checked={this.state.otherGenderPref} />
+                    </Form.Group>
+                </div>
+
+                <div className="center-row padding-top-1rem">
+                    <div className="divider ">
+                    </div>
+                </div>
+                <div className="input-row center-row">
+                    <button className="full-width-button red" type="submit">Register!</button>
+                </div>
+            </form>
+        }
+        else{
+        registerform=
+            <form onSubmit={this.checkSecurity}>
+                <div className="input-row center-row">
+                    <h2 className="font-red">Security Questions</h2>
+                </div>
+
+                <p><i>Looks good! Now just 2 security questions, in case you ever forget your password.</i></p>
+                <div className="input-row center-row">
+                    <select defaultValue="" id="q1_select"
+                        name="q1_select" onChange={this.handleInputChange} className="input">
+                        <option value="" disabled>Question 1</option>
+                        <option value="Q1">Your mom's maiden name:</option>
+                        <option value="Q2">Your best friend in kindergarten:</option>
+                        <option value="Q3">Favorite type of nut:</option>
+                        <option value="Q4">Name of your first kiss:</option>
+                        <option value="Q5">Dream job:</option>
+                    </select>
+                </div>
+                <div className="input-row center-row">
+                    <input className="input" type='text' value={this.state.a1} onChange={this.handleInputChange} name='a1' placeholder="Answer" />
+                </div>
+                <div className="input-row center-row">
+                    <select defaultValue="" id="q2_select"
+                        name="q2_select" onChange={this.handleInputChange} className="input">
+                        <option value="" disabled>Question 2</option>
+                        <option value="Q1">Your mom's maiden name:</option>
+                        <option value="Q2">Your best friend in kindergarten:</option>
+                        <option value="Q3">Favorite type of nut:</option>
+                        <option value="Q4">Name of your first kiss:</option>
+                        <option value="Q5">Dream job:</option>
+                    </select>
+                </div>
+                <div className="input-row center-row">
+                    <input className="input" type='text' value={this.state.a2} onChange={this.handleInputChange} name='a2' placeholder="Answer" />
+                </div>
+                
+
+                <div className="center-row padding-top-1rem">
+                    <div className="divider ">
+                    </div>
+                </div>
+                <div className="input-row center-row">
+                    <button className="full-width-button red" type="submit">Register!</button>
+                </div>
+            </form>
+        }
         return (
             <div className="page">
 
                 <div className="row center-row">
-                    <div className="col center-col">
+                    <div className="col center-col padding-5rem">
                         <div className="box margin-5rem ">
-                            <form onSubmit={this.filterInputs}>
-                                <div className="input-row center-row">
-                                    <h2 className="font-red">Register for Bear Hugs</h2>
-                                </div>
 
-                                <div className="input-row center-row">
-                                    <input className="input" type='text' value={this.state.email} onChange={this.handleInputChange} name='email' placeholder="yourwustlemail@wustl.edu" />
-                                </div>
-                                <div className="input-row center-row">
-                                    <input className="input" value={this.state.password} onChange={this.handleInputChange} type='password' name='password' placeholder="Password" />
-                                </div>
-                                <div className="input-row center-row">
-                                    <input className="input" type='password' value={this.state.confirmPassword} onChange={this.handleInputChange} name='confirmPassword' placeholder="Confirm Password" />
-                                </div>
-                                <div className="input-row center-row">
-                                    <input className="input" type='text' value={this.state.firstName} onChange={this.handleInputChange} name='firstName' placeholder="First Name" />
-                                    <input className="input" type='text' value={this.state.lastName} onChange={this.handleInputChange} name='lastName' placeholder="Last Name" />
-                                </div>
-                                <div className="input-row center-row">
-                                    <input className="input" type='number' name='age' onChange={this.handleInputChange} value={this.state.age} placeholder="Type age here" />
-                                </div>
-                                <div className="input-row center-row">
-                                    <select defaultValue={this.state.genderIdentity} id="gender_select"
-                                        name="genderIdentity" onChange={this.handleInputChange} className="input">
-                                        <option value="" disabled>Your Gender</option>
-                                        <option value="MALE">Male</option>
-                                        <option value="FEMALE">Female</option>
-                                        <option value="OTHER">Other</option>
-                                    </select>
-                                </div>
-                                
-                                <div className="input-row center-row match-width">
-                                   
-                                    <Form.Group>
-                                        <div>
-                                        <Form.Label>Gender Preference for Matching</Form.Label>
-                                        </div>
-                                    <Form.Check inline label="Male" name="maleGenderPref" onChange={this.handleInputChange} id="male_gender_pref"  checked={this.state.maleGenderPref} />
-                                    <Form.Check inline label="Female" name="femaleGenderPref" onChange={this.handleInputChange} id="female_gender_pref"  checked={this.state.femaleGenderPref} />
-                                    <Form.Check inline label="Other" name="otherGenderPref" onChange={this.handleInputChange} id="other_gender_pref" checked={this.state.otherGenderPref} />
-                                    </Form.Group>
-                                </div>
+                            {registerform}
 
-                                <div className="center-row padding-top-1rem">
-                                    <div className="divider ">
-                                    </div>
+                                <p className="center"><Link to="/" className="route-link">Back to Login </Link></p>
+                                <div className="feedback-wrapper">
+                                    <p>{this.state.feedback}</p>
                                 </div>
-                                <div className="input-row center-row">
-                                    <button className="full-width-button red" type="submit">Register!</button>
-                                </div>
-                                <div className="center-row">
-                                    <span className="error-span">{this.state.feedback}</span>
-                                </div>
-                                <div className="row center-row">
-                                    <Link to="/" className="route-link">Back to Login </Link>
-                                </div>
-                            </form>
+                                    
 
 
                         </div>

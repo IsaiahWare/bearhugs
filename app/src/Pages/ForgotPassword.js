@@ -84,10 +84,6 @@ class ForgotPassword extends React.Component {
                 <div className="input-row center-row">
                     <input className="input" type='text' value={this.state.a2} onChange={this.handleInputChange} name='a2' placeholder="Answer"/>
                 </div>
-                <p>3. {this.state.q3}</p>
-                <div className="input-row center-row">
-                    <input className="input" type='text' value={this.state.a3} onChange={this.handleInputChange} name='a3' placeholder="Answer"/>
-                </div>
                 <div className="input-row center-row">
                     <input className="input" type='password' value={this.state.password} onChange={this.handleInputChange} name='password' placeholder="New Password"/>
                 </div>
