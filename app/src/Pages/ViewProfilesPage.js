@@ -28,14 +28,11 @@ class ViewProfilePage extends React.Component {
 
     checkUserLogIn() {
         let token = UserToken.getUserId()
-        console.log("token " + token)
         if (token == null || token == undefined || token == "") {
             this.setState({
                 redirect: true
             })
-            console.log("redirect " + this.state.redirect)
         }
-        console.log("redirect " + this.state.redirect)
     }
 
     getCurrentMatches() {
@@ -52,8 +49,6 @@ class ViewProfilePage extends React.Component {
         })
             .then(res => res.json())
             .then(responseData => {
-                console.log("current matches response data ")
-                console.log(responseData)
                 if (JSON.stringify(responseData.error) === '{}') {
                     this.setState({
                         unsuitableMatches: this.state.unsuitableMatches.concat(responseData.results)
@@ -80,8 +75,6 @@ class ViewProfilePage extends React.Component {
         })
             .then(res => res.json())
             .then(responseData => {
-                console.log("wingman rejected matches response data ")
-                console.log(responseData)
                 if (JSON.stringify(responseData.error) === '{}') {
                     this.setState({
                         unsuitableMatches: this.state.unsuitableMatches.concat(responseData.results)
@@ -109,8 +102,8 @@ class ViewProfilePage extends React.Component {
         })
             .then(res => res.json())
             .then(responseData => {
-                console.log("rejected matches response data ")
-                console.log(responseData)
+                // console.log("rejected matches response data ")
+                // console.log(responseData)
                 if (JSON.stringify(responseData.error) === '{}') {
                     this.setState({
                         unsuitableMatches: this.state.unsuitableMatches.concat(responseData.results)
@@ -142,8 +135,8 @@ class ViewProfilePage extends React.Component {
             .then(responseData => {
                 console.log(responseData)
                 if (JSON.stringify(responseData.error) === '{}') {
-                    console.log("pending matches response data ")
-                    console.log(responseData)
+                    // console.log("pending matches response data ")
+                    // console.log(responseData)
                     this.setState({
                         unsuitableMatches: this.state.unsuitableMatches.concat(responseData.results)
                     }, function () {
@@ -172,8 +165,8 @@ class ViewProfilePage extends React.Component {
             .then(res => res.json())
             .then(responseData => {
                 if (responseData.error !== '{}') {
-                    console.log("Current profiles before splicing: ")
-                    console.log(responseData)
+                    // console.log("Current profiles before splicing: ")
+                    // console.log(responseData)
                     for (let j = 0; j < this.state.unsuitableMatches.length; ++j) {
                         let result = responseData.results.findIndex(element => element.userId == this.state.unsuitableMatches[j].userId)
                         if (result != -1) {
@@ -183,9 +176,9 @@ class ViewProfilePage extends React.Component {
                     }
                     let temp = responseData.results;
                     let selfid = parseInt(UserToken.getUserId())
-                    console.log("self id " + selfid)
+                    // console.log("self id " + selfid)
                     let tempResult = temp.filter((obj) => {
-                        console.log(obj)
+                        // console.log(obj)
                         return obj.userId !== selfid
                     })
 
@@ -199,8 +192,8 @@ class ViewProfilePage extends React.Component {
                     this.setState({ feedback: "No profiles could be obtained. Please try again later." })
                 }
             }).then(() => {
-                console.log("Current profiles: ")
-                console.log(this.state.profiles)
+                // console.log("Current profiles: ")
+                // console.log(this.state.profiles)
                 for (let i = 0; i < this.state.profiles.length; ++i) {
                     this.getPhotoForCurrentUser(this.state.profiles[i].userId)
                 }
@@ -214,7 +207,6 @@ class ViewProfilePage extends React.Component {
     componentDidMount() {
         this.checkUserLogIn()
         if (!this.state.redirect) {
-            console.log("HLELLO???")
             this.getPendingMatches()
         }
     }

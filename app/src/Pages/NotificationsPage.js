@@ -54,6 +54,7 @@ class NotificationsPage extends React.Component {
 
 
     }
+    
 
     checkUserLogIn() {
         let token = UserToken.getUserId()

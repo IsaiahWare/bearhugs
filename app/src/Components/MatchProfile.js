@@ -92,7 +92,7 @@ class MatchProfile extends React.Component {
             <Carousel interval={null} wrap={false}>
                 {this.props.photos.map((imgsrc, idx) =>  (
                     <Carousel.Item key={imgsrc+" "+UserToken.getUserId()+" "+idx}>
-                            <img src={imgsrc} key={idx} className="d-block profImage"
+                            <img src={imgsrc} alt = {imgsrc} key={idx} className="d-block profImage"
                             />
                     </Carousel.Item>
                 ))}

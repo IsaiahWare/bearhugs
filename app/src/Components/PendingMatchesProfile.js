@@ -75,7 +75,7 @@ class PendingMatchesProfile extends React.Component {
                         <div className="col center-col">
                             <div className="row center-row">
                                 <div className="img-container">
-                                    <img className="match-img" src={this.props.imgsrc}></img>
+                                    <img className="match-img" src={this.props.imgsrc} alt={this.props.imgsrc}></img>
                                 </div>
                             </div>
                             <div className="row center-row">
