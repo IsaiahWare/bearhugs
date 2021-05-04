@@ -12,9 +12,11 @@ class ForgotPassword extends React.Component {
         this.state = {
             a1: "",
             a2: "",
+            answer1: "",
+            answer2: "",
             q1: "beep boop?",
             q2: "sceet scoot?",
-            emailentered: true,
+            emailentered: false,
             feedback: "",
             userId: -1,
             email: "",
@@ -66,7 +68,8 @@ class ForgotPassword extends React.Component {
                                 //if security questions are found, progress to security questions
                                 emailentered: true
                             })
-                        this.addFriendByEmail(responseData.results[0].userId, responseData.results[0])
+                        this.getQuestions();
+                        //this.addFriendByEmail(responseData.results[0].userId, responseData.results[0])
                     }
                     else {
                         this.setState({
@@ -94,13 +97,10 @@ class ForgotPassword extends React.Component {
         return true
     }
 
-    resetPassword(event){
-        event.preventDefault();
-        
-        //check to see if security question answers match
+    getQuestions(){
         let url = baseDomain + '/securityQuestions/get'
         let newRequest = {
-            "userId": this.state.userId
+            "email": this.state.email
         }
         console.log(newRequest)
         fetch(url, {
@@ -112,24 +112,42 @@ class ForgotPassword extends React.Component {
         })
             .then(res => res.json())
             .then(responseData => {
-                console.log(responseData)
+                console.log("security questions query: " + responseData)
                 if (JSON.stringify(responseData.error) !== '{}') {
                     this.setState({
-                        feedback: "Password change failed 🤨"
+                        feedback: "Error getting security questions"
                     })
                 } else {
+                    console.log("responseData.results: "+responseData.results.securityQuestions);
+                    console.log("responseData "+JSON.stringify(responseData));
+                    let res = Object.keys(responseData.results[0].securityQuestions);
+                    console.log(JSON.stringify(responseData.results[0].securityQuestions).split("\\"))
+                    // let res2;// = Object.values(responseData.results.securityQuestions);
                     this.setState({
-                        feedback: "Password changed successfully :)"
+                        feedback: "Security questions obtained successfully",
+                        //answer1: res2[0],
+                        //answer2: res2[1],
+                        //q1: res[0],
+                        //q2: res[1]
                     })
-                    this.logIn();
+                    console.log("security q 1: " + this.state.q1 + " answer: "+ this.state.a1
+                    +"security q 2: " + this.state.q2 + " answer: " + this.state.a2);
                 }
             })
+        }
+    
+
+    resetPassword(event){
+        event.preventDefault();
 
 
-            if(this.filterPassword(this.state.password)){
-
-            }
-        console.log("password rest")
+        if(this.filterPassword(this.state.password) &&
+         this.state.a1.toLowerCase() === this.state.answer1.toLowerCase() &&
+         this.state.a2.toLowerCase() === this.state.answer2.toLowerCase()){
+            console.log("questions match!");
+            //check to see if security question answers match
+            this.updateAccount();
+        }
     }
 
     updateAccount() {
@@ -164,7 +182,7 @@ class ForgotPassword extends React.Component {
                     })
                 } else {
                     this.setState({
-                        feedback: "Password changed successfully :)"
+                        feedback: "Password updated successfully :)"
                     })
                     this.logIn();
                 }

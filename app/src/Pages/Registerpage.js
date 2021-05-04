@@ -36,7 +36,7 @@ class RegisterPage extends React.Component {
             femaleGenderPref: false,
             otherGenderPref: false,
             redirect: false,
-            securityQs: true,
+            securityQs: false,
             q1_select: "",
             q2_select: "",
             a1: "",
@@ -243,10 +243,10 @@ class RegisterPage extends React.Component {
             let que1 = this.state.q1_select; let que2 = this.state.q2_select;
             let newRequest = {
                 "email": this.state.email,
-                "securityQuestions": {
-                    que1 : a1,
-                    que2 : a2
-                }
+                "securityQuestions": JSON.stringify({
+                    [que1] : a1,
+                    [que2] : a2
+                })
             }
             console.log("securityQ: "+ newRequest)
             fetch(url, {
