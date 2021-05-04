@@ -3,6 +3,9 @@ import { Redirect } from 'react-router-dom';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import "../App.css"
 import UserToken from  "../Components/UserToken.js"
+
+const axios = require('axios');
+
 let baseDomain = "http://ec2-100-24-237-42.compute-1.amazonaws.com:3000"
 class LoginPage extends React.Component {
     constructor(props) {
@@ -12,10 +15,13 @@ class LoginPage extends React.Component {
             password:"",
 	        redirect: false,
             photos: [],
-            feedback:""
+            feedback:"",
+            userId: 0
         }
         this.logIn= this.logIn.bind(this)
         this.handleInputChange = this.handleInputChange.bind(this)
+        this.uploadPhotosTest = this.uploadPhotosTest.bind(this)
+        this.getPhotosTest = this.getPhotosTest.bind(this)
     }
 
     logIn(event) {
@@ -78,14 +84,32 @@ handleInputChange(event) {
           .catch(console.error);
     }
 
+    uploadPhotosTest(event) {
+        event.preventDefault();
+        let formData = new FormData();
+
+        formData.append('userId', this.state.userId);
+        formData.append('filename', event.target.filename);
+
+        const config = {
+            headers: { 'content-type': 'multipart/form-data' }
+        }
+
+        axios.post(url, formData, config)
+        .then(response => {
+            console.log(response);
+        })
+        .catch(error => {
+            console.log(error);
+        });
+    }
+
     render() {
 	    const redirect = this.state.redirect
 	    if (redirect) {
             return <Redirect
             to= "/viewmatches"
             />
-
-
 	 }
         return (
             <div className="page">
@@ -132,15 +156,15 @@ handleInputChange(event) {
                 </div>
 
                 <h1>1. Upload photo for current user</h1>
-                <form enctype="multipart/form-data" action="../../../server/php/photoGetter.php" method="POST">
+                <form onSubmit={this.uploadPhotosTest}>
                     <input type="hidden" name="MAX_FILE_SIZE" value="50000000000000" />
                     <input type="file" name="filename" id = "uploadfile_input"/>
-                    <input type="hidden" name="userId" value={30} />
+                    <input type="number" name="userId" placeholder="userId" onChange={this.handleInputChange}/>
                     <button type="submit" name="submit"> UPLOAD </button>
                 </form>
 
                 <h1>2. Get all photos for current user in state</h1>
-                <button onClick={this.getPhotosTest}> GET ALL PHOTOS</button>
+                <button onClick={this.getPhotosTest}> GET ALL PHOTOS </button>
 
                 <h1>3. Display photos for current user</h1>
                 {
