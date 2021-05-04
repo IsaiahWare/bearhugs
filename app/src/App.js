@@ -1,5 +1,5 @@
 import logo from './logo.svg';
-import { Router, Switch, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import {IndexRoute} from 'react-router-dom';
 import './App.css';
 import LoginPage from './Pages/Loginpage'
@@ -20,7 +20,7 @@ import WingManPage from './Pages/WingmanPage';
 
 function App() {
   return (
-  <Router>
+  <Router basename={process.env.PUBLIC_URL}>
     <Switch>
         <Route exact path='/' component={LoginPage} />
         <Route exact path="/register" component={RegisterPage}></Route>
