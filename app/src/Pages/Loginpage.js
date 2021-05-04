@@ -84,7 +84,7 @@ handleInputChange(event) {
             return <Redirect
             to= "/viewmatches"
             />
-        
+
 
 	 }
         return (
@@ -112,15 +112,15 @@ handleInputChange(event) {
                                 </div>
                                 <div className="row center-row">
                                 <p>Don't have an account?  <Link to="/register" className="route-link">Register here! </Link></p>
-                                
-                                
+
+
                             </div>
                             <div className="center">
                                 <p><Link to="/forgotpassword" className="route-link center">Forgot password </Link></p>
                             </div>
-                                
-                                
-                            
+
+
+
                             <div className="feedback-wrapper">
                                 {this.state.feedback}
                             </div>
@@ -130,7 +130,7 @@ handleInputChange(event) {
                         </div>
                     </div>
                 </div>
-                {/*
+
                 <h1>1. Upload photo for current user</h1>
                 <form enctype="multipart/form-data" action="../../../server/php/photoGetter.php" method="POST">
                     <input type="hidden" name="MAX_FILE_SIZE" value="50000000000000" />
@@ -150,7 +150,7 @@ handleInputChange(event) {
                 }
                 <div className="page-gradient">
                 </div>
-                */}
+
             </div>
         );
     }
