@@ -53,6 +53,7 @@ router.post("/send", (req: Request, res: Response) => {
 });  
 
 router.post("/get", (req: Request, res: Response) => {
+    console.log(req.body);
     const SecurityQuestionsGetResponse: any = {
         "error": {},
         "results": []
