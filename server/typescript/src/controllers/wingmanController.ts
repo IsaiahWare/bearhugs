@@ -28,22 +28,22 @@ router.post("/send", (req: Request, res: Response) => {
 
     const queryStatement: string = "SELECT * FROM pendingWingman WHERE wingmanId = ? AND requesteeId = ? AND requesterId = ?";
     const queryArgs = [req.body.wingmanId, req.body.requesteeId, req.body.requesterId];
-    db.query(queryStatement, queryArgs, (queryError: MysqlError | null, queryResults: any ) => {
-        if (queryError) {
-            wingmanResponse.error =  {
-                "message": queryError.sqlMessage
-            };
-            res.json(wingmanResponse);
-        } 
-        else {
-            if (queryResults.length === 1) {
-                    wingmanResponse.error =  {
-                        "message": "Request already sent"
-                    };
-                res.json(wingmanResponse);
-            } 
-            else {
-                const queryStatement3: string = "SELECT requesterId FROM pendingWingman WHERE wingmanId = ? AND requesteeId = ? AND requesterId = ?";
+    // db.query(queryStatement, queryArgs, (queryError: MysqlError | null, queryResults: any ) => {
+        // if (queryError) {
+        //     wingmanResponse.error =  {
+        //         "message": queryError.sqlMessage
+        //     };
+        //     res.json(wingmanResponse);
+        // } 
+        // else {
+            // if (queryResults.length !== 0) {
+            //         wingmanResponse.error =  {
+            //             "message": "Request already sent"
+            //         };
+            //     res.json(wingmanResponse);
+            // } 
+            // else {
+                const queryStatement3: string = "SELECT requestId FROM pendingWingman WHERE wingmanId = ? AND requesteeId = ? AND requesterId = ?";
                 const queryArgs3 = [req.body.wingmanId, req.body.requesterId, req.body.requesteeId];
                 db.query(queryStatement3, queryArgs3, (queryError3: MysqlError | null, queryResults3: any ) => {
                     if (queryError3) {
@@ -51,7 +51,7 @@ router.post("/send", (req: Request, res: Response) => {
                             "message": queryError3.sqlMessage
                         };
                         res.json(wingmanResponse);
-                    } else if (queryResults3.length === 1) {
+                    } else if (queryResults3.length !== 0) {
                         const queryStatement4: string = "INSERT INTO completedWingman (wingmanId, requesterId, requesteeId) VALUES (?,?,?), (?,?,?)";
                         const queryArgs4 = [
                                req.body.wingmanId,
@@ -69,7 +69,7 @@ router.post("/send", (req: Request, res: Response) => {
                                 res.json(wingmanResponse);
                             } else {
                                 const queryStatement6: string = "DELETE FROM pendingWingman WHERE requestId = ?";
-                                const queryArgs6 = [req.body.requestId];
+                                const queryArgs6 = [queryResults3[0].requestId];
                                 db.query(queryStatement6, queryArgs6, (queryError6: MysqlError | null, queryResults6: any ) => {
                                     if (queryError6) {
                                         wingmanResponse.error =  {
@@ -109,9 +109,9 @@ router.post("/send", (req: Request, res: Response) => {
                         });
                     }
                 });
-            }
-        }
-    }); 
+            // }
+        // }
+    // }); 
 });
 
 router.post("/requests", (req: Request, res: Response) => {
