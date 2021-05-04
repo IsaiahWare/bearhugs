@@ -69,7 +69,7 @@ router.post("/get", (req: Request, res: Response) => {
 
     const queryStatement: string = "SELECT * FROM securityQuestions WHERE userId = ?";
  
-    db.query(queryStatement, req.body, (queryError: MysqlError | null, queryResults: any) => {
+    db.query(queryStatement, req.body.userId, (queryError: MysqlError | null, queryResults: any) => {
         if (queryError) {
             SecurityQuestionsGetResponse.error = {
                 "message": queryError.sqlMessage
