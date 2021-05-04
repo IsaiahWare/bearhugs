@@ -1,5 +1,5 @@
 import logo from './logo.svg';
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import { Router, Switch, Route, Link } from 'react-router-dom';
 import {IndexRoute} from 'react-router-dom';
 import './App.css';
 import LoginPage from './Pages/Loginpage'
@@ -20,7 +20,7 @@ import WingManPage from './Pages/WingmanPage';
 
 function App() {
   return (
-  <Router basename={process.env.PUBLIC_URL}>
+  <Router>
     <Switch>
         <Route exact path='/' component={LoginPage} />
         <Route exact path="/register" component={RegisterPage}></Route>
@@ -33,7 +33,7 @@ function App() {
         <Route exact path="/forgotpassword" component={ForgotPassword}></Route>
     </Switch>
 </Router>
-  
+
   );
 }
 
