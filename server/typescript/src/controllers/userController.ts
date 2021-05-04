@@ -313,6 +313,35 @@ router.post("/phone", (req: Request, res: Response) => {
     }); 
 });
 
+router.post("/updatePassword", (req: Request, res: Response) => {
+    const updateResponse: any = {
+        "error": {},
+        "results": []
+    };
+    
+    const queryStatement: string = "UPDATE users SET password = ? WHERE email = ?";
+    const queryArgs = [
+        req.body.password,
+        req.body.email
+    ];
+    bcrypt.hash(req.body.password, saltRounds).then((hashedPassword: string) => {
+        db.query(queryStatement, [hashedPassword, req.body.email], (queryError: MysqlError | null, queryResults: any) => {
+            if (queryError) {
+                updateResponse.error = {
+                    "message": queryError.sqlMessage
+                };
+            } else {
+                updateResponse.results = [
+                    {
+                        "success": true
+
+                    }
+                ];
+            }
+            res.json(updateResponse);
+        });
+    });
+});
+
 
 export default router;
-
