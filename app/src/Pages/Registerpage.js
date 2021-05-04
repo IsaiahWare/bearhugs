@@ -49,7 +49,7 @@ class RegisterPage extends React.Component {
     }
 
     logIn() {
-        console.log("Login event")
+        // console.log("Login event")
         let url = baseDomain + '/user/login'
         let newRequest = {
             "email": this.state.email,
@@ -65,7 +65,7 @@ class RegisterPage extends React.Component {
             .then(res => res.json())
             
             .then(responseData => {
-                console.log(responseData)
+                // console.log(responseData)
                 // TODO: handle case where login is invalid
                 if (JSON.stringify(responseData.error) === '{}') {
                     console.log("in reigster page log in with results " + responseData.results)
@@ -218,7 +218,7 @@ class RegisterPage extends React.Component {
             })
         }
         else {
-            console.log("Filters failed")
+            // console.log("Filters failed")
             window.scrollTo({
                 top: 300,
                 behavior: "smooth"
@@ -265,7 +265,7 @@ class RegisterPage extends React.Component {
                 "q1": q1,
                 "q2": q2
             }
-            console.log("securityQ: "+ newRequest)
+            // console.log("securityQ: "+ newRequest)
             fetch(url, {
                 method: 'POST',
                 headers: {
@@ -275,7 +275,7 @@ class RegisterPage extends React.Component {
             })
                 .then(res => res.json())
                 .then(responseData => {
-                    console.log(responseData)
+                    // console.log(responseData)
                     if (JSON.stringify(responseData.error) !== '{}') {
                         this.setState({
                             feedback: "Problem uploading security questions to server 🤒"
@@ -304,7 +304,7 @@ class RegisterPage extends React.Component {
             "femaleGenderPref": this.state.femaleGenderPref,
             "otherGenderPref": this.state.otherGenderPref,
         }
-        console.log(newRequest)
+        // console.log(newRequest)
 
         fetch(url, {
             method: 'POST',
@@ -316,7 +316,7 @@ class RegisterPage extends React.Component {
         })
             .then(res => res.json())
             .then(responseData => {
-                console.log(responseData)
+                // console.log(responseData)
                 // TODO: handle case where login is invalid
                 if (JSON.stringify(responseData.error) !== '{}') {
                     this.setState({
@@ -338,7 +338,7 @@ class RegisterPage extends React.Component {
         let name = target.name;
         if (name=="maleGenderPref" || name=="femaleGenderPref" || name=="otherGenderPref") {
                 let checkValue = event.target.checked;
-                console.log('name ' + name + 'value '+ checkValue)
+                // console.log('name ' + name + 'value '+ checkValue)
                 let setValue = false
                 this.setState({
                     [name]: checkValue

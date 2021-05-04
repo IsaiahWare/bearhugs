@@ -38,7 +38,7 @@ class NotificationsPage extends React.Component {
         })
             .then(res => res.json())
             .then(responseData => {
-		    console.log(responseData)
+		    // console.log(responseData)
                 if (JSON.stringify(responseData.error) === '{}') {
                     for (let i =0; i < responseData.results.length; ++i) {
                         let date = responseData.results[i].notificationDate

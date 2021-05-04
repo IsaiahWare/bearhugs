@@ -133,7 +133,6 @@ class ViewProfilePage extends React.Component {
         })
             .then(res => res.json())
             .then(responseData => {
-                console.log(responseData)
                 if (JSON.stringify(responseData.error) === '{}') {
                     // console.log("pending matches response data ")
                     // console.log(responseData)

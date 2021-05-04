@@ -50,7 +50,7 @@ class ForgotPassword extends React.Component {
             let newRequest = {
                 email: this.state.email
             }
-            console.log(newRequest)
+            // console.log(newRequest)
             fetch(url, {
                 method: 'POST',
                 headers: {
@@ -119,14 +119,14 @@ class ForgotPassword extends React.Component {
         })
             .then(res => res.json())
             .then(responseData => {
-                console.log("security questions query: " + responseData)
+                // console.log("security questions query: " + responseData)
                 if (JSON.stringify(responseData.error) !== '{}') {
                     this.setState({
                         feedback: "Error getting security questions"
                     })
                 } else {
                     let res = responseData.results[0];
-                    console.log("sec que response data: "+ res);
+                    // console.log("sec que response data: "+ res);
                     this.setState({
                         feedback: "Security questions obtained successfully",
                         answer1: res.a1,
@@ -134,8 +134,8 @@ class ForgotPassword extends React.Component {
                         q1: res.q1,
                         q2: res.q2
                     })
-                    console.log("security q 1: " + this.state.q1 + " answer: "+ this.state.a1
-                    +"security q 2: " + this.state.q2 + " answer: " + this.state.a2);
+                    // console.log("security q 1: " + this.state.q1 + " answer: "+ this.state.a1
+                    // +"security q 2: " + this.state.q2 + " answer: " + this.state.a2);
                 }
             })
         }
@@ -148,20 +148,20 @@ class ForgotPassword extends React.Component {
         if(this.filterPassword(this.state.password) &&
          this.state.a1.toLowerCase() === this.state.answer1.toLowerCase() &&
          this.state.a2.toLowerCase() === this.state.answer2.toLowerCase()){
-            console.log("questions match!");
+            // console.log("questions match!");
             //check to see if security question answers match
             this.updatePassword();
         }
     }
 
     updatePassword() {
-        console.log("trying to update...");
+        // console.log("trying to update...");
         let url = baseDomain + '/user/updatePassword'
         let newRequest = {
             "email": this.state.email,
             "password": this.state.password
         }
-        console.log(newRequest)
+        // console.log(newRequest)
 
         fetch(url, {
             method: 'POST',
@@ -173,7 +173,7 @@ class ForgotPassword extends React.Component {
         })
             .then(res => res.json())
             .then(responseData => {
-                console.log(responseData)
+                // console.log(responseData)
                 // TODO: handle case where login is invalid
                 if (JSON.stringify(responseData.error) !== '{}') {
                     this.setState({
@@ -189,7 +189,7 @@ class ForgotPassword extends React.Component {
     }
 
     logIn(){
-        console.log("login event with");
+        // console.log("login event with");
     }
 
     render(){

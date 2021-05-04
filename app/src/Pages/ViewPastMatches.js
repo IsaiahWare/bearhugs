@@ -87,12 +87,12 @@ class ViewPastMatches extends React.Component {
         })
             .then(photos => photos.json())
             .then(photos => {
-                console.log("current photo response : ")
-                console.log(photos)
+                // console.log("current photo response : ")
+                // console.log(photos)
                 let tempPhotoNumber = this.state.doneLoadingPending + 1;
                 // TODO: handle case where login is invalid
                 if (photos.results.length != 0) {
-                    console.log("return actual photo")
+                    // console.log("return actual photo")
                     this.setState(prevState => ({
                         pendingPhotos: [...prevState.pendingPhotos, { id: id, imgsrc: photos.results }],
                         doneLoadingPending: tempPhotoNumber
@@ -100,7 +100,7 @@ class ViewPastMatches extends React.Component {
 
                 }
                 else {
-                    console.log("Reutnr defualt")
+                    // console.log("Reutnr defualt")
                     this.setState(prevState => ({
                         pendingPhotos: [...prevState.pendingPhotos, { id: id, imgsrc: ["default-profile.png"] }],
                         doneLoadingPending: tempPhotoNumber
@@ -110,7 +110,7 @@ class ViewPastMatches extends React.Component {
             }).catch((error) => {
                 let tempPhotoNumber = this.state.doneLoadingPending + 1;
                 console.error(error)
-                console.log("Reutnr defualt")
+                // console.log("Reutnr defualt")
                 this.setState(prevState => ({
                     pendingPhotos: [...prevState.pendingPhotos, { id: id, imgsrc: ["default-profile.png"] }],
                     doneLoadingPending: tempPhotoNumber
@@ -241,7 +241,7 @@ class ViewPastMatches extends React.Component {
 
     rejectMatch(id) {
         let url = baseDomain + '/match/reject'
-        console.log("in reject match " + id)
+        // console.log("in reject match " + id)
         let newRequest = {
             requesterId: UserToken.getUserId(),
             requesteeId: id
@@ -255,7 +255,7 @@ class ViewPastMatches extends React.Component {
         })
             .then(res => res.json())
             .then(responseData => {
-                console.log(responseData)
+                // console.log(responseData)
                 if (JSON.stringify(responseData.error) === '{}') {
                     let temp = this.state.pendingMatches
                     let photoArray = this.state.pendingPhotos
@@ -263,13 +263,13 @@ class ViewPastMatches extends React.Component {
                     let numProfilesPending = this.state.numPending - 1
                     let tempResult = temp.filter((obj) => {
                         if (obj.userId === id) {
-                            console.log("remove " + JSON.stringify(obj))
+                            // console.log("remove " + JSON.stringify(obj))
                         }
                         return obj.userId !== id
                     })
                     let tempPhotoResult = photoArray.filter((obj) => {
                         if (obj.id === id) {
-                            console.log("remove " + JSON.stringify(obj))
+                            // console.log("remove " + JSON.stringify(obj))
                         }
                         return obj.id !== id
                     })
@@ -307,22 +307,22 @@ class ViewPastMatches extends React.Component {
         })
             .then(res => res.json())
             .then(responseData => {
-                console.log(responseData)
+                // console.log(responseData)
                 if (JSON.stringify(responseData.error) === '{}') {
                     let temp = this.state.pendingWingmanMatches
                     let photoArray = this.state.pendingWingmanPhotos
                     let tempNumberWingman = this.state.numWingmanRequests-1
                     let tempDone = this.state.doneLoadingPendingWingman-1
-                    console.log("wingman matches before filter: " + temp)
+                    // console.log("wingman matches before filter: " + temp)
                     let tempResult = temp.filter((obj) => {
                         return obj.requesterId !== requesterId
                     })
-                    console.log("wingman matches after filter: " + tempResult)
-                    console.log("wingman photos before filter: " + photoArray)
+                    // console.log("wingman matches after filter: " + tempResult)
+                    // console.log("wingman photos before filter: " + photoArray)
                     let tempPhotoResult = photoArray.filter((obj) => {
                         return obj.id !== requesterId
                     })
-                    console.log("wingman photos after filter: " + tempPhotoResult)
+                    // console.log("wingman photos after filter: " + tempPhotoResult)
                     this.setState({
                         feedback: "Wingman request rejected!",
                         pendingWingmanMatches: tempResult,
@@ -349,7 +349,7 @@ class ViewPastMatches extends React.Component {
         })
             .then(res => res.json())
             .then(responseData => {
-                console.log(responseData)
+                // console.log(responseData)
                 if (JSON.stringify(responseData.error) === '{}') {
                     this.setState({
                         pendingWingmanMatches: responseData.results,
@@ -378,7 +378,7 @@ class ViewPastMatches extends React.Component {
         })
             .then(res => res.json())
             .then(responseData => {
-                console.log(responseData)
+                // console.log(responseData)
                 if (JSON.stringify(responseData.error) === '{}') {
                     this.setState({
                         currentMatches: responseData.results,
@@ -409,8 +409,8 @@ class ViewPastMatches extends React.Component {
         })
             .then(res => res.json())
             .then(responseData => {
-                console.log("pending friends resposne data")
-                console.log(responseData)
+                // console.log("pending friends resposne data")
+                // console.log(responseData)
                 if (JSON.stringify(responseData.error) === '{}') {
                     this.setState({
                         pendingMatches: responseData.results,
@@ -448,14 +448,14 @@ class ViewPastMatches extends React.Component {
     }
 
     completePendingWingman(wingmanId, requesterId, requesteeId) {
-        console.log("IN add match by button")
+        // console.log("IN add match by button")
         let url = baseDomain + '/wingman/send'
         let newRequest = {
             wingmanId: wingmanId,
             requesterId: requesterId,
             requesteeId: requesteeId
         }
-        console.log(newRequest)
+        // console.log(newRequest)
         fetch(url, {
             method: 'POST',
             headers: {
@@ -466,21 +466,21 @@ class ViewPastMatches extends React.Component {
             .then(res => res.json())
             .then(responseData => {
                 if (JSON.stringify(responseData.error) === '{}') {
-                    console.log("complete pending wingman " + responseData)
+                    // console.log("complete pending wingman " + responseData)
                     let temp = this.state.pendingWingmanMatches
                     let photoArray = this.state.pendingWingmanPhotos
                     let tempNumberWingman = this.state.numWingmanRequests-1
                     let tempDone = this.state.doneLoadingPendingWingman-1
-                    console.log("wingman matches before filter: " + temp)
+                    // console.log("wingman matches before filter: " + temp)
                     let tempResult = temp.filter((obj) => {
                         return obj.requesterId !== requesterId
                     })
-                    console.log("wingman matches after filter: " + tempResult)
-                    console.log("wingman photos before filter: " + photoArray)
+                    // console.log("wingman matches after filter: " + tempResult)
+                    // console.log("wingman photos before filter: " + photoArray)
                     let tempPhotoResult = photoArray.filter((obj) => {
                         return obj.id !== requesterId
                     })
-                    console.log("wingman photos after filter: " + tempPhotoResult)
+                    // console.log("wingman photos after filter: " + tempPhotoResult)
                     this.setState({
                         feedback: "Wingman approved!",
                         pendingWingmanMatches: tempResult,
@@ -501,13 +501,13 @@ class ViewPastMatches extends React.Component {
 
     }
     addMatchFromButton(id) {
-        console.log("IN add match by button")
+        // console.log("IN add match by button")
         let url = baseDomain + '/match/send'
         let newRequest = {
             requesterId: UserToken.getUserId(),
             requesteeId: id
         }
-        console.log(newRequest)
+        // console.log(newRequest)
         fetch(url, {
             method: 'POST',
             headers: {
@@ -518,7 +518,7 @@ class ViewPastMatches extends React.Component {
             .then(res => res.json())
             .then(responseData => {
                 if (JSON.stringify(responseData.error) === '{}') {
-                    console.log(responseData)
+                    // console.log(responseData)
                     this.setState({
                         feedback: "Match approved!",
                     })
@@ -527,7 +527,7 @@ class ViewPastMatches extends React.Component {
 
                 }
                 else {
-                    console.log(responseData)
+                    // console.log(responseData)
                     this.setState({
                         feedback: "Match could not be completed :(. Please try again later"
                     })
@@ -575,9 +575,9 @@ class ViewPastMatches extends React.Component {
                 to="/"
             />
         }
-        console.log("number of matches for current and completed " + this.state.numCurrent + "loading " + this.state.doneLoadingCurrent)
-        console.log("number of matches for pending " + this.state.numPending + "loading " + this.state.doneLoadingPending)
-        console.log("number of matches for wignman" + this.state.numWingmanRequests + "loading " + this.state.doneLoadingPendingWingman)
+        // console.log("number of matches for current and completed " + this.state.numCurrent + "loading " + this.state.doneLoadingCurrent)
+        // console.log("number of matches for pending " + this.state.numPending + "loading " + this.state.doneLoadingPending)
+        // console.log("number of matches for wignman" + this.state.numWingmanRequests + "loading " + this.state.doneLoadingPendingWingman)
         if (this.state.numCurrent == this.state.doneLoadingCurrent && this.state.numPending == this.state.doneLoadingPending && this.state.doneLoadingPendingWingman == this.state.numWingmanRequests) {
             return (
                 <div className="page">

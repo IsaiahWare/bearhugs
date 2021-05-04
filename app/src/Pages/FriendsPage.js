@@ -72,7 +72,7 @@ class FriendsPage extends React.Component {
 
     getPhotoForPendingUser(id) {
         let url = '../../../server/php/photoGetter.php'
-        console.log("url " + url)
+        // console.log("url " + url)
         let newRequest = {
             "userId": id,
         }
@@ -86,12 +86,12 @@ class FriendsPage extends React.Component {
         })
             .then(photos => photos.json())
             .then(photos => {
-                console.log("current photo response : ")
-                console.log(photos)
+                // console.log("current photo response : ")
+                // console.log(photos)
                 let tempPhotoNumber = this.state.doneLoadingPending + 1;
                 // TODO: handle case where login is invalid
                 if (photos.results.length != 0) {
-                    console.log("return actual photo")
+                    // console.log("return actual photo")
                     this.setState(prevState => ({
                         pendingPhotos: [...prevState.pendingPhotos, { id: id, imgsrc: photos.results[0] }],
                         doneLoadingPending: tempPhotoNumber
@@ -99,7 +99,7 @@ class FriendsPage extends React.Component {
 
                 }
                 else {
-                    console.log("Reutnr defualt")
+                    // console.log("Reutnr defualt")
                     this.setState(prevState => ({
                         pendingPhotos: [...prevState.pendingPhotos, { id: id, imgsrc: "default-profile.png" }],
                         doneLoadingPending: tempPhotoNumber
@@ -109,7 +109,7 @@ class FriendsPage extends React.Component {
             }).catch((error) => {
                 let tempPhotoNumber = this.state.doneLoadingPending + 1;
                 console.error(error)
-                console.log("Reutnr defualt")
+                // console.log("Reutnr defualt")
                 this.setState(prevState => ({
                     pendingPhotos: [...prevState.pendingPhotos, { id: id, imgsrc: "default-profile.png" }],
                     doneLoadingPending: tempPhotoNumber
@@ -135,12 +135,12 @@ class FriendsPage extends React.Component {
         })
             .then(photos => photos.json())
             .then(photos => {
-                console.log("current photo response : ")
-                console.log(photos)
+                // console.log("current photo response : ")
+                // console.log(photos)
                 let tempPhotoNumber = this.state.doneLoadingCurrent + 1;
                 // TODO: handle case where login is invalid
                 if (photos.results.length != 0) {
-                    console.log("return actual photo")
+                    // console.log("return actual photo")
                     this.setState(prevState => ({
                         currentPhotos: [...prevState.currentPhotos, { id: id, imgsrc: photos.results[0] }],
                         doneLoadingCurrent: tempPhotoNumber
@@ -148,7 +148,7 @@ class FriendsPage extends React.Component {
 
                 }
                 else {
-                    console.log("Reutnr defualt")
+                    // console.log("Reutnr defualt")
                     this.setState(prevState => ({
                         currentPhotos: [...prevState.currentPhotos, { id: id, imgsrc: "default-profile.png" }],
                         doneLoading: tempPhotoNumber
@@ -158,7 +158,7 @@ class FriendsPage extends React.Component {
             }).catch((error) => {
                 let tempPhotoNumber = this.state.doneLoadingCurrent + 1;
                 console.error(error)
-                console.log("Reutnr defualt")
+                // console.log("Reutnr defualt")
                 this.setState(prevState => ({
                     currentPhotos: [...prevState.currentPhotos, { id: id, imgsrc: "default-profile.png" }],
                     doneLoadingCurrent: tempPhotoNumber
@@ -170,8 +170,8 @@ class FriendsPage extends React.Component {
 
     removeFriend(id) {
         let url = baseDomain + '/friend/unfriend'
-        console.log("Remove friend--self-id :" + UserToken.getUserId())
-        console.log("Remove friend--otherf-id :" + id)
+        // console.log("Remove friend--self-id :" + UserToken.getUserId())
+        // console.log("Remove friend--otherf-id :" + id)
         let newRequest = {
             userId1: UserToken.getUserId(),
             userId2: id
@@ -185,7 +185,7 @@ class FriendsPage extends React.Component {
         })
             .then(res => res.json())
             .then(responseData => {
-                console.log(responseData)
+                // console.log(responseData)
                 if (JSON.stringify(responseData.error) === '{}') {
                     let temp = this.state.currentFriends
                     let tempPhotos = this.state.currentPhotos
@@ -230,7 +230,7 @@ class FriendsPage extends React.Component {
         })
             .then(res => res.json())
             .then(responseData => {
-                console.log(responseData)
+                // console.log(responseData)
                 if (JSON.stringify(responseData.error) === '{}') {
                     this.setState({
                         currentFriends: responseData.results,
@@ -263,10 +263,10 @@ class FriendsPage extends React.Component {
         })
             .then(res => res.json())
             .then(responseData => {
-                console.log("the boy from pending friends")
+                // console.log("the boy from pending friends")
                 if (JSON.stringify(responseData.error) === '{}') {
-                    console.log("got pending photo data")
-                    console.log(responseData)
+                    // console.log("got pending photo data")
+                    // console.log(responseData)
                     this.setState({
                         pendingFriendsRequest: responseData.results,
                         doneLoadingPending: 0,
@@ -355,7 +355,7 @@ class FriendsPage extends React.Component {
         })
             .then(res => res.json())
             .then(responseData => {
-                console.log(responseData)
+                // console.log(responseData)
 
             })
 
@@ -377,18 +377,18 @@ class FriendsPage extends React.Component {
         })
             .then(res => res.json())
             .then(responseData => {
-                console.log(responseData)
+                // console.log(responseData)
             })
     }
 
     addFriendFromButton(id) {
-        console.log("IN add friend by button")
+        // console.log("IN add friend by button")
         let url = baseDomain + '/friend/send'
         let newRequest = {
             requesterId: UserToken.getUserId(),
             requesteeId: id
         }
-        console.log(newRequest)
+        // console.log(newRequest)
         fetch(url, {
             method: 'POST',
             headers: {
@@ -426,7 +426,7 @@ class FriendsPage extends React.Component {
             let newRequest = {
                 email: this.state.addFriendUser
             }
-            console.log(newRequest)
+            // console.log(newRequest)
             fetch(url, {
                 method: 'POST',
                 headers: {
@@ -470,7 +470,7 @@ class FriendsPage extends React.Component {
             .then(res => res.json())
             .then(responseData => {
                 if (JSON.stringify(responseData.error) === '{}') {
-                    console.log("the boy from reject friend")
+                    // console.log("the boy from reject friend")
                     this.getPendingFriends();
                     // console.log(responseData)
                     //     let temp = this.state.pendingFriendsRequest
@@ -537,8 +537,8 @@ class FriendsPage extends React.Component {
                 to="/"
             />
         }
-        console.log("number of matches for current and completed " + this.state.numCurrent + "loading " + this.state.doneLoadingCurrent)
-        console.log("number of matches for pending " + this.state.numPending + "loading " + this.state.doneLoadingPending)
+        // console.log("number of matches for current and completed " + this.state.numCurrent + "loading " + this.state.doneLoadingCurrent)
+        // console.log("number of matches for pending " + this.state.numPending + "loading " + this.state.doneLoadingPending)
         if (this.state.numPending == this.state.doneLoadingPending && this.state.numCurrent == this.state.doneLoadingCurrent) {
             return (
                 <div className="page">

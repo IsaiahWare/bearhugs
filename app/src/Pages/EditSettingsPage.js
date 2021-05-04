@@ -60,7 +60,6 @@ class EditSettingsPage extends React.Component {
     }
 
     componentDidMount() {
-        console.log("EDIT SETTINGS IS HERE")
         this.checkUserLogIn();
         this.getCurrentUserInfo()
         this.getPhotoInfo();
@@ -68,7 +67,6 @@ class EditSettingsPage extends React.Component {
 
     getCurrentUserInfo() {
         let uid = UserToken.getUserId();
-        console.log("user id in edit settings: " + uid)
         let url = baseDomain + '/user/find'
         let newRequest = {
             "userId": uid,
@@ -85,7 +83,7 @@ class EditSettingsPage extends React.Component {
         .then(responseData => {
             // TODO: handle case where login is invalid
             if (JSON.stringify(responseData.error) === '{}') {
-                console.log(responseData.results[0])
+                // console.log(responseData.results[0])
                 this.setState({
                     email: responseData.results[0].email,
                     description: responseData.results[0].description,
@@ -99,8 +97,6 @@ class EditSettingsPage extends React.Component {
 
             }
             else {
-                console.log("No data for edit settings")
-                console.log(responseData.error)
                 this.setState({ feedback: "Couldn't get data" })
             }
 
@@ -134,7 +130,7 @@ class EditSettingsPage extends React.Component {
                     })
                 }
             }).catch((error) => {
-                console.log(error);
+                // console.log(error);
                 let tempPhotoNumber = this.state.doneLoading + 1;
                 this.setState({
                     feedback: "Photos could not be obtained at this time, but other user information has been obtained."
@@ -151,7 +147,7 @@ class EditSettingsPage extends React.Component {
         formData.append('userId', parseInt(UserToken.getUserId()));
         formData.append('filename', this.state.file);
 
-        console.log(this.state);
+        // console.log(this.state);
 
         // const config = {
         //     headers: { 'content-type': 'multipart/form-data' }
@@ -165,7 +161,7 @@ class EditSettingsPage extends React.Component {
             }
         })
         .then(response => {
-            console.log(response);
+            // console.log(response);
             this.setState({
                 feedback:"Photo successfully uploaded!"
             })
@@ -196,7 +192,7 @@ class EditSettingsPage extends React.Component {
             "otherGenderPref": this.state.otherGenderPref
         }
 
-        console.log("New request for edit" + JSON.stringify(newRequest))
+        // console.log("New request for edit" + JSON.stringify(newRequest))
 
         fetch(url, {
             method: 'POST',
@@ -207,8 +203,8 @@ class EditSettingsPage extends React.Component {
 
         }).then(res => res.json())
             .then(responseData => {
-                console.log("Data received")
-                console.log(responseData)
+                // console.log("Data received")
+                // console.log(responseData)
                 // TODO: handle case where login is invalid
                 if (JSON.stringify(responseData.error) === '{}') {
                     this.setState({ feedback: "Changes saved!" })
@@ -229,7 +225,7 @@ class EditSettingsPage extends React.Component {
         let name = target.name;
         if (name=="maleGenderPref" || name=="femaleGenderPref" || name=="otherGenderPref") {
                 let checkValue = event.target.checked;
-                console.log('name ' + name + 'value '+ checkValue)
+                // console.log('name ' + name + 'value '+ checkValue)
                 this.setState({
                     [name]: checkValue
                 });

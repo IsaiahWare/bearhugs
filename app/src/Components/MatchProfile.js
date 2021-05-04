@@ -86,7 +86,6 @@ class MatchProfile extends React.Component {
 
         let images;
         if(this.props.photos.length > 0){
-            console.log("photos: " + this.props.photos);
             images =
             <Carousel interval={null} wrap={false}>
                 {this.props.photos.map((imgsrc, idx) =>  (

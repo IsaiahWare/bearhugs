@@ -42,11 +42,11 @@ class LoginPage extends React.Component {
     })
     .then(res => res.json())
      .then(responseData => {
-         console.log("login return")
-        console.log(responseData)
+        //  console.log("login return")
+        // console.log(responseData)
         // TODO: handle case where login is invalid
 	    if (JSON.stringify(responseData.error) === '{}') {
-            console.log("login")
+            // console.log("login")
             UserToken.setUserId(responseData.results[0].userId)
             UserToken.setUserName(responseData.results[0].firstName + " " +responseData.results[0].lastName )
             UserToken.setUserEmail(responseData.results[0].email)
@@ -93,7 +93,7 @@ handleInputChange(event) {
         formData.append('userId', this.state.userId);
         formData.append('filename', this.state.file);
 
-        console.log(this.state);
+        // console.log(this.state);
 
         // const config = {
         //     headers: { 'content-type': 'multipart/form-data' }

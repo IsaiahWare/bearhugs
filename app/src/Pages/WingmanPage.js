@@ -56,7 +56,7 @@ class WingmanPage extends React.Component {
         })
         .then(photos => photos.json())
         .then(photos=> {
-            console.log(JSON.stringify(photos))
+            // console.log(JSON.stringify(photos))
            let tempPhotoNumber=this.state.doneLoading+1;
                 // TODO: handle case where login is invalid
                     if (photos.length!=0) {
@@ -97,7 +97,7 @@ class WingmanPage extends React.Component {
         })
             .then(res => res.json())
             .then(responseData => {
-		    console.log(responseData)
+		    // console.log(responseData)
                 if (JSON.stringify(responseData.error) === '{}') {
                     this.setState({
                        currentFriends: responseData.results,
@@ -177,7 +177,7 @@ class WingmanPage extends React.Component {
 
 
     sendWingMan(friend){
-        console.log("send wingman for friend " +friend)
+        // console.log("send wingman for friend " +friend)
         let url = baseDomain + '/wingman/send'
         let newRequest = {
             wingmanId: UserToken.getUserId(),
