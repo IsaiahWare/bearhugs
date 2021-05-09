@@ -26,6 +26,7 @@ class RegisterPage extends React.Component {
             firstName: "",
             lastName: "",
             email: "",
+            phoneNumber: "",
             password: "",
             confirmPassword: "",
             errors: "",
@@ -72,6 +73,7 @@ class RegisterPage extends React.Component {
                     UserToken.setUserId(responseData.results[0].userId)
                     UserToken.setUserName(responseData.results[0].firstName + " " + responseData.results[0].lastName)
                     UserToken.setUserEmail(responseData.results[0].email)
+                    UserToken.setUserPhoneNumber(responseData.results[0].phoneNumber)
                     this.setState({ redirect: true })
                 }
             })
@@ -198,6 +200,7 @@ class RegisterPage extends React.Component {
         let firstName = this.state.firstName
         let lastName = this.state.lastName
         let email = this.state.email
+        let phoneNumber = this.state.phoneNumber
         let password = this.state.password
         let confirmPassword = this.state.confirmPassword
         let ageFilter = this.filterAge(age)
@@ -206,8 +209,9 @@ class RegisterPage extends React.Component {
         let passwordFilter = this.filterPassword(password)
         let confirmPassWordCheck = this.checkPassword(password, confirmPassword)
         let genderIdentityCheck = this.filterGenderIdentity();
+        let filterPhoneNumber = this.filterPhoneNumber()
         let genderPreferenceCheck = this.filterGenderPreference()
-        if (ageFilter && nameFilter && emailFilter && passwordFilter && confirmPassWordCheck && genderIdentityCheck && genderPreferenceCheck) {
+        if (ageFilter && nameFilter && emailFilter && passwordFilter && confirmPassWordCheck && genderIdentityCheck && genderPreferenceCheck && filterPhoneNumber) {
             this.setState({
                 securityQs: true,
                 feedback: ""
@@ -297,6 +301,7 @@ class RegisterPage extends React.Component {
             "firstName": this.state.firstName,
             "lastName": this.state.lastName,
             "email": this.state.email,
+            "phoneNumber": this.state.phoneNumber,
             "password": this.state.password,
             "age": this.state.age,
             "genderIdentity": this.state.genderIdentity,
@@ -330,6 +335,15 @@ class RegisterPage extends React.Component {
                 }
             })
     }
+
+    filterPhoneNumber(){
+        var regex = /^(\+\d{1,2}\s?)?1?\-?\.?\s?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/;
+        if (!regex.test(this.state.phoneNumber)) {
+            this.setState({
+                feedback: "Please enter valid phone number."
+            })
+    }
+}
 
     handleInputChange(event) {
         event.preventDefault();
@@ -371,6 +385,9 @@ class RegisterPage extends React.Component {
 
                 <div className="input-row center-row">
                     <input className="input" type='text' value={this.state.email} onChange={this.handleInputChange} name='email' placeholder="yourwustlemail@wustl.edu" />
+                </div>
+                <div className="input-row center-row">
+                    <input className="input" type='tel' pattern="[0-9]{10}" value={this.state.phoneNumber} onChange={this.handleInputChange} name='phoneNumber' placeholder="##########" />
                 </div>
                 <div className="input-row center-row">
                     <input className="input" value={this.state.password} onChange={this.handleInputChange} type='password' name='password' placeholder="Password" />

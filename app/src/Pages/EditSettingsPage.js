@@ -23,6 +23,7 @@ class EditSettingsPage extends React.Component {
         this.state = {
             description: "",
             email: "",
+            phoneNumber: "",
             feedback: "",
             password: "",
             redirect: false,
@@ -86,6 +87,7 @@ class EditSettingsPage extends React.Component {
                 // console.log(responseData.results[0])
                 this.setState({
                     email: responseData.results[0].email,
+                    phoneNumber: responseData.results[0].phoneNumber,
                     description: responseData.results[0].description,
                     firstName: responseData.results[0].firstName,
                     lastName: responseData.results[0].lastName,
@@ -186,6 +188,7 @@ class EditSettingsPage extends React.Component {
         let newRequest = {
             "userId": uid,
             "email": this.state.email,
+            "phoneNumber": this.state.phoneNumber,
             "description": this.state.description,
             "genderIdentity": this.state.genderIdentity,
             "maleGenderPref": this.state.maleGenderPref,
@@ -273,6 +276,10 @@ class EditSettingsPage extends React.Component {
                         <Form.Group controlId="editForm.email">
                             <Form.Label>Email</Form.Label>
                             <Form.Control type="email" name="email" value={this.state.email} onChange={this.handleInputChange} placeholder="newemail@wustl.edu" />
+                        </Form.Group>
+                        <Form.Group controlId="editForm.phoneNumber">
+                            <Form.Label>Phone Number</Form.Label>
+                            <Form.Control type="phoneNumber" name="phoneNumber" value={this.state.phoneNumber} onChange={this.handleInputChange} placeholder="##########" />
                         </Form.Group>
                         <Form.Group controlId="editForm.description">
                             <Form.Label>Description</Form.Label>

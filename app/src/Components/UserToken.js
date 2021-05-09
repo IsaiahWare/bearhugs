@@ -3,7 +3,8 @@ import React, { Component } from 'react';
 var UserToken = (function() {
     var userId ="";
     var userName="";
-    var userEmail=""
+    var userEmail="";
+    var userPhoneNumber="";
   
     var getUserId = function() {
       return localStorage.getItem('user');    // Or pull this from cookie/localStorage
@@ -32,6 +33,15 @@ var UserToken = (function() {
     var getUserEmail = function() {
       return localStorage.getItem('email');    // Or pull this from cookie/localStorage
     };
+
+    var setUserPhoneNumber = function(newPhoneNumber){
+      userPhoneNumber = newPhoneNumber
+      localStorage.setItem('phoneNumber', userPhoneNumber)
+    };
+
+    var getUserPhoneNumber = function() {
+      return localStorage.getItem('phoneNumber');
+    }
     
     var logout = function(){
       localStorage.clear();

@@ -40,8 +40,10 @@ class FriendsPage extends React.Component {
         this.getCurrentFriends = this.getCurrentFriends.bind(this)
         this.getPendingFriends = this.getPendingFriends.bind(this)
         this.addFriend = this.addFriendByEmail.bind(this)
+        this.addFriend = this.addFriendByPhoneNumber.bind(this)
         // this.rejectFriend = this.rejectFriend.bind(this)
         this.checkUserEmail = this.checkUserEmail.bind(this)
+        this.checkUserPhoneNumber = this.checkUserPhoneNumber.bind(this)
 
 
 
@@ -341,6 +343,7 @@ class FriendsPage extends React.Component {
 
     }
 
+
     createAddFriendNotification(friendId) {
         let url = baseDomain + '/notifications/sendtwouser'
         let newRequest = {
@@ -456,6 +459,76 @@ class FriendsPage extends React.Component {
 
          }
 
+         // /user/phone
+         addFriendByPhoneNumber(id, newFriendInfo){
+            let url = baseDomain + '/friend/send'
+            let newRequest = {
+                requesterId: UserToken.getUserId(),
+                requesteeId: id
+            }
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(newRequest)
+            })
+                .then(res => res.json())
+                .then(responseData => {
+                    if (JSON.stringify(responseData.error) === '{}') {
+                        this.setState({
+                            feedback: "Friend request sent!",
+                            pendingFriends: this.state.pendingFriends.concat(newFriendInfo)
+                        })
+                        this.createAddFriendNotification(id)
+                    }
+                    else {
+                        this.setState({
+                            feedback: "Friend request could not be sent :(. Please try a different phone number"
+                        })
+                    }
+                })
+        }
+        checkUserPhoneNumber() {
+            if (this.state.addFriendUser == UserToken.getUserPhoneNumber()) {
+                this.setState({
+                    feedback: "You can't friend yourself!"
+                })
+            }
+            else {
+                let url = baseDomain + '/user/phone'
+                let newRequest = {
+                    phoneNumber: this.state.addFriendUser
+                }
+                // console.log(newRequest)
+                fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(newRequest)
+                })
+                    .then(res => res.json())
+                    .then(responseData => {
+                        if (JSON.stringify(responseData.error) === '{}') {
+                            this.setState({
+                                feedback: "Friend found!"
+                            })
+                            this.addFriendByPhoneNumber(responseData.results[0].userId, responseData.results[0])
+                        }
+                        else {
+                            this.setState({
+                                feedback: "Friend could not be found :(. Please try a different phone number and check that there are no other characters or symbols in your search."
+                            })
+                        }
+                    })
+    
+                 }
+    
+    
+             }
+
+
     rejectFriend(id) {
         let url = baseDomain + '/friend/reject'
         let newRequest = {
@@ -513,7 +586,12 @@ class FriendsPage extends React.Component {
 
     handleSubmit(event) {
         event.preventDefault();
-        this.checkUserEmail();
+        if(this.state.addFriendUser.match(/ ^ [0-9] + $ /)){
+            this.checkUserNumber();
+        }
+        else{
+            this.checkUserEmail();
+        }
 
     }
 
@@ -569,7 +647,7 @@ class FriendsPage extends React.Component {
                                     <Form onSubmit={this.handleSubmit} className="input">
                                         <Form.Group>
                                             <Form.Label>Search for User</Form.Label>
-                                            <Form.Control type="text" name="addFriendUser" value={this.state.addFriendUser} onChange={this.handleInputChange} placeholder="Add friend by WUSTL email" />
+                                            <Form.Control type="text" name="addFriendUser" value={this.state.addFriendUser} onChange={this.handleInputChange} placeholder="Add friend by WUSTL email or phone number" />
                                         </Form.Group>
                                         <Button type="submit" variant="danger" value="Search">Add Friend</Button>
                                     </Form>

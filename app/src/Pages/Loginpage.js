@@ -50,6 +50,7 @@ class LoginPage extends React.Component {
             UserToken.setUserId(responseData.results[0].userId)
             UserToken.setUserName(responseData.results[0].firstName + " " +responseData.results[0].lastName )
             UserToken.setUserEmail(responseData.results[0].email)
+            UserToken.setUserPhoneNumber(responseData.results[0].phoneNumber)
             this.setState({redirect:true})
 	    }
         else {
