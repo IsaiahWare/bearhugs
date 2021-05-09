@@ -121,7 +121,7 @@ class FriendsPage extends React.Component {
 
     getPhotoForCurrentUser(id) {
         console.log("get photo for user " + id)
-        let url = '../../../server/php/photoGetter.php'
+        let url = 'http://ec2-34-239-255-127.compute-1.amazonaws.com/server/php/photoGetter.php'
         let newRequest = {
             "userId": id,
         }
@@ -135,8 +135,8 @@ class FriendsPage extends React.Component {
         })
             .then(photos => photos.json())
             .then(photos => {
-                // console.log("current photo response : ")
-                // console.log(photos)
+                console.log("current photo response : ")
+                console.log(photos)
                 let tempPhotoNumber = this.state.doneLoadingCurrent + 1;
                 // TODO: handle case where login is invalid
                 if (photos.length != 0) {
@@ -230,7 +230,7 @@ class FriendsPage extends React.Component {
         })
             .then(res => res.json())
             .then(responseData => {
-                // console.log(responseData)
+                console.log(responseData)
                 if (JSON.stringify(responseData.error) === '{}') {
                     this.setState({
                         currentFriends: responseData.results,
@@ -238,6 +238,7 @@ class FriendsPage extends React.Component {
                         doneLoadingCurrent: 0,
                         currentPhotos: [],
                     }, () => {
+                        console.log(this.state.currentFriends)
                         if (responseData.results.length > 0) {
                             for (let i = 0; i < this.state.currentFriends.length; ++i) {
                                 this.getPhotoForCurrentUser(this.state.currentFriends[i].userId);

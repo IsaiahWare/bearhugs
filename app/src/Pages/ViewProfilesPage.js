@@ -164,8 +164,8 @@ class ViewProfilePage extends React.Component {
             .then(res => res.json())
             .then(responseData => {
                 if (responseData.error !== '{}') {
-                    // console.log("Current profiles before splicing: ")
-                    // console.log(responseData)
+                    console.log("Current profiles before splicing: ")
+                    console.log(responseData)
                     for (let j = 0; j < this.state.unsuitableMatches.length; ++j) {
                         let result = responseData.results.findIndex(element => element.userId == this.state.unsuitableMatches[j].userId)
                         if (result != -1) {
@@ -191,11 +191,10 @@ class ViewProfilePage extends React.Component {
                     this.setState({ feedback: "No profiles could be obtained. Please try again later." })
                 }
             }).then(() => {
-                // console.log("Current profiles: ")
-                // console.log(this.state.profiles)
-                for (let i = 0; i < this.state.profiles.length; ++i) {
-                    this.getPhotoForCurrentUser(this.state.profiles[i].userId)
-                }
+                console.log("Current profiles: ")
+                console.log(this.state.profiles)
+                    // this.getPhotoForCurrentUser(this.state.profiles[0].userId, 0)
+
             }).then(() => {
                 this.setState({feedback:""})
 
@@ -270,7 +269,7 @@ class ViewProfilePage extends React.Component {
                 }
             })
     }
-    getPhotoForCurrentUser(id) {
+    getPhotoForCurrentUser(id, idx) {
         let url = 'http://ec2-34-239-255-127.compute-1.amazonaws.com/server/php/photoGetter.php'
         let newRequest = {
             "userId": id,
@@ -286,7 +285,6 @@ class ViewProfilePage extends React.Component {
             .then(photos => photos.json())
             .then(photos => {
                 let tempPhotoNumber = this.state.doneLoading + 1;
-                // TODO: handle case where login is invalid
                     if (photos.length!=0) {
                             this.setState(prevState => ({
                                 currentPhotos: [...prevState.currentPhotos, {id: id, imgsrc: photos}],
@@ -299,6 +297,7 @@ class ViewProfilePage extends React.Component {
                             doneLoading: tempPhotoNumber
                         }))
                     }
+                this.getPhotoForCurrentUser(this.state.profiles[idx+1].userId, idx+1)
 
             }).catch((error) => {
                 let tempPhotoNumber = this.state.doneLoading + 1;
