@@ -60,6 +60,7 @@ router.post("/register", (req: Request, res: Response) => {
                         "maleGenderPref": req.body.maleGenderPref,
                         "femaleGenderPref": req.body.femaleGenderPref,
                         "otherGenderPref": req.body.otherGenderPref,
+                        "phoneNumber": req.body.phoneNumber
 
                     }
                 ];
@@ -117,6 +118,7 @@ router.post("/login", (req: Request, res: Response) => {
                             "maleGenderPref": queryResults[0].maleGenderPref,
                             "femaleGenderPref": queryResults[0].femaleGenderPref,
                             "otherGenderPref": queryResults[0].otherGenderPref,
+                            "phoneNumber": queryResults[0].phoneNumber
                         }
                     ];
                 }
@@ -216,7 +218,7 @@ router.post("/random", (req: Request, res: Response) => {
         return;
     }
 
-    const queryStatement: string = "SELECT userId, email, firstName, lastName, age, description, maleGenderPref, femaleGenderPref, otherGenderPref FROM users LIMIT ?";
+    const queryStatement: string = "SELECT userId, email, firstName, lastName, age, description, phoneNumber, maleGenderPref, femaleGenderPref, otherGenderPref FROM users LIMIT ?";
     const queryArgs = [req.body.count];
     db.query(queryStatement, req.body.count, (queryError: MysqlError | null, queryResults: any ) => {
         if (queryError) {

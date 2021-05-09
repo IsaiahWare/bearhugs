@@ -6,13 +6,14 @@ import "../App.css"
 import UserToken from '../Components/UserToken'
 import BearHugsNavbar from '../Components/BearHugsNavbar'
 import Button from 'react-bootstrap/Button';
+import Accordion from 'react-bootstrap/Accordion'
+import Card from 'react-bootstrap/Card'
 import Form from 'react-bootstrap/Form';
 import { Redirect } from 'react-router-dom';
 import { Col } from 'react-bootstrap';
 import { Row } from 'react-bootstrap';
 import ImageUploader from 'react-images-upload';
 import Image from "react-bootstrap/Image"
-
 const axios = require('axios');
 
 let baseDomain = "http://ec2-34-239-255-127.compute-1.amazonaws.com:3000"
@@ -25,7 +26,9 @@ class EditSettingsPage extends React.Component {
             email: "",
             phoneNumber: "",
             feedback: "",
-            password: "",
+            passwordFeedback: "",
+            newPassword: "",
+            newPasswordConfirm: "",
             redirect: false,
             photos:[],
             genderIdentity: "",
@@ -47,7 +50,7 @@ class EditSettingsPage extends React.Component {
         this.getPhotoInfo = this.getPhotoInfo.bind(this);
         this.uploadPhoto = this.uploadPhoto.bind(this);
         this.onPhotosChange = this.onPhotosChange.bind(this)
-
+        this.changePassword = this.changePassword.bind(this);
     }
 
     checkUserLogIn() {
@@ -240,6 +243,59 @@ class EditSettingsPage extends React.Component {
         };
     }
 
+    changePassword(event){
+        event.preventDefault();
+        if(this.filterPassword(this.state.newPassword)){
+            // console.log("trying to update...");
+            let url = baseDomain + '/user/updatePassword'
+            let newRequest = {
+                "email": this.state.email,
+                "password": this.state.newPassword
+            }
+            // console.log(newRequest)
+
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(newRequest)
+
+            })
+                .then(res => res.json())
+                .then(responseData => {
+                    // console.log(responseData)
+                    // TODO: handle case where login is invalid
+                    if (JSON.stringify(responseData.error) !== '{}') {
+                        this.setState({
+                            passwordFeedback: "Password change failed 🤨"
+                        })
+                    } else {
+                        this.setState({
+                            passwordFeedback: "Password updated successfully 😁"
+                        })
+                    }
+                })
+        }
+    }
+
+    filterPassword(password) {
+        if (password != this.state.newPasswordConfirm) {
+            this.setState({
+                passwordFeedback: "Password and confirm password do not match."
+            })
+            return false
+        }
+        const re = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/
+        if (!re.test(password)) {
+            this.setState({
+                passwordFeedback: "Password should contain at least eight characters, and it should have at least one uppercase character, one lowercase character, and one digit."
+            })
+            return false
+        }
+        return true
+    }
+
     render() {
         const redirect = this.state.redirect
         if (redirect) {
@@ -306,6 +362,21 @@ class EditSettingsPage extends React.Component {
                         <Form.Row>
                             <Form.Group as={Col} controlId="editForm.submit">
                                 <Button type="submit" variant="danger" name="submit-button">Submit Changes</Button>
+                            </Form.Group>
+                        </Form.Row>
+                    </Form>
+                    <Form controlId="passwordForm" onSubmit={this.changePassword}>
+                        <h3 class="center">Change Password</h3>
+                        <Form.Group controlId="editForm.newPassword">
+                            <Form.Control type="password" name="newPassword" value={this.state.newPassword} onChange={this.handleInputChange} placeholder="New Password" />
+                        </Form.Group>
+                        <Form.Group controlId="editForm.newPasswordconfirm">
+                            <Form.Control type="password" name="newPasswordConfirm" value={this.state.newPasswordConfirm} onChange={this.handleInputChange} placeholder="Confirm New Password" />
+                        </Form.Group>
+                        <p class="center">{this.state.passwordFeedback}</p>
+                        <Form.Row>
+                            <Form.Group as={Col} controlId="passwordForm.submit">
+                                <Button type="submit" variant="danger" name="submit-button">Change Password</Button>
                             </Form.Group>
                         </Form.Row>
                     </Form>

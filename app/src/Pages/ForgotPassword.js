@@ -221,7 +221,7 @@ class ForgotPassword extends React.Component {
         else{
             securityQs = 
             <form onSubmit={this.checkEmail}>
-                <p>Enter your email:</p>
+                <p>Enter your WUSTL email:</p>
                 <div className="input-row center-row">
                     <input className="input" type='text' name='email' value={this.state.email} onChange={this.handleInputChange} placeholder="Email"/>
                 </div>

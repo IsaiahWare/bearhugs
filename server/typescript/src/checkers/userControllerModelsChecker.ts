@@ -19,7 +19,8 @@ export function isUserRegisterRequest(obj: any): obj is UserRegisterRequest {
   obj.maleGenderPref !== undefined &&
   obj.femaleGenderPref !== undefined &&
   obj.otherGenderPref!== undefined &&
-  Object.keys(obj).length === 9;
+  obj.phoneNumber!==undefined &&
+  Object.keys(obj).length === 10;
 }
 
 export function isUserLoginRequest(obj: any): obj is UserLoginRequest {
