@@ -230,6 +230,7 @@ class FriendsPage extends React.Component {
         })
             .then(res => res.json())
             .then(responseData => {
+                console.log("firend resposne")
                 console.log(responseData)
                 if (JSON.stringify(responseData.error) === '{}') {
                     this.setState({
@@ -239,11 +240,11 @@ class FriendsPage extends React.Component {
                         currentPhotos: [],
                     }, () => {
                         console.log(this.state.currentFriends)
-                        // if (responseData.results.length > 0) {
-                        //     for (let i = 0; i < this.state.currentFriends.length; ++i) {
-                        //         this.getPhotoForCurrentUser(this.state.currentFriends[i].userId);
-                        //     }
-                        // }
+                        if (responseData.results.length > 0) {
+                            for (let i = 0; i < this.state.currentFriends.length; ++i) {
+                                this.getPhotoForCurrentUser(this.state.currentFriends[i].userId);
+                            }
+                        }
                     });
                 }
             })
@@ -538,8 +539,8 @@ class FriendsPage extends React.Component {
                 to="/"
             />
         }
-        // console.log("number of matches for current and completed " + this.state.numCurrent + "loading " + this.state.doneLoadingCurrent)
-        // console.log("number of matches for pending " + this.state.numPending + "loading " + this.state.doneLoadingPending)
+        console.log("number of matches for current and completed " + this.state.numCurrent + "loading " + this.state.doneLoadingCurrent)
+        console.log("number of matches for pending " + this.state.numPending + "loading " + this.state.doneLoadingPending)
         if (this.state.numPending == this.state.doneLoadingPending && this.state.numCurrent == this.state.doneLoadingCurrent) {
             return (
                 <div className="page">
