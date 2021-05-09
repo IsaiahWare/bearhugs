@@ -279,11 +279,11 @@ class WingmanPage extends React.Component {
 
                     <div className="friendsContainer">
                         {
-                            this.state.currentFriends.filter(friend => friend.userId != this.state.wingmanee.userId).map((friend) =>
+                            this.state.currentFriends.filter(friend => friend.userId != this.state.wingmanee.userId).map((friend, index) =>
                                 <button key={friend.userId} onClick={() => this.wingMan(friend)} className="nostyle buttonwrapper">
                                     <ListedUser id={friend.userId} key={friend.userId} firstName={friend.firstName}
                                     lastName={friend.lastName}
-                                    removeTrue = {false} profPicSrc="possum-on-horse.png" age={friend.age}></ListedUser>
+                                    removeTrue = {false} profPicSrc={this.state.currentPhotos[index].imgsrc} age={friend.age}></ListedUser>
                                 </button>
                             )
                         }
