@@ -8,6 +8,7 @@ export interface User {
     firstName: string;
     lastName: string;
     age: number;
+    phoneNumber: string;
     description: object;
     genderIdentity: string;
     maleGenderPref: boolean;
@@ -34,6 +35,7 @@ export interface UserRegisterRequest {
    maleGenderPref: boolean;
    femaleGenderPref: boolean;
    otherGenderPref: boolean;
+   phoneNumber: string;
 }
 
 export interface UserLoginRequest {
