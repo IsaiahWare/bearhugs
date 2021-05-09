@@ -224,7 +224,8 @@ router.post("/random", (req: Request, res: Response) => {
                 "message": queryError.sqlMessage
             };
         } else {
-            shuffleArray(queryResults);
+	    console.log("user/random results", queryResults);
+            // shuffleArray(queryResults);
             randomResponse.results = queryResults
         }
         res.json(randomResponse);
