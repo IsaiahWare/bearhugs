@@ -193,7 +193,9 @@ class ViewProfilePage extends React.Component {
             }).then(() => {
                 console.log("Current profiles: ")
                 console.log(this.state.profiles)
-                    // this.getPhotoForCurrentUser(this.state.profiles[0].userId, 0)
+                for (let i = 0; i < this.state.profiles.length; ++i) {
+                    this.getPhotoForCurrentUser(this.state.profiles[i].userId)
+                }
 
             }).then(() => {
                 this.setState({feedback:""})
@@ -297,9 +299,9 @@ class ViewProfilePage extends React.Component {
                             doneLoading: tempPhotoNumber
                         }))
                     }
-                this.getPhotoForCurrentUser(this.state.profiles[idx+1].userId, idx+1)
 
             }).catch((error) => {
+                console.error(error)
                 let tempPhotoNumber = this.state.doneLoading + 1;
                 this.setState(prevState => ({
                     currentPhotos: [...prevState.currentPhotos, {id: id, imgsrc: ["default-profile.png"]}],

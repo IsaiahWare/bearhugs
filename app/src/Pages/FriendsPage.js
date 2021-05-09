@@ -151,7 +151,7 @@ class FriendsPage extends React.Component {
                     // console.log("Reutnr defualt")
                     this.setState(prevState => ({
                         currentPhotos: [...prevState.currentPhotos, { id: id, imgsrc: "default-profile.png" }],
-                        doneLoading: tempPhotoNumber
+                        doneLoadingCurrent: tempPhotoNumber
                     }))
                 }
 
