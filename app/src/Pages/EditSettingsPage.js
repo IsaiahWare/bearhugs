@@ -264,7 +264,7 @@ class EditSettingsPage extends React.Component {
                 <div className="col">
                 <form onSubmit={this.uploadPhoto}>
                     <input type="hidden" name="MAX_FILE_SIZE" value="50000000000000" />
-                    <input type="file" name="filename" id = "uploadfile_input" onChange={this.onPhotosChange}/>
+                    <input type="file" accept="image/png, image/jpeg" name="filename" id = "uploadfile_input" onChange={this.onPhotosChange}/>
                     <Button type="submit" variant="danger" name="submit"> UPLOAD </Button>
                 </form>
 
