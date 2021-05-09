@@ -239,11 +239,11 @@ class FriendsPage extends React.Component {
                         currentPhotos: [],
                     }, () => {
                         console.log(this.state.currentFriends)
-                        if (responseData.results.length > 0) {
-                            for (let i = 0; i < this.state.currentFriends.length; ++i) {
-                                this.getPhotoForCurrentUser(this.state.currentFriends[i].userId);
-                            }
-                        }
+                        // if (responseData.results.length > 0) {
+                        //     for (let i = 0; i < this.state.currentFriends.length; ++i) {
+                        //         this.getPhotoForCurrentUser(this.state.currentFriends[i].userId);
+                        //     }
+                        // }
                     });
                 }
             })
@@ -266,8 +266,8 @@ class FriendsPage extends React.Component {
             .then(responseData => {
                 // console.log("the boy from pending friends")
                 if (JSON.stringify(responseData.error) === '{}') {
-                    // console.log("got pending photo data")
-                    // console.log(responseData)
+                     console.log("got pending friends data")
+                     console.log(responseData)
                     this.setState({
                         pendingFriendsRequest: responseData.results,
                         doneLoadingPending: 0,
