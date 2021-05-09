@@ -524,6 +524,10 @@ class FriendsPage extends React.Component {
         });
     }
 
+    componentDidUpdate() {
+	console.log("updated state:", this.state);
+    }
+
     /*
     Some users in table:
     43 - mandy opposum - test3@wustl.edu
