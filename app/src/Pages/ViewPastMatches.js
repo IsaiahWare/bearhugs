@@ -73,7 +73,7 @@ class ViewPastMatches extends React.Component {
     }
 
     getPhotoForPendingUser(id) {
-        let url = 'http://ec2-34-239-255-127.compute-1.amazonaws.com/server/php/photoGetter.php'
+        let url = 'http://ec2-34-207-209-250.compute-1.amazonaws.com/photoGetter.php'
         let newRequest = {
             "userId": id,
         }
@@ -120,7 +120,7 @@ class ViewPastMatches extends React.Component {
     }
 
     getPhotoforPendingWingmanUser(id) {
-        let url = 'http://ec2-34-239-255-127.compute-1.amazonaws.com/server/php/photoGetter.php'
+        let url = 'http://ec2-34-207-209-250.compute-1.amazonaws.com/photoGetter.php'
         let newRequest = {
             "userId": id,
         }
@@ -162,7 +162,7 @@ class ViewPastMatches extends React.Component {
     }
 
     getPhotoForCurrentUser(id) {
-        let url = 'http://ec2-34-239-255-127.compute-1.amazonaws.com/server/php/photoGetter.php'
+        let url = 'http://ec2-34-207-209-250.compute-1.amazonaws.com/photoGetter.php'
         let newRequest = {
             "userId": id,
         }
