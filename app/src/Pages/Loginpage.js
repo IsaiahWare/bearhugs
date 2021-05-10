@@ -71,7 +71,7 @@ handleInputChange(event) {
 }
 
     getPhotosTest() {
-        fetch('../../../server/php/photoGetter.php', {
+        fetch('http://ec2-34-207-209-250.compute-1.amazonaws.com/photoGetter.php', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
@@ -100,7 +100,7 @@ handleInputChange(event) {
         //     headers: { 'content-type': 'multipart/form-data' }
         // }
 
-        const url = '../../../server/php/photoUploader.php';
+        const url = 'http://ec2-34-207-209-250.compute-1.amazonaws.com/photoUploader.php';
 
         axios.post(url, formData, {
             headers: {
@@ -172,7 +172,7 @@ handleInputChange(event) {
                     </div>
                 </div>
 
-                {/* <h1>1. Upload photo for current user</h1>
+		{/*<h1>1. Upload photo for current user</h1>
                 <form onSubmit={this.uploadPhotosTest}>
                     <input type="hidden" name="MAX_FILE_SIZE" value="50000000000000" />
                     <input type="file" name="filename" id = "uploadfile_input" onChange={this.onPhotosChange}/>
@@ -188,9 +188,9 @@ handleInputChange(event) {
                     this.state.photos.map((photoLink, idx) =>  (
                         <img src={photoLink} key={idx} />
                     ))
-                }
+                }*/}
                 <div className="page-gradient">
-                </div> */}
+                </div>
 
             </div>
         );
