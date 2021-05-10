@@ -660,7 +660,7 @@ Response {
 `RETRIEVING`
 
 ```
-fetch('http://bearhugs.love/server/php/photoGetter.php', {
+fetch('http://ec2-34-207-209-250.compute-1.amazonaws.com/photoGetter.php', {
   method: 'POST',
   headers: {'Content-Type': 'application/json'},
   body: JSON.stringify({

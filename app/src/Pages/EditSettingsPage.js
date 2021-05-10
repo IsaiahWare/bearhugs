@@ -111,7 +111,6 @@ class EditSettingsPage extends React.Component {
 
     }
 
-
     getPhotoInfo() {
         fetch('http://ec2-34-207-209-250.compute-1.amazonaws.com/photoGetter.php', {
             method: 'POST',
@@ -142,8 +141,6 @@ class EditSettingsPage extends React.Component {
                     feedback: "Photos could not be obtained at this time, but other user information has been obtained."
                 })
             })
-
-
     }
 
     uploadPhoto(event) {

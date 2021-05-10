@@ -73,7 +73,7 @@ class FriendsPage extends React.Component {
     }
 
     getPhotoForPendingUser(id) {
-        let url = 'http://ec2-34-239-255-127.compute-1.amazonaws.com/server/php/photoGetter.php'
+        let url = 'http://ec2-34-207-209-250.compute-1.amazonaws.com/photoGetter.php'
         // console.log("url " + url)
         let newRequest = {
             "userId": id,
