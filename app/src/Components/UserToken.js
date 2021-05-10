@@ -54,6 +54,8 @@ var UserToken = (function() {
       setUserName: setUserName,
       setUserEmail: setUserEmail,
       getUserEmail: getUserEmail,
+      setUserPhoneNumber: setUserPhoneNumber,
+      getUserPhoneNumber: getUserPhoneNumber,
       logout: logout
     }
   
