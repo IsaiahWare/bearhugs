@@ -200,7 +200,6 @@ class RegisterPage extends React.Component {
         let firstName = this.state.firstName
         let lastName = this.state.lastName
         let email = this.state.email
-        let phoneNumber = this.state.phoneNumber
         let password = this.state.password
         let confirmPassword = this.state.confirmPassword
         let ageFilter = this.filterAge(age)
@@ -245,11 +244,11 @@ class RegisterPage extends React.Component {
             this.setState({
                 feedback: "Please enter a valid answer for both questions."
             })
-            return false;
             window.scrollTo({
                 top: 200,
                 behavior: "smooth"
             })
+            return false;
         }
         return true;
     }
@@ -342,7 +341,9 @@ class RegisterPage extends React.Component {
             this.setState({
                 feedback: "Please enter valid phone number."
             })
-    }
+            return false;
+        }
+        return true;
 }
 
     handleInputChange(event) {
@@ -370,7 +371,7 @@ class RegisterPage extends React.Component {
         const redirect = this.state.redirect
         if (redirect) {
             return <Redirect
-                to="/viewmatches"
+                to="/editsettings"
             />
         }
 
