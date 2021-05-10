@@ -189,8 +189,8 @@ handleInputChange(event) {
                         <img src={photoLink} key={idx} />
                     ))
                 }*/}
-                <p>Most recent change: 5/10</p>
                 <div className="page-gradient">
+                <p class="center">Most recent change: 5/10</p>
                 </div>
 
             </div>
