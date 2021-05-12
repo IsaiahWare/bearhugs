@@ -113,14 +113,23 @@ class RegisterPage extends React.Component {
         return true
     }
     filterPassword(password) {
-        const re = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/;
-        if (!re.test(password)) {
-            this.setState({
-                feedback: "Password should contain at least eight characters, and it should have at least one uppercase character, one lowercase character, and one digit."
-            })
-            return false
-        }
-        return true
+        // const re = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/;
+        // if (!re.test(password)) {
+        //     this.setState({
+        //         feedback: "Password should contain at least eight characters, and it should have at least one uppercase character, one lowercase character, and one digit."
+        //     })
+        //     return false
+        // }
+        // return true
+        
+    //https://www.geeksforgeeks.org/validate-a-password-using-html-and-javascript/
+        if (password.match(/[a-z]/g) && password.match(/[A-Z]/g) && password.match(/[0-9]/g) && password.length >= 8){
+                return true;
+            }
+        this.setState({
+            feedback: "Password should contain at least eight characters, and it should have at least one uppercase character, one lowercase character, and one digit."
+        })
+        return false
     }
     //https://stackoverflow.com/questions/46155/how-to-validate-an-email-address-in-javascript
     filterEmail(email) {
@@ -388,7 +397,7 @@ class RegisterPage extends React.Component {
                     <input className="input" type='text' value={this.state.email} onChange={this.handleInputChange} name='email' placeholder="yourwustlemail@wustl.edu" />
                 </div>
                 <div className="input-row center-row">
-                    <input className="input" type='tel' pattern="[0-9]{10}" value={this.state.phoneNumber} onChange={this.handleInputChange} name='phoneNumber' placeholder="##########" />
+                    <input className="input" type='tel' pattern="[0-9]{10}" maxlength="10" value={this.state.phoneNumber} onChange={this.handleInputChange} name='phoneNumber' placeholder="Phone number (no dashes)" />
                 </div>
                 <div className="input-row center-row">
                     <input className="input" value={this.state.password} onChange={this.handleInputChange} type='password' name='password' placeholder="Password" />
