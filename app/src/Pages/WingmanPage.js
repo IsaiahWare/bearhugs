@@ -247,7 +247,7 @@ class WingmanPage extends React.Component {
                     <button key={wingmanee.userId} onClick={() => this.sendWingMan(wingmanee)} className="nostyle buttonwrapper">
                     <ListedUser id={wingmanee.userId} key={wingmanee.userId} firstName={wingmanee.firstName}
                         lastName={wingmanee.lastName}
-                        removeTrue = {false} profPicSrc="possum-on-horse.png" age={wingmanee.age}></ListedUser>
+                        removeTrue = {false} profPicSrc={this.state.wingmanee.photos[0]} age={wingmanee.age}></ListedUser>
                     </button>
                 </div>
 
