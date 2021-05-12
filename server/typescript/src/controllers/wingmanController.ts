@@ -43,15 +43,38 @@ router.post("/send", (req: Request, res: Response) => {
             //     res.json(wingmanResponse);
             // } 
             // else {
-                const queryStatement3: string = "SELECT requestId FROM pendingWingman WHERE wingmanId = ? AND requesteeId = ? AND requesterId = ?";
-                const queryArgs3 = [req.body.wingmanId, req.body.requesterId, req.body.requesteeId];
+                const queryStatement3: string = "SELECT requestId FROM pendingWingman WHERE (wingmanId = ? AND requesteeId = ? AND requesterId = ?) OR (wingmanId = ? AND requesteeId = ? AND requesterId = ?)";
+                const queryArgs3 = [req.body.wingmanId, req.body.requesterId, req.body.requesteeId, req.body.wingmanId, req.body.requesteeId, req.body.requesterId];
                 db.query(queryStatement3, queryArgs3, (queryError3: MysqlError | null, queryResults3: any ) => {
                     if (queryError3) {
                         wingmanResponse.error =  {
                             "message": queryError3.sqlMessage
                         };
                         res.json(wingmanResponse);
-                    } else if (queryResults3.length !== 0) {
+
+                    }
+                    else if (queryResults3.length==2)  {
+                        console.log("query result " + queryResults3)
+                        const queryStatement6: string = "DELETE FROM pendingWingman WHERE requestId = ?";
+                        const queryArgs6 = [queryResults3[0].requestId];
+                        console.log(queryResults3[0].requestId)
+                        db.query(queryStatement6, queryArgs6, (queryError6: MysqlError | null, queryResults6: any ) => {
+                            if (queryError6) {
+                                wingmanResponse.error =  {
+                                    "message": queryError6.sqlMessage
+                                };
+                            } else {
+                                wingmanResponse.results = [
+                                    {
+                                        "match": true
+                                    }
+                                ];
+                            }
+                            res.json(wingmanResponse);
+                        });
+                    }
+                    else if (queryResults3.length == 1) {
+                        console.log("query result " + queryResults3)
                         const queryStatement4: string = "INSERT INTO completedWingman (wingmanId, requesterId, requesteeId) VALUES (?,?,?), (?,?,?)";
                         const queryArgs4 = [
                                req.body.wingmanId,
@@ -86,13 +109,17 @@ router.post("/send", (req: Request, res: Response) => {
                                 });
                             }
                         });
-                    } else {
-                        const queryStatement2 = "INSERT INTO pendingWingman SET ?";
-                        const queryArgs2 = {
-                            "wingmanId": req.body.wingmanId,
-                            "requesterId": req.body.requesterId,
-                            "requesteeId": req.body.requesteeId
-                        };
+                    } else if (queryResults3.length==0){
+                        console.log("query result " + queryResults3)
+                        const queryStatement2 = "INSERT INTO pendingWingman (wingmanId, requesterId, requesteeId) VALUES (?,?,?), (?,?,?)";
+                        const queryArgs2 = [
+                            req.body.wingmanId,
+                            req.body.requesterId, 
+                            req.body.requesteeId,
+                            req.body.wingmanId,
+                            req.body.requesteeId, 
+                            req.body.requesterId
+                     ];
                         db.query(queryStatement2, queryArgs2, (queryError2: MysqlError | null, queryResults2: any ) => {
                             if (queryError2) {
                                 wingmanResponse.error =  {
