@@ -18,7 +18,6 @@ class WingmanPage extends React.Component {
             currentFriends: [],
             wingmanee: { userId: -1 },
             wingmanning: false,
-            currentPhotos:[],
             doneLoading:0,
             numFriends:-1,
             feedback: ""
@@ -41,8 +40,9 @@ class WingmanPage extends React.Component {
         }
     }
 
-    getPhotoForCurrentUser(id) {
-        let url='http://ec2-34-207-209-250.compute-1.amazonaws.com/photoGetter.php'
+    async getPhotoForCurrentUser(id, found, foundIndex) {
+        let dupeCurrent = this.state.currentFriends
+        let url = 'http://ec2-34-207-209-250.compute-1.amazonaws.com/photoGetter.php'
         let newRequest = {
             "userId": id,
         }
@@ -54,34 +54,42 @@ class WingmanPage extends React.Component {
             body: JSON.stringify(newRequest)
 
         })
-        .then(photos => photos.json())
-        .then(photos=> {
-            // console.log(JSON.stringify(photos))
-           let tempPhotoNumber=this.state.doneLoading+1;
+            .then(photos => photos.json())
+            .then(photos => {
+                let tempPhotoNumber = this.state.doneLoading + 1;
+             
                 // TODO: handle case where login is invalid
-                    if (photos.length!=0) {
-                            this.setState(prevState => ({
-                                currentPhotos: [...prevState.currentPhotos, {id: id, imgsrc: photos[0]}],
-                                doneLoading: tempPhotoNumber
-                            }))
-                        }
-                    else {
-                        this.setState(prevState => ({
-                            currentPhotos: [...prevState.currentPhotos, {id: id, imgsrc:"default-profile.png"}],
-                            doneLoading: tempPhotoNumber
-                        }))
-                    }
+                if (photos.length != 0) {
+                    found.photos = photos
+                    dupeCurrent[foundIndex] = found
+                    this.setState(prevState => ({
+                        currentFriends:dupeCurrent,
+                        doneLoading: tempPhotoNumber
+                    }))
 
-            }).catch((error)=>{
-                let tempPhotoNumber=this.state.doneLoading+1;
+                }
+                else {
+                    found.photos = ["default-profile.png"]
+                    dupeCurrent[foundIndex] = found
+                    this.setState(prevState => ({
+                        currentFriends: dupeCurrent,
+                        doneLoading: tempPhotoNumber
+                    }))
+                }
+
+            }).catch((error) => {
+                let tempPhotoNumber = this.state.doneLoading+ 1;
                 console.error(error)
+                found.photos = ["default-profile.png"]
+                dupeCurrent[foundIndex] = found
                 this.setState(prevState => ({
-                    currentPhotos: [...prevState.currentPhotos, {id: id, imgsrc:"default-profile.png"}],
-                    doneLoading: tempPhotoNumber
+                    currentFriends: dupeCurrent,
+                    doneLoading: tempPhotoNumber,
                 }))
             })
 
     }
+
 
     getCurrentFriends() {
         let url = baseDomain + '/friend/friends'
@@ -97,19 +105,17 @@ class WingmanPage extends React.Component {
         })
             .then(res => res.json())
             .then(responseData => {
-		    // console.log(responseData)
+		       console.log(responseData)
                 if (JSON.stringify(responseData.error) === '{}') {
                     this.setState({
                        currentFriends: responseData.results,
                        doneLoading: 0,
                        numFriends: responseData.results.length
-                    }, function() {
-                        if (this.state.currentFriends.length > 0) {
-                            for (let i=0; i < this.state.currentFriends.length; ++i) {
-                                this.getPhotoForCurrentUser(this.state.currentFriends[i].userId)
-                             }
-
-                        }
+                    }, async function() {
+                        if (this.state.currentFriends.length!=0) {
+                        for (let i = 0; i < this.state.currentFriends.length; ++i) {
+                            await this.getPhotoForCurrentUser(this.state.currentFriends[i].userId, this.state.currentFriends[i], i )
+                        }}
                         else {
                             this.setState({
                                 feedback: "You don't have any friends yet. Go to the friends page to make a friend request!"
@@ -176,6 +182,7 @@ class WingmanPage extends React.Component {
     }
 
 
+
     sendWingMan(friend){
         // console.log("send wingman for friend " +friend)
         let url = baseDomain + '/wingman/send'
@@ -214,6 +221,9 @@ class WingmanPage extends React.Component {
         this.setState({wingmanning: false, wingmanee: { userId: -1 }});
     }
 
+    
+      
+
     render(){
         const redirect = this.state.redirect
         if (redirect) {
@@ -231,7 +241,7 @@ class WingmanPage extends React.Component {
             <div className="friendsContainer">
                 <h1 className="pageTitle row center-row">Wingman:</h1>
                 <div className="row center-row">
-                    {this.state.feedback}
+                    <h6>{this.state.feedback}</h6>
                 </div>
                 <div>
                     <button key={wingmanee.userId} onClick={() => this.sendWingMan(wingmanee)} className="nostyle buttonwrapper">
@@ -283,7 +293,8 @@ class WingmanPage extends React.Component {
                                 <button key={friend.userId} onClick={() => this.wingMan(friend)} className="nostyle buttonwrapper">
                                     <ListedUser id={friend.userId} key={friend.userId} firstName={friend.firstName}
                                     lastName={friend.lastName}
-                                    removeTrue = {false} profPicSrc={this.state.currentPhotos[index].imgsrc} age={friend.age}></ListedUser>
+                                    removeTrue = {false} profPicSrc={friend.photos[0]}
+                                        age={friend.age}></ListedUser>
                                 </button>
                             )
                         }

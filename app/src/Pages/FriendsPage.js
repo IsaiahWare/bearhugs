@@ -14,6 +14,7 @@ import pendingFriends from "../Components/PendingFriend"
 import PendingFriend from '../Components/PendingFriend';
 import TabContent from 'react-bootstrap/TabContent'
 import Form from 'react-bootstrap/Form'
+import { Profiler } from 'react';
 
 let baseDomain = "http://ec2-34-239-255-127.compute-1.amazonaws.com:3000"
 
@@ -24,11 +25,9 @@ class FriendsPage extends React.Component {
             addFriendUser: "",
             redirect: false,
             feedback: "",
+            pendingFriends:[],
             pendingFriendsRequest: [],
-            pendingFriends: [],
             currentFriends: [],
-            pendingPhotos: [],
-            currentPhotos: [],
             numPending: -1,
             numCurrent: -1,
             doneLoadingCurrent: 0,
@@ -72,8 +71,9 @@ class FriendsPage extends React.Component {
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    getPhotoForPendingUser(id) {
+    getPhotoForPendingUser(id, found, foundIndex) {
         let url = 'http://ec2-34-207-209-250.compute-1.amazonaws.com/photoGetter.php'
+        let dupeCurrent = this.state.pendingFriendsRequest
         // console.log("url " + url)
         let newRequest = {
             "userId": id,
@@ -88,22 +88,24 @@ class FriendsPage extends React.Component {
         })
             .then(photos => photos.json())
             .then(photos => {
-                // console.log("current photo response : ")
-                // console.log(photos)
                 let tempPhotoNumber = this.state.doneLoadingPending + 1;
-                // TODO: handle case where login is invalid
+                
                 if (photos.length != 0) {
-                    // console.log("return actual photo")
+                    found.photos = photos
+                    dupeCurrent[foundIndex] = found
                     this.setState(prevState => ({
-                        pendingPhotos: [...prevState.pendingPhotos, { id: id, imgsrc: photos[0] }],
+                        pendingFriendsRequest:dupeCurrent,
                         doneLoadingPending: tempPhotoNumber
                     }))
 
+
                 }
                 else {
+                    found.photos = ["default-profile.png"]
+                    dupeCurrent[foundIndex] = found
                     // console.log("Reutnr defualt")
                     this.setState(prevState => ({
-                        pendingPhotos: [...prevState.pendingPhotos, { id: id, imgsrc: "default-profile.png" }],
+                        pendingFriendsRequest:dupeCurrent,
                         doneLoadingPending: tempPhotoNumber
                     }))
                 }
@@ -111,9 +113,11 @@ class FriendsPage extends React.Component {
             }).catch((error) => {
                 let tempPhotoNumber = this.state.doneLoadingPending + 1;
                 console.error(error)
+                found.photos = ["default-profile.png"]
+                dupeCurrent[foundIndex] = found
                 // console.log("Reutnr defualt")
                 this.setState(prevState => ({
-                    pendingPhotos: [...prevState.pendingPhotos, { id: id, imgsrc: "default-profile.png" }],
+                    pendingFriendsRequest: dupeCurrent,
                     doneLoadingPending: tempPhotoNumber
                 }))
             })
@@ -121,7 +125,8 @@ class FriendsPage extends React.Component {
     }
 
 
-    getPhotoForCurrentUser(id) {
+    getPhotoForCurrentUser(id, found, foundIndex) {
+        let dupeCurrent = this.state.currentFriends;
         console.log("get photo for user " + id)
         let url = 'http://ec2-34-207-209-250.compute-1.amazonaws.com/photoGetter.php'
         let newRequest = {
@@ -142,17 +147,21 @@ class FriendsPage extends React.Component {
                 let tempPhotoNumber = this.state.doneLoadingCurrent + 1;
                 // TODO: handle case where login is invalid
                 if (photos.length != 0) {
-                    // console.log("return actual photo")
+                    found.photos = photos
+                    dupeCurrent[foundIndex] = found
                     this.setState(prevState => ({
-                        currentPhotos: [...prevState.currentPhotos, { id: id, imgsrc: photos[0] }],
+                        currentFriends:dupeCurrent,
                         doneLoadingCurrent: tempPhotoNumber
                     }))
 
+
                 }
                 else {
+                    found.photos = ["default-profile.png"]
+                    dupeCurrent[foundIndex] = found
                     // console.log("Reutnr defualt")
                     this.setState(prevState => ({
-                        currentPhotos: [...prevState.currentPhotos, { id: id, imgsrc: "default-profile.png" }],
+                        currentFriends:dupeCurrent,
                         doneLoadingCurrent: tempPhotoNumber
                     }))
                 }
@@ -160,9 +169,11 @@ class FriendsPage extends React.Component {
             }).catch((error) => {
                 let tempPhotoNumber = this.state.doneLoadingCurrent + 1;
                 console.error(error)
+                found.photos = ["default-profile.png"]
+                dupeCurrent[foundIndex] = found
                 // console.log("Reutnr defualt")
                 this.setState(prevState => ({
-                    currentPhotos: [...prevState.currentPhotos, { id: id, imgsrc: "default-profile.png" }],
+                    currentFriends: dupeCurrent,
                     doneLoadingCurrent: tempPhotoNumber
                 }))
             })
@@ -190,19 +201,14 @@ class FriendsPage extends React.Component {
                 // console.log(responseData)
                 if (JSON.stringify(responseData.error) === '{}') {
                     let temp = this.state.currentFriends
-                    let tempPhotos = this.state.currentPhotos
                     let tempCurrentNum = this.state.numCurrent - 1
                     let doneLoadingTemp = this.state.doneLoadingCurrent - 1
                     let tempResult = temp.filter((obj) => {
                         return obj.userId !== id
                     })
-                    let tempPhotoResult = tempPhotos.filter((obj) => {
-                        return obj.id !== id
-                    })
 
                     this.setState({
                         currentFriends: tempResult,
-                        currentPhotos: tempPhotoResult,
                         numCurrent: tempCurrentNum,
                         doneLoadingCurrent: doneLoadingTemp,
                         feedback: "Friend removed!"
@@ -239,12 +245,11 @@ class FriendsPage extends React.Component {
                         currentFriends: responseData.results,
                         numCurrent: responseData.results.length,
                         doneLoadingCurrent: 0,
-                        currentPhotos: [],
-                    }, () => {
+                    }, async () => {
                         console.log(this.state.currentFriends)
                         if (responseData.results.length > 0) {
                             for (let i = 0; i < this.state.currentFriends.length; ++i) {
-                                this.getPhotoForCurrentUser(this.state.currentFriends[i].userId);
+                                await this.getPhotoForCurrentUser(this.state.currentFriends[i].userId, this.state.currentFriends[i], i);
                             }
                         }
                     });
@@ -274,12 +279,11 @@ class FriendsPage extends React.Component {
                     this.setState({
                         pendingFriendsRequest: responseData.results,
                         doneLoadingPending: 0,
-                        pendingPhotos: [],
                         numPending: responseData.results.length
-                    }, () => {
+                    }, async () => {
                         if (responseData.results.length > 0) {
                             for (let i = 0; i < this.state.pendingFriendsRequest.length; ++i) {
-                                this.getPhotoForPendingUser(this.state.pendingFriendsRequest[i].userId);
+                                await this.getPhotoForPendingUser(this.state.pendingFriendsRequest[i].userId, this.state.pendingFriendsRequest[i], i );
                             }
                         }
 
@@ -294,18 +298,13 @@ class FriendsPage extends React.Component {
 
     filterPendingAfterAdd(id) {
         let temp = this.state.pendingFriendsRequest
-        let tempPhotos = this.state.pendingPhotos
         let tempNumber = this.state.numPending - 1
         let tempPendingDone = this.state.doneLoadingPending - 1
         let tempResult = temp.filter((obj) => {
             return obj.userId !== id
         })
-        let tempPhotoResult = tempPhotos.filter((obj) => {
-            return obj.id !== id
-        })
         this.setState({
             pendingFriendsRequest: tempResult,
-            pendingPhotos: tempPhotoResult,
             numPending: tempNumber,
             doneLoadingPending: tempPendingDone
 
@@ -621,8 +620,8 @@ class FriendsPage extends React.Component {
                 to="/"
             />
         }
-        console.log("number of matches for current and completed " + this.state.numCurrent + "loading " + this.state.doneLoadingCurrent)
-        console.log("number of matches for pending " + this.state.numPending + "loading " + this.state.doneLoadingPending)
+        // console.log("number of matches for current and completed " + this.state.numCurrent + "loading " + this.state.doneLoadingCurrent)
+        // console.log("number of matches for pending " + this.state.numPending + "loading " + this.state.doneLoadingPending)
         if (this.state.numPending == this.state.doneLoadingPending && this.state.numCurrent == this.state.doneLoadingCurrent) {
             return (
                 <div className="page">
@@ -642,7 +641,9 @@ class FriendsPage extends React.Component {
                                 <div className="row center-row">
                                     <h1 className="pageTitle">Friends</h1>
                                 </div>
-                                <div>{this.state.feedback}</div>
+                                <div className="row center-row">
+                                    <h6>{this.state.feedback}</h6>
+                                </div>
                                 <div className="input-row center-row">
                                     <Form onSubmit={this.handleSubmit} className="input">
                                         <Form.Group>
@@ -658,7 +659,7 @@ class FriendsPage extends React.Component {
                                         this.state.currentFriends.map((friend, i) =>
                                             <ListedUser id={friend.userId} key={friend.userId} firstName={friend.firstName}
                                                 lastName={friend.lastName} removeFriend={() => this.removeFriend(friend.userId)}
-                                                removeTrue={true} profPicSrc={this.state.currentPhotos[i].imgsrc} age={friend.age}></ListedUser>
+                                                removeTrue={true} profPicSrc={friend.photos[0]} age={friend.age}></ListedUser>
                                         )
                                     }
 
@@ -670,11 +671,13 @@ class FriendsPage extends React.Component {
                                 <div className="row center-row">
                                     <h1 className="pageTitle">Pending Friend Requests</h1>
                                 </div>
-                                <div>{this.state.feedback}</div>
+                                <div className="row center-row">
+                                    <h6>{this.state.feedback}</h6>
+                                </div>
                                 <div>
                                     {
                                         this.state.pendingFriendsRequest.map((friend, i) =>
-                                            <PendingFriend id={friend.userId} key={friend.userId} firstName={friend.firstName} lastName={friend.lastName} approveFriend={() => this.addFriendFromButton(friend.userId)} rejectFriend={() => this.rejectFriend(friend.userId)} profPicSrc={this.state.pendingPhotos[i].imgsrc} age={friend.age}></PendingFriend>
+                                            <PendingFriend id={friend.userId} key={friend.userId} firstName={friend.firstName} lastName={friend.lastName} approveFriend={() => this.addFriendFromButton(friend.userId)} rejectFriend={() => this.rejectFriend(friend.userId)} profPicSrc={friend.photos[0]} age={friend.age}></PendingFriend>
                                         )
                                     }
                                 </div>
@@ -704,7 +707,9 @@ class FriendsPage extends React.Component {
                                 <div className="row center-row">
                                     <h1 className="pageTitle">Friends</h1>
                                 </div>
-                                <div>{this.state.feedback}</div>
+                                <div className="row center-row">
+                                    <h6>{this.state.feedback}</h6>
+                                </div>
                                 <div className="input-row center-row">
                                     <Form onSubmit={this.handleSubmit} className="input">
                                         <Form.Group>
@@ -723,7 +728,9 @@ class FriendsPage extends React.Component {
                                 <div className="row center-row">
                                     <h1 className="pageTitle">Pending Friend Requests</h1>
                                 </div>
-                                <div>{this.state.feedback}</div>
+                                <div className="row center-row">
+                                    <h6>{this.state.feedback}</h6>
+                                </div>
                                 <div>
                                 </div>
                             </div>

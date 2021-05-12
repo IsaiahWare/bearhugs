@@ -17,7 +17,6 @@ class ViewProfilePage extends React.Component {
             numProfiles: -1,
             redirect: false,
             unsuitableMatches: [],
-            currentPhotos: [],
             doneLoading: 0,
             feedback: "Loading profiles..."
         }
@@ -190,11 +189,11 @@ class ViewProfilePage extends React.Component {
                 else {
                     this.setState({ feedback: "No profiles could be obtained. Please try again later." })
                 }
-            }).then(() => {
+            }).then(async () => {
                 console.log("Current profiles: ")
                 console.log(this.state.profiles)
                 for (let i = 0; i < this.state.profiles.length; ++i) {
-                    this.getPhotoForCurrentUser(this.state.profiles[i].userId)
+                    await this.getPhotoForCurrentUser(this.state.profiles[i].userId, this.state.profiles[i], i)
                 }
 
             }).then(() => {
@@ -203,6 +202,7 @@ class ViewProfilePage extends React.Component {
             })
 
     }
+
 
     componentDidMount() {
         this.checkUserLogIn()
@@ -271,7 +271,9 @@ class ViewProfilePage extends React.Component {
                 }
             })
     }
-    getPhotoForCurrentUser(id, idx) {
+
+    async getPhotoForCurrentUser(id, found, foundIndex) {
+        let dupeCurrent = this.state.profiles
         let url = 'http://ec2-34-207-209-250.compute-1.amazonaws.com/photoGetter.php'
         let newRequest = {
             "userId": id,
@@ -287,25 +289,34 @@ class ViewProfilePage extends React.Component {
             .then(photos => photos.json())
             .then(photos => {
                 let tempPhotoNumber = this.state.doneLoading + 1;
-                    if (photos.length!=0) {
-                            this.setState(prevState => ({
-                                currentPhotos: [...prevState.currentPhotos, {id: id, imgsrc: photos}],
-                                doneLoading: tempPhotoNumber
-                            }))
-                        }
-                    else {
-                        this.setState(prevState => ({
-                            currentPhotos: [...prevState.currentPhotos, {id: id, imgsrc: ["default-profile.png"]}],
-                            doneLoading: tempPhotoNumber
-                        }))
-                    }
+             
+                // TODO: handle case where login is invalid
+                if (photos.length != 0) {
+                    found.photos = photos
+                    dupeCurrent[foundIndex] = found
+                    this.setState(prevState => ({
+                        profiles:dupeCurrent,
+                        doneLoading: tempPhotoNumber
+                    }))
+
+                }
+                else {
+                    found.photos = ["default-profile.png"]
+                    dupeCurrent[foundIndex] = found
+                    this.setState(prevState => ({
+                        profiles: dupeCurrent,
+                        doneLoading: tempPhotoNumber
+                    }))
+                }
 
             }).catch((error) => {
+                let tempPhotoNumber = this.state.doneLoading+ 1;
                 console.error(error)
-                let tempPhotoNumber = this.state.doneLoading + 1;
+                found.photos = ["default-profile.png"]
+                dupeCurrent[foundIndex] = found
                 this.setState(prevState => ({
-                    currentPhotos: [...prevState.currentPhotos, {id: id, imgsrc: ["default-profile.png"]}],
-                    doneLoading: tempPhotoNumber
+                    profiles: dupeCurrent,
+                    doneLoading: tempPhotoNumber,
                 }))
             })
 
@@ -356,8 +367,8 @@ class ViewProfilePage extends React.Component {
                 to="/"
             />
         }
-        // console.log("done loading :" + this.state.doneLoading)
-        // console.log("num profiles " + this.state.numProfiles)
+        console.log("done loading :" + this.state.doneLoading)
+        console.log("num profiles " + this.state.numProfiles)
 
         let userPhotos = [
             {imgsrc: "mail-order-wife.png", id: 1},
@@ -365,7 +376,7 @@ class ViewProfilePage extends React.Component {
         ];
 
         if (this.state.doneLoading == this.state.numProfiles) {
-            // console.log("In render with done loading "+ this.state.doneLoading+ " and num profiles" + this.state.numProfiles)
+            console.log("In render with done loading "+ this.state.doneLoading+ " and num profiles" + this.state.numProfiles)
             return (
                 <div className="page">
                     <BearHugsNavbar></BearHugsNavbar>
@@ -377,7 +388,7 @@ class ViewProfilePage extends React.Component {
                             {
                                 this.state.profiles.map((profile,i) =>
                                 <div className="row center-row match-container match-row" key = {"row0" + profile.userId}>
-                                    <MatchProfile key={profile.userId} userId={profile.userId} photos= {this.state.currentPhotos[i].imgsrc}
+                                    <MatchProfile key={profile.userId} userId={profile.userId} photos= {profile.photos}
                                     firstName={profile.firstName} lastName={profile.lastName} age={profile.age} descrip={profile.description}
                                      matched={false}
                                      approveMatch={() => this.onClickAccept(profile.userId)} rejectMatch={() => this.onClickReject(profile.userId)}
