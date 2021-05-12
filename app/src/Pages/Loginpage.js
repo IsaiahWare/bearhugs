@@ -28,6 +28,9 @@ class LoginPage extends React.Component {
 
     logIn(event) {
     event.preventDefault();
+    this.setState({
+        feedback: "Logging in..."
+    })
         let url =  baseDomain + '/user/login'
         let newRequest = {
             "email": this.state.email,
