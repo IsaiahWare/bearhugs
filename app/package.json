@@ -12,6 +12,7 @@
     "axios": "^0.21.1",
     "bootstrap": "^4.6.0",
     "jquery": "^3.6.0",
+    "mongoose": "^5.12.9",
     "react": "^17.0.1",
     "react-bootstrap": "^1.5.2",
     "react-deck-swiper": "^1.0.9",
