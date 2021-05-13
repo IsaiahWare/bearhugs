@@ -227,7 +227,7 @@ router.post("/random", (req: Request, res: Response) => {
             };
         } else {
 	    console.log("user/random results", queryResults.length);
-            shuffleArray(queryResults);
+            // shuffleArray(queryResults);
             randomResponse.results = queryResults
         }
         res.json(randomResponse);
