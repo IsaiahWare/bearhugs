@@ -147,7 +147,7 @@ router.post("/find", (req: Request, res: Response) => {
         return;
     }
 
-    const queryStatement: string = "SELECT userId, email, firstName, lastName, age, description, genderIdentity, maleGenderPref, femaleGenderPref, otherGenderPref FROM users WHERE userId = ?";
+    const queryStatement: string = "SELECT userId, email, firstName, lastName, age, description, genderIdentity, maleGenderPref, femaleGenderPref, otherGenderPref, phoneNumber FROM users WHERE userId = ?";
     db.query(queryStatement, req.body.userId, (queryError: MysqlError | null, queryResults: any ) => {
         if (queryError) {
             findResponse.error =  {
