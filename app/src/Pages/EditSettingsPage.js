@@ -183,6 +183,8 @@ class EditSettingsPage extends React.Component {
 
     handleSubmit(event) {
         event.preventDefault();
+        let phoneNumberFilter = this.filterPhoneNumber();
+        if (phoneNumberFilter){
         let uid = parseInt(UserToken.getUserId());
         let url = baseDomain + '/user/update'
         let newRequest = {
@@ -221,6 +223,19 @@ class EditSettingsPage extends React.Component {
                     behavior: "smooth"
                 })
             })
+        }
+    }
+
+    filterPhoneNumber() {
+        const re = /[0-9]{10}/
+        if (!re.test(this.state.phoneNumber)) {
+            this.setState({
+                feedback: "Please enter a valid U.S. phone number."
+            })
+            return false
+        }
+        return true
+
     }
 
     handleInputChange(event) {
@@ -332,7 +347,7 @@ class EditSettingsPage extends React.Component {
                         </Form.Group>
                         <Form.Group controlId="editForm.phoneNumber">
                             <Form.Label>Phone Number</Form.Label>
-                            <Form.Control type="phoneNumber" name="phoneNumber" value={this.state.phoneNumber} onChange={this.handleInputChange} placeholder="##########" />
+                            <Form.Control type='tel' pattern="[0-9]{10}" maxlength="10" name="phoneNumber" value={this.state.phoneNumber} onChange={this.handleInputChange} placeholder="##########" />
                         </Form.Group>
                         <Form.Group controlId="editForm.description">
                             <Form.Label>Description</Form.Label>
