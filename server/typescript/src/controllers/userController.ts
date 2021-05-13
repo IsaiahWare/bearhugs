@@ -42,6 +42,7 @@ router.post("/register", (req: Request, res: Response) => {
     bcrypt.hash(req.body.password, saltRounds).then((hashedPassword: string) => {
         const queryStatement: string = "INSERT INTO users SET ?";
         req.body.password = hashedPassword;
+        req.body.confirmedEmail = "false"
 
         db.query(queryStatement, req.body, (queryError: MysqlError | null, queryResults: any) => {
             if (queryError) {
@@ -60,8 +61,8 @@ router.post("/register", (req: Request, res: Response) => {
                         "maleGenderPref": req.body.maleGenderPref,
                         "femaleGenderPref": req.body.femaleGenderPref,
                         "otherGenderPref": req.body.otherGenderPref,
-                        "phoneNumber": req.body.phoneNumber
-
+                        "phoneNumber": req.body.phoneNumber,
+                        "confirmedEmail": "false"
                     }
                 ];
             }
