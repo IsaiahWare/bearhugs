@@ -317,7 +317,7 @@ class ViewPastMatches extends React.Component {
         })
             .then(res => res.json())
             .then(responseData => {
-                // console.log(responseData)
+                console.log(responseData)
                 if (JSON.stringify(responseData.error) === '{}') {
                     let temp = this.state.pendingWingmanMatches
                     let tempNumberWingman = this.state.numWingmanRequests-1
