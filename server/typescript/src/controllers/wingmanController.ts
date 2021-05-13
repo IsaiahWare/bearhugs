@@ -55,6 +55,7 @@ router.post("/send", (req: Request, res: Response) => {
                     }
                     else if (queryResults3.length==2)  {
                         console.log("query result " + queryResults3)
+                        console.log("query result with length 2")
                         const queryStatement6: string = "DELETE FROM pendingWingman WHERE requestId = ?";
                         const queryArgs6 = [queryResults3[0].requestId];
                         console.log(queryResults3[0].requestId)
@@ -75,6 +76,7 @@ router.post("/send", (req: Request, res: Response) => {
                     }
                     else if (queryResults3.length == 1) {
                         console.log("query result " + queryResults3)
+                        console.log("query result with length 1")
                         const queryStatement4: string = "INSERT INTO completedWingman (wingmanId, requesterId, requesteeId) VALUES (?,?,?), (?,?,?)";
                         const queryArgs4 = [
                                req.body.wingmanId,
@@ -111,6 +113,7 @@ router.post("/send", (req: Request, res: Response) => {
                         });
                     } else if (queryResults3.length==0){
                         console.log("query result " + queryResults3)
+                        console.log("query result with length 0")
                         const queryStatement2 = "INSERT INTO pendingWingman (wingmanId, requesterId, requesteeId) VALUES (?,?,?), (?,?,?)";
                         const queryArgs2 = [
                             req.body.wingmanId,
@@ -120,6 +123,7 @@ router.post("/send", (req: Request, res: Response) => {
                             req.body.requesteeId, 
                             req.body.requesterId
                      ];
+                     console.log(queryArgs2)
                         db.query(queryStatement2, queryArgs2, (queryError2: MysqlError | null, queryResults2: any ) => {
                             if (queryError2) {
                                 wingmanResponse.error =  {
