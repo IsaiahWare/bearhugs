@@ -63,6 +63,7 @@ export interface UserUpdateRequest {
     maleGenderPref: boolean;
     femaleGenderPref: boolean;
     otherGenderPref: boolean;
+    phoneNumber: string;
     userId: number;
 }
 

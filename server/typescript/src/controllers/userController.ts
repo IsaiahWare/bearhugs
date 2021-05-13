@@ -248,7 +248,7 @@ router.post("/update", (req: Request, res: Response) => {
         return;
     }    
     
-    const queryStatement: string = "UPDATE users SET email = ?, description = ?, genderIdentity = ?, maleGenderPref = ?, femaleGenderPref =?, otherGenderPref=? WHERE userId = ?";
+    const queryStatement: string = "UPDATE users SET email = ?, description = ?, genderIdentity = ?, maleGenderPref = ?, femaleGenderPref =?, otherGenderPref=?, phoneNumber=? WHERE userId = ?";
     const queryArgs = [
         req.body.email,
         // req.body.password,
@@ -257,7 +257,7 @@ router.post("/update", (req: Request, res: Response) => {
         req.body.maleGenderPref,
         req.body.femaleGenderPref,
         req.body.otherGenderPref,
-        // req.body.phoneNumber,
+        req.body.phoneNumber,
         req.body.userId
     ];
 

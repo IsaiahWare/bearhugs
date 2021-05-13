@@ -294,7 +294,7 @@ class RegisterPage extends React.Component {
                         })
                     } else {
                         this.setState({
-                            feedback: "Registering account..."
+                            feedback: "Register successful :)! Now logging in!"
                         })
                         this.registerAccount()
                     }
@@ -337,7 +337,7 @@ class RegisterPage extends React.Component {
                     })
                 } else {
                     this.setState({
-                        feedback: "Register successful :) Return to login and try your new account!"
+                        feedback: "Register successful :) Now logging in...!"
                     })
                     this.logIn();
                 }

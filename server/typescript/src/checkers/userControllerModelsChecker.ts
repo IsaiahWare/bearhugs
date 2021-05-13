@@ -51,7 +51,7 @@ export function isUserUpdateRequest(obj: any): obj is UserUpdateRequest {
   && obj.description !== undefined 
   && obj.genderIdentity !== undefined && obj.maleGenderPref !== undefined 
   && obj.femaleGenderPref !== undefined && obj.otherGenderPref !== undefined 
-  && obj.userId !== undefined && Object.keys(obj).length === 7;
+  && obj.userId !== undefined && obj.phoneNumber !==undefined && Object.keys(obj).length === 8;
 }
 
 export function isUserPhoneRequest(obj: any): obj is UserPhoneRequest {
