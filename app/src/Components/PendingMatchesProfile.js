@@ -49,10 +49,11 @@ class PendingMatchesProfile extends React.Component {
                 </div>
                 <div className="swiperElement">
                     <Swipeable onSwipe = {this.handleOnSwipe} swipeThreshold ={60} fadeThreshold={0}>
-                        <div>
-                            <FontAwesomeIcon icon={faHandPointUp} size="2x"></FontAwesomeIcon>
+                        <div className="finger">
+                            <FontAwesomeIcon icon={faHandPointUp} color="white" size="2x"></FontAwesomeIcon>
                         </div>
                     </Swipeable>
+                    <p>drag to swipe!</p>
                 </div>
                 <div className="swiperElement heartmade">
                     <FontAwesomeIcon icon={faHeart} color="green" size="2x"></FontAwesomeIcon>
