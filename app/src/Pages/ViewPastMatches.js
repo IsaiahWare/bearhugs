@@ -125,7 +125,6 @@ class ViewPastMatches extends React.Component {
 
     async getPhotoforPendingWingmanUser(id, found, foundIndex) {
         let dupeCurrent = this.state.pendingWingmanMatches
-        console.log(found)
         let url = 'http://ec2-34-207-209-250.compute-1.amazonaws.com/photoGetter.php'
         let newRequest = {
             "userId": id,
@@ -354,7 +353,8 @@ class ViewPastMatches extends React.Component {
         })
             .then(res => res.json())
             .then(responseData => {
-                // console.log(responseData)
+                console.log("pending wingman matches")
+                console.log(responseData)
                 if (JSON.stringify(responseData.error) === '{}') {
                     this.setState({
                         pendingWingmanMatches: responseData.results,
@@ -568,9 +568,9 @@ class ViewPastMatches extends React.Component {
                 to="/"
             />
         }
-        // console.log("number of matches for current and completed " + this.state.numCurrent + "loading " + this.state.doneLoadingCurrent)
-        // console.log("number of matches for pending " + this.state.numPending + "loading " + this.state.doneLoadingPending)
-        // console.log("number of matches for wignman" + this.state.numWingmanRequests + "loading " + this.state.doneLoadingPendingWingman)
+        console.log("number of matches for current and completed " + this.state.numCurrent + "loading " + this.state.doneLoadingCurrent)
+        console.log("number of matches for pending " + this.state.numPending + "loading " + this.state.doneLoadingPending)
+        console.log("number of matches for wignman" + this.state.numWingmanRequests + "loading " + this.state.doneLoadingPendingWingman)
         if (this.state.numCurrent == this.state.doneLoadingCurrent && this.state.numPending == this.state.doneLoadingPending && this.state.doneLoadingPendingWingman == this.state.numWingmanRequests) {
             console.log(this.state.pendingMatches)
             return (
@@ -686,7 +686,7 @@ class ViewPastMatches extends React.Component {
                         </Tab>
                         <Tab eventKey="wingmanMatches" title="Pending Wingman Matches">
                             <div className="row center-row">
-                                <h2>HELLO???</h2>
+                                <h2>Pending Wingman Matches</h2>
                             </div>
                             <div className="row center-row">
                                 <div className="col center-col">

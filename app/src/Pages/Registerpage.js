@@ -287,7 +287,7 @@ class RegisterPage extends React.Component {
             })
                 .then(res => res.json())
                 .then(responseData => {
-                    // console.log(responseData)
+                 console.log(responseData)
                     if (JSON.stringify(responseData.error) !== '{}') {
                         this.setState({
                             feedback: "Problem uploading security questions to server 🤒"
@@ -329,7 +329,7 @@ class RegisterPage extends React.Component {
         })
             .then(res => res.json())
             .then(responseData => {
-                // console.log(responseData)
+                console.log(responseData)
                 // TODO: handle case where login is invalid
                 if (JSON.stringify(responseData.error) !== '{}') {
                     this.setState({
