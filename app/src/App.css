@@ -169,10 +169,10 @@ width: 100%;
   float: left;
 }
 form {
-  padding-left: 4rem;
-  padding-right: 4rem;
+  padding-left: 10%;
+  padding-right: 10%;
   padding-bottom: 4rem;
-  padding-top: 2rem;
+  padding-top: 1rem;
 }
 
 .btn-red {
@@ -206,12 +206,18 @@ form {
 
 }
 .notification-box {
-  border-bottom: 3px solid #c5c5c5;
+  /*border-bottom: 3px solid #c5c5c5;
   border-top: 3px solid #c5c5c5;
   align-items: center;
   justify-content: center;
   text-align: center;
-  background-color: rgb(221, 234, 236);
+  background-color: rgb(221, 234, 236);*/
+  z-index: 1;
+  width: 100%;
+  height: 5rem;
+  padding: .5rem;
+  border-bottom: 1px solid grey;
+  background-color: #f3f3f3;
 }
 
 .red-border {
@@ -378,4 +384,19 @@ form {
   border-radius: 5px;
   border: 1px solid grey;
   padding: 1rem 1rem;
+}
+
+.photoUploadWrapper {
+  width: 50rem;
+  max-width: 100%;
+  display: flex;
+  justify-content: center;
+  margin: 0 auto;
+  height: 6.5rem;
+}
+.padding-bottom-1rem{
+  padding-bottom: 1rem;
+}
+.smalltext{
+  font-size: .8rem;
 }

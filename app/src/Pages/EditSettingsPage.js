@@ -333,12 +333,16 @@ class EditSettingsPage extends React.Component {
                             ))}
                     </div>
                 <div className="col">
-                <form onSubmit={this.uploadPhoto}>
-                    <input type="hidden" name="MAX_FILE_SIZE" value="50000000000000" />
-                    <input type="file" accept="image/png, image/jpeg" name="filename" id = "uploadfile_input" onChange={this.onPhotosChange}/>
-                    <Button type="submit" variant="danger" name="submit"> UPLOAD </Button>
-                </form>
-
+                <div className="photoUploadWrapper">
+                    <form onSubmit={this.uploadPhoto}>
+                                
+                        <input type="hidden" name="MAX_FILE_SIZE" value="50000000000000" />
+                        <input className="padding-bottom-1rem" type="file" accept="image/png, image/jpeg" name="filename" id = "uploadfile_input" onChange={this.onPhotosChange}/>
+                        <Button type="submit" variant="danger" name="submit"> UPLOAD </Button>
+                        <p className="center smalltext">Accepted file types: JPG, PNG</p>
+                        
+                    </form>
+                </div>
 
                     <Form onSubmit={this.handleSubmit} controlId="editForm">
                         <Form.Group controlId="editForm.email">
@@ -350,7 +354,7 @@ class EditSettingsPage extends React.Component {
                             <Form.Control type='tel' pattern="[0-9]{10}" maxlength="10" name="phoneNumber" value={this.state.phoneNumber} onChange={this.handleInputChange} placeholder="##########" />
                         </Form.Group>
                         <Form.Group controlId="editForm.description">
-                            <Form.Label>Description</Form.Label>
+                            <Form.Label>Bio - this is what people will see under your name on your profile!</Form.Label>
                             <Form.Control as="textarea" name="description" value={this.state.description} rows={3} onChange={this.handleInputChange} placeholder="Write what you want
                             people to see on your profile" />
                         </Form.Group>
