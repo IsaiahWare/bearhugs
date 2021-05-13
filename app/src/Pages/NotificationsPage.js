@@ -43,7 +43,10 @@ class NotificationsPage extends React.Component {
                     for (let i =0; i < responseData.results.length; ++i) {
                         let date = responseData.results[i].notificationDate
                         let dateObject = new Date(date)
-                        let dateString = dateObject.toDateString();
+                        let time = dateObject.getHours() + ":" + dateObject.getMinutes();
+                        let day = dateObject.toDateString()
+                        day = day.substring(0, day.length-5);
+                        let dateString = day + " at " + time;
                         responseData.results[i].notificationDate = dateString
                     }
                     this.setState({
@@ -86,10 +89,10 @@ class NotificationsPage extends React.Component {
                         {
                             this.state.notifications.map((notification) =>
                                 <div className="row center-row notification-box" key={"row" + notification.id}>
-                                    <div key={"col-"+ notification.id} className="col">
+                                    <div key={"col-"+ notification.id} className="notifications-message">
                                         <p>{notification.message}</p>
                                     </div>
-                                    <div key={"col-"+ notification.id + " date"} className="col">
+                                    <div key={"col-"+ notification.id + " date"} className="notifications-date">
                                         <p>{notification.notificationDate}</p>
                                     </div>
                                 </div>

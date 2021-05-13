@@ -205,20 +205,6 @@ form {
   width: 100%;
 
 }
-.notification-box {
-  /*border-bottom: 3px solid #c5c5c5;
-  border-top: 3px solid #c5c5c5;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  background-color: rgb(221, 234, 236);*/
-  z-index: 1;
-  width: 100%;
-  height: 5rem;
-  padding: .5rem;
-  border-bottom: 1px solid grey;
-  background-color: #f3f3f3;
-}
 
 .red-border {
   border-style: solid;
@@ -399,4 +385,31 @@ form {
 }
 .smalltext{
   font-size: .8rem;
+}
+.notifications-message{
+  width: 60%;
+  height: 100%;
+  float: left;
+}
+.notifications-date{
+  width: 24%;
+  margin-left: 15%;
+  text-align: right;
+  float: left;
+  border-radius: 5px;
+  padding-top: .8rem;
+  padding-right: .5rem;
+  padding-bottom: 0;
+  font-weight: bold;
+}
+.notification-box {
+  z-index: 1;
+  width: 100%;
+  height: 5rem;
+  padding: .5rem;
+  border-bottom: 1px solid grey;
+  background-color: #f3f3f3;
+}
+.notifications-box:hover {
+  background-color: blue;
 }
