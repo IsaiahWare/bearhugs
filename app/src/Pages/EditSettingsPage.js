@@ -381,8 +381,18 @@ class EditSettingsPage extends React.Component {
                             </Form.Group>
                         </Form.Row>
                     </Form>
-                    <Form controlId="passwordForm" onSubmit={this.changePassword}>
-                        <h3 class="center">Change Password</h3>
+
+                    <Accordion>
+                    <Card className="changePassword">
+                        <Card.Header>
+                        <Accordion.Toggle as={Button} variant="link" eventKey="0">
+                            Change password
+                        </Accordion.Toggle>
+                        </Card.Header>
+                        <Accordion.Collapse eventKey="0">
+                        <Card.Body>
+
+                    <Form id="changePassword" controlId="passwordForm" onSubmit={this.changePassword}>
                         <Form.Group controlId="editForm.newPassword">
                             <Form.Control type="password" name="newPassword" value={this.state.newPassword} onChange={this.handleInputChange} placeholder="New Password" />
                         </Form.Group>
@@ -396,6 +406,18 @@ class EditSettingsPage extends React.Component {
                             </Form.Group>
                         </Form.Row>
                     </Form>
+
+                        </Card.Body>
+                        </Accordion.Collapse>
+                    </Card>
+                </Accordion>
+
+                <div className="editSpacer"></div>
+
+                    <h3 class="center">Done editing your profile?</h3>
+                    <Button id="startswiping" href="/viewmatches">Start Swiping!</Button>
+
+                    <div className="editSpacer"></div>
 
                     {/* <form onSubmit={this.handleSubmit}>
                         <div className="row">

@@ -171,7 +171,7 @@ width: 100%;
 form {
   padding-left: 10%;
   padding-right: 10%;
-  padding-bottom: 4rem;
+  padding-bottom: 1rem;
   padding-top: 1rem;
 }
 
@@ -412,4 +412,26 @@ form {
 }
 .notifications-box:hover {
   background-color: blue;
+}
+#startswiping{
+  font-size: 1.2rem;
+  font-weight: bold;
+  padding-top: 1rem;
+  height: 4rem;
+  width: 17rem;
+  border-radius: 2rem;
+  margin: 0 auto;
+}
+
+.changePassword{
+  width: 80%;
+  margin: 0 auto;
+  background-color: transparent !important;
+}
+.editSpacer{
+  height: 5rem;
+}
+#changePassword {
+  width: 50%;
+  margin-left: 25%;
 }
