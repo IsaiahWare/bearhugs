@@ -107,21 +107,28 @@ router.post("/login", (req: Request, res: Response) => {
                     loginResponse.error = compareError;
                 }
                 else if (passwordsMatch) {
-                    loginResponse.results = [
-                        {   
-                            "userId": queryResults[0].userId,
-                            "email": queryResults[0].email,
-                            "firstName": queryResults[0].firstName,
-                            "lastName": queryResults[0].lastName,
-                            "age": queryResults[0].age,
-                            "description": queryResults[0].description,
-                            "genderIdentity":queryResults[0].genderIdentity,
-                            "maleGenderPref": queryResults[0].maleGenderPref,
-                            "femaleGenderPref": queryResults[0].femaleGenderPref,
-                            "otherGenderPref": queryResults[0].otherGenderPref,
-                            "phoneNumber": queryResults[0].phoneNumber
-                        }
-                    ];
+                    if (queryResults[0].confirmedEmail === "false") {
+                        loginResponse.error = {
+                            "message": "Please confirm your email!"
+                        };
+                        // res.json(loginResponse); 
+                    } else {
+                        loginResponse.results = [
+                            {   
+                                "userId": queryResults[0].userId,
+                                "email": queryResults[0].email,
+                                "firstName": queryResults[0].firstName,
+                                "lastName": queryResults[0].lastName,
+                                "age": queryResults[0].age,
+                                "description": queryResults[0].description,
+                                "genderIdentity":queryResults[0].genderIdentity,
+                                "maleGenderPref": queryResults[0].maleGenderPref,
+                                "femaleGenderPref": queryResults[0].femaleGenderPref,
+                                "otherGenderPref": queryResults[0].otherGenderPref,
+                                "phoneNumber": queryResults[0].phoneNumber
+                            }
+                        ];
+                    }
                 }
                 else {
                     loginResponse.error = {
