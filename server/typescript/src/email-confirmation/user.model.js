@@ -1,18 +1,18 @@
-const mongoose = require('mongoose')
-const Schema = mongoose.Schema
+// const mongoose = require('mongoose')
+// const Schema = mongoose.Schema
 
-// Data we need to collect/confirm to have the app go.
-const fields = {
-  email: {
-    type: String
-  },
-  confirmed: {
-    type: Boolean,
-    default: false
-  }
-}
+// // Data we need to collect/confirm to have the app go.
+// const fields = {
+//   email: {
+//     type: String
+//   },
+//   confirmed: {
+//     type: Boolean,
+//     default: false
+//   }
+// }
 
-// schema
-const userSchema = new Schema(fields)
+// // schema
+// const userSchema = new Schema(fields)
 
-module.exports = mongoose.model('User', userSchema)
+// module.exports = mongoose.model('User', userSchema)
